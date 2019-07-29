@@ -9,6 +9,5 @@ jobs:
     steps:
       - checkout
 
-      - run: make manifests
       - run: make test
       - run: make

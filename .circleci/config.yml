@@ -9,6 +9,15 @@ jobs:
     working_directory: /go/src/github.com/{{ORG_NAME}}/{{REPO_NAME}}
     steps:
       - checkout
+      - run:
+          name: Install kubebuilder
+          command: |
+            version=2.0.0-beta.0
+            arch=amd64
+            curl -L -O https://github.com/kubernetes-sigs/kubebuilder/releases/download/v${version}/kubebuilder_${version}_linux_${arch}.tar.gz
+            tar -zxvf kubebuilder_${version}_linux_${arch}.tar.gz
+            sudo mv kubebuilder_${version}_linux_${arch} /usr/local/kubebuilder
+            export PATH=$PATH:/usr/local/kubebuilder/bin
 
       - run: make test
       - run: make

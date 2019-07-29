@@ -11,10 +11,12 @@ else
 GOBIN=$(shell go env GOBIN)
 endif
 
+GOLANGCI_VERSION = v1.17.1
+
 all: manager
 
 # Run tests
-test: generate fmt vet manifests
+test: generate fmt lint manifests
 	go test ./api/... ./controllers/... -coverprofile cover.out
 
 # Build manager binary
@@ -45,6 +47,19 @@ fmt:
 # Run go vet against code
 vet:
 	go vet ./...
+
+# Download golangci-lint if needed
+golangci-lint:
+ifeq (, $(shell which golangci-lint))
+	go get github.com/golangci/golangci-lint/cmd/golangci-lint@${GOLANGCI_VERSION}
+GOLANGCI_LINT=$(shell go env GOPATH)/bin/golangci-lint
+else
+GOLANGCI_LINT=$(shell which golangci-lint)
+endif
+
+# Run linter. GOGC is set to reduce memory footprint
+lint: golangci-lint
+	GOGC=10 $(GOLANGCI_LINT) run -v --deadline 10m
 
 # Generate code
 generate: controller-gen

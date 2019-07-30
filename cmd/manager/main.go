@@ -19,8 +19,8 @@ import (
 	"flag"
 	"os"
 
-	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
-	"github.com/xridge/kubestone/controllers"
+	perfv1alpha1 "github.com/xridge/kubestone/pkg/api/v1alpha1"
+	"github.com/xridge/kubestone/pkg/controllers"
 	"k8s.io/apimachinery/pkg/runtime"
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
 	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"

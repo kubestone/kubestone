@@ -22,38 +22,38 @@ import (
 // EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
 
-// NetworkSpec defines the desired state of Network
-type NetworkSpec struct {
+// Iperf3Spec defines the desired state of Iperf3
+type Iperf3Spec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 }
 
-// NetworkStatus defines the observed state of Network
-type NetworkStatus struct {
+// Iperf3Status defines the observed state of Iperf3
+type Iperf3Status struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 }
 
 // +kubebuilder:object:root=true
 
-// Network is the Schema for the networks API
-type Network struct {
+// Iperf3 is the Schema for the iperf3s API
+type Iperf3 struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   NetworkSpec   `json:"spec,omitempty"`
-	Status NetworkStatus `json:"status,omitempty"`
+	Spec   Iperf3Spec   `json:"spec,omitempty"`
+	Status Iperf3Status `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 
-// NetworkList contains a list of Network
-type NetworkList struct {
+// Iperf3List contains a list of Iperf3
+type Iperf3List struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []Network `json:"items"`
+	Items           []Iperf3 `json:"items"`
 }
 
 func init() {
-	SchemeBuilder.Register(&Network{}, &NetworkList{})
+	SchemeBuilder.Register(&Iperf3{}, &Iperf3List{})
 }

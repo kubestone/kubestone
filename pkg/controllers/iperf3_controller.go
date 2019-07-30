@@ -25,26 +25,26 @@ import (
 	perfv1alpha1 "github.com/xridge/kubestone/pkg/api/v1alpha1"
 )
 
-// NetworkReconciler reconciles a Network object
-type NetworkReconciler struct {
+// Iperf3Reconciler reconciles a Iperf3 object
+type Iperf3Reconciler struct {
 	client.Client
 	Log logr.Logger
 }
 
-// +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=networks,verbs=get;list;watch;create;update;patch;delete
-// +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=networks/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=iperf3s,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=iperf3s/status,verbs=get;update;patch
 
-func (r *NetworkReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
+func (r *Iperf3Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 	_ = context.Background()
-	_ = r.Log.WithValues("network", req.NamespacedName)
+	_ = r.Log.WithValues("iperf3", req.NamespacedName)
 
 	// your logic here
 
 	return ctrl.Result{}, nil
 }
 
-func (r *NetworkReconciler) SetupWithManager(mgr ctrl.Manager) error {
+func (r *Iperf3Reconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
-		For(&perfv1alpha1.Network{}).
+		For(&perfv1alpha1.Iperf3{}).
 		Complete(r)
 }

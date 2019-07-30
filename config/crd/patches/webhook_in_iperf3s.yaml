@@ -3,7 +3,7 @@
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
-  name: networks.perf.kubestone.xridge.io
+  name: iperf3s.perf.kubestone.xridge.io
 spec:
   conversion:
     strategy: Webhook

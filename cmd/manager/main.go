@@ -61,11 +61,11 @@ func main() {
 		os.Exit(1)
 	}
 
-	if err = (&controllers.NetworkReconciler{
+	if err = (&controllers.Iperf3Reconciler{
 		Client: mgr.GetClient(),
-		Log:    ctrl.Log.WithName("controllers").WithName("Network"),
+		Log:    ctrl.Log.WithName("controllers").WithName("Iperf3"),
 	}).SetupWithManager(mgr); err != nil {
-		setupLog.Error(err, "unable to create controller", "controller", "Network")
+		setupLog.Error(err, "unable to create controller", "controller", "Iperf3")
 		os.Exit(1)
 	}
 	// +kubebuilder:scaffold:builder

@@ -1,4 +1,5 @@
 /*
+Copyright 2019 The xridge kubestone contributors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,11 +20,20 @@ import (
 	"flag"
 	"os"
 
+	"github.com/go-logr/zapr"
 	perfv1alpha1 "github.com/xridge/kubestone/pkg/api/v1alpha1"
 	"github.com/xridge/kubestone/pkg/controllers"
+	"github.com/xridge/kubestone/pkg/k8s"
+	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/client-go/kubernetes"
+
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
+	k8sscheme "k8s.io/client-go/kubernetes/scheme"
+	typedcorev1 "k8s.io/client-go/kubernetes/typed/core/v1"
 	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
+	"k8s.io/client-go/tools/clientcmd"
+	"k8s.io/client-go/tools/record"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 	// +kubebuilder:scaffold:imports
@@ -31,6 +41,7 @@ import (
 
 var (
 	scheme   = runtime.NewScheme()
+	rootLog  = zap.RawLoggerTo(os.Stderr, true)
 	setupLog = ctrl.Log.WithName("setup")
 )
 
@@ -41,6 +52,16 @@ func init() {
 	// +kubebuilder:scaffold:scheme
 }
 
+func newEventRecorder(clientSet *kubernetes.Clientset) record.EventRecorder {
+	eventBroadcaster := record.NewBroadcaster()
+	eventBroadcaster.StartLogging(rootLog.Sugar().Infof)
+	eventBroadcaster.StartRecordingToSink(
+		&typedcorev1.EventSinkImpl{Interface: clientSet.CoreV1().Events("")})
+	recorder := eventBroadcaster.NewRecorder(k8sscheme.Scheme,
+		corev1.EventSource{Component: "kubestone"})
+	return recorder
+}
+
 func main() {
 	var metricsAddr string
 	var enableLeaderElection bool
@@ -49,7 +70,7 @@ func main() {
 		"Enable leader election for controller manager. Enabling this will ensure there is only one active controller manager.")
 	flag.Parse()
 
-	ctrl.SetLogger(zap.Logger(true))
+	ctrl.SetLogger(zapr.NewLogger(rootLog))
 
 	mgr, err := ctrl.NewManager(ctrl.GetConfigOrDie(), ctrl.Options{
 		Scheme:             scheme,
@@ -57,15 +78,34 @@ func main() {
 		LeaderElection:     enableLeaderElection,
 	})
 	if err != nil {
-		setupLog.Error(err, "unable to start manager")
+		setupLog.Error(err, "Unable to start manager")
 		os.Exit(1)
 	}
 
-	if err = (&controllers.NetworkReconciler{
-		Client: mgr.GetClient(),
-		Log:    ctrl.Log.WithName("controllers").WithName("Network"),
-	}).SetupWithManager(mgr); err != nil {
-		setupLog.Error(err, "unable to create controller", "controller", "Network")
+	clientConfig := clientcmd.NewNonInteractiveDeferredLoadingClientConfig(
+		clientcmd.NewDefaultClientConfigLoadingRules(),
+		&clientcmd.ConfigOverrides{})
+
+	restClientConfig, err := clientConfig.ClientConfig()
+	if err != nil {
+		setupLog.Error(err, "Unable to get kubernetes client config")
+		os.Exit(1)
+	}
+
+	clientSet, err := kubernetes.NewForConfig(restClientConfig)
+	if err != nil {
+		setupLog.Error(err, "Unable to build kubernetes clientSet")
+		os.Exit(1)
+	}
+
+	if err = (&controllers.Iperf3Reconciler{
+		K8S: k8s.Access{
+			Client:        mgr.GetClient(),
+			Scheme:        mgr.GetScheme(),
+			EventRecorder: newEventRecorder(clientSet),
+		},
+		Log: ctrl.Log.WithName("controllers").WithName("Iperf3")}).SetupWithManager(mgr); err != nil {
+		setupLog.Error(err, "unable to create controller", "controller", "Iperf3")
 		os.Exit(1)
 	}
 	// +kubebuilder:scaffold:builder

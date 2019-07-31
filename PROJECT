@@ -4,4 +4,4 @@ repo: github.com/xridge/kubestone
 resources:
 - group: perf
   version: v1alpha1
-  kind: Network
+  kind: Iperf3

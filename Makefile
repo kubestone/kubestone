@@ -17,7 +17,7 @@ all: manager
 
 # Run tests
 test: generate fmt lint manifests
-	go test ./pkg/... -coverprofile cover.out
+	go test ./api/... ./controllers/... ./pkg/... -coverprofile cover.out
 
 # Build manager binary
 manager: generate fmt vet
@@ -63,7 +63,7 @@ lint: golangci-lint
 
 # Generate code
 generate: controller-gen
-	$(CONTROLLER_GEN) object:headerFile=./hack/boilerplate.go.txt paths=./pkg/api/...
+	$(CONTROLLER_GEN) object:headerFile=./hack/boilerplate.go.txt paths=./api/...
 
 # Build the docker image
 docker-build: test

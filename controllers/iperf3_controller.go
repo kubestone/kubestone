@@ -29,7 +29,7 @@ import (
 
 	"github.com/xridge/kubestone/pkg/k8s"
 
-	perfv1alpha1 "github.com/xridge/kubestone/pkg/api/v1alpha1"
+	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
 )
 
 // Iperf3Reconciler provides fields from manager to reconciler

@@ -21,8 +21,8 @@ import (
 	"os"
 
 	"github.com/go-logr/zapr"
-	perfv1alpha1 "github.com/xridge/kubestone/pkg/api/v1alpha1"
-	"github.com/xridge/kubestone/pkg/controllers"
+	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
+	"github.com/xridge/kubestone/controllers"
 	"github.com/xridge/kubestone/pkg/k8s"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"

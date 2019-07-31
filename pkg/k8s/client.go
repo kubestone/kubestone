@@ -13,3 +13,19 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
+package k8s
+
+import (
+	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/client-go/tools/record"
+
+	"sigs.k8s.io/controller-runtime/pkg/client"
+)
+
+// Access provides client related structs to access kubernetes
+type Access struct {
+	Client        client.Client
+	Scheme        *runtime.Scheme
+	EventRecorder record.EventRecorder
+}

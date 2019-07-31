@@ -9,7 +9,7 @@ rules:
 - apiGroups:
   - perf.kubestone.xridge.io
   resources:
-  - networks
+  - iperf3s
   verbs:
   - create
   - delete
@@ -21,7 +21,7 @@ rules:
 - apiGroups:
   - perf.kubestone.xridge.io
   resources:
-  - networks/status
+  - iperf3s/status
   verbs:
   - get
   - patch

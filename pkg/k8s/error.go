@@ -13,3 +13,16 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
+package k8s
+
+import "k8s.io/apimachinery/pkg/api/errors"
+
+// IgnoreNotFound returns nil on k8s Not-Found type of errors,
+// but returns the error as-is otherwise
+func IgnoreNotFound(err error) error {
+	if errors.IsNotFound(err) {
+		return nil
+	}
+	return err
+}

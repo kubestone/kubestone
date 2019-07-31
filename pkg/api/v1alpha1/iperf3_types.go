@@ -1,4 +1,5 @@
 /*
+Copyright 2019 The xridge kubestone contributors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,19 +20,22 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
-// NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
-
-// Iperf3Spec defines the desired state of Iperf3
+// Iperf3Spec defines the Iperf3 Benchmark Job
 type Iperf3Spec struct {
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
+	// time in seconds to transmit for
+	Time int32 `json:"time,omitempty"`
+
+	// Use UDP rather than TCP
+	// +optional
+	UDP bool `json:"udp,omitempty"`
 }
 
 // Iperf3Status defines the observed state of Iperf3
 type Iperf3Status struct {
-	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
+	// Shows if the benchmark is running
+	Running bool `json:"running"`
+	// Shows completion of benchmark
+	Completed bool `json:"completed"`
 }
 
 // +kubebuilder:object:root=true

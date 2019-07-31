@@ -13,3 +13,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
+package k8s
+
+const (
+	// CreateFailed is an event provided via EventRecorder
+	CreateFailed = "CreateFailed"
+	// CreateSucceeded is an event provided via EventRecorder
+	CreateSucceeded = "CreateSucceeded"
+)

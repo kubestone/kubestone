@@ -22,7 +22,7 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
+	perfv1alpha1 "github.com/xridge/kubestone/pkg/api/v1alpha1"
 )
 
 // NetworkReconciler reconciles a Network object

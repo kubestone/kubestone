@@ -17,15 +17,15 @@ all: manager
 
 # Run tests
 test: generate fmt lint manifests
-	go test ./api/... ./controllers/... -coverprofile cover.out
+	go test ./pkg/... -coverprofile cover.out
 
 # Build manager binary
 manager: generate fmt vet
-	go build -o bin/manager main.go
+	go build -o bin/manager cmd/manager/main.go
 
 # Run against the configured Kubernetes cluster in ~/.kube/config
 run: generate fmt vet
-	go run ./main.go
+	go run ./cmd/manager/main.go
 
 # Install CRDs into a cluster
 install: manifests
@@ -63,7 +63,7 @@ lint: golangci-lint
 
 # Generate code
 generate: controller-gen
-	$(CONTROLLER_GEN) object:headerFile=./hack/boilerplate.go.txt paths=./api/...
+	$(CONTROLLER_GEN) object:headerFile=./hack/boilerplate.go.txt paths=./pkg/api/...
 
 # Build the docker image
 docker-build: test

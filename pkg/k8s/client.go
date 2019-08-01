@@ -18,6 +18,7 @@ package k8s
 
 import (
 	"k8s.io/apimachinery/pkg/runtime"
+	k8sclient "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/record"
 
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -26,6 +27,7 @@ import (
 // Access provides client related structs to access kubernetes
 type Access struct {
 	Client        client.Client
+	Clientset     *k8sclient.Clientset
 	Scheme        *runtime.Scheme
 	EventRecorder record.EventRecorder
 }

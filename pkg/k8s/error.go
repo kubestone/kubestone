@@ -18,11 +18,21 @@ package k8s
 
 import "k8s.io/apimachinery/pkg/api/errors"
 
-// IgnoreNotFound returns nil on k8s Not-Found type of errors,
-// but returns the error as-is otherwise
-func IgnoreNotFound(err error) error {
-	if errors.IsNotFound(err) {
+func ignoreByErrorFn(err error, errorFn func(error) bool) error {
+	if errorFn(err) {
 		return nil
 	}
 	return err
+}
+
+// IgnoreNotFound returns nil on k8s Not Found type of errors,
+// but returns the error as-is otherwise
+func IgnoreNotFound(err error) error {
+	return ignoreByErrorFn(err, errors.IsNotFound)
+}
+
+// IgnoreAlreadyExists returns nil on k8s Already Exists type of errors,
+// but returns the error as-is otherwise
+func IgnoreAlreadyExists(err error) error {
+	return ignoreByErrorFn(err, errors.IsAlreadyExists)
 }

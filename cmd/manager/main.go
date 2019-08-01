@@ -22,7 +22,7 @@ import (
 
 	"github.com/go-logr/zapr"
 	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
-	"github.com/xridge/kubestone/controllers"
+	iperf3_controller "github.com/xridge/kubestone/controllers/iperf3"
 	"github.com/xridge/kubestone/pkg/k8s"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -98,13 +98,14 @@ func main() {
 		os.Exit(1)
 	}
 
-	if err = (&controllers.Iperf3Reconciler{
+	if err = (&iperf3_controller.Reconciler{
 		K8S: k8s.Access{
 			Client:        mgr.GetClient(),
+			Clientset:     clientSet,
 			Scheme:        mgr.GetScheme(),
 			EventRecorder: newEventRecorder(clientSet),
 		},
-		Log: ctrl.Log.WithName("controllers").WithName("Iperf3")}).SetupWithManager(mgr); err != nil {
+		Log: ctrl.Log.WithName("controllers").WithName("iperf3")}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "Iperf3")
 		os.Exit(1)
 	}

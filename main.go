@@ -28,6 +28,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/client-go/kubernetes"
 
+	"github.com/xridge/kubestone/controllers"
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
 	k8sscheme "k8s.io/client-go/kubernetes/scheme"
 	typedcorev1 "k8s.io/client-go/kubernetes/typed/core/v1"
@@ -107,6 +108,13 @@ func main() {
 		},
 		Log: ctrl.Log.WithName("controllers").WithName("iperf3")}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "Iperf3")
+		os.Exit(1)
+	}
+	if err = (&controllers.FioReconciler{
+		Client: mgr.GetClient(),
+		Log:    ctrl.Log.WithName("controllers").WithName("Fio"),
+	}).SetupWithManager(mgr); err != nil {
+		setupLog.Error(err, "unable to create controller", "controller", "Fio")
 		os.Exit(1)
 	}
 	// +kubebuilder:scaffold:builder

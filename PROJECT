@@ -5,3 +5,6 @@ resources:
 - group: perf
   version: v1alpha1
   kind: Iperf3
+- group: perf
+  version: v1alpha1
+  kind: Fio

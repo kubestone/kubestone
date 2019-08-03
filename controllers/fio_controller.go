@@ -20,15 +20,20 @@ import (
 	"context"
 
 	"github.com/go-logr/logr"
+	batchv1 "k8s.io/api/batch/v1"
+	corev1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/client-go/tools/reference"
 	ctrl "sigs.k8s.io/controller-runtime"
-	"sigs.k8s.io/controller-runtime/pkg/client"
+	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 
 	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
+	"github.com/xridge/kubestone/pkg/k8s"
 )
 
-// FioReconciler reconciles a Fio object
+// FioReconciler provides fields from manager to reconciler
 type FioReconciler struct {
-	client.Client
+	K8S k8s.Access
 	Log logr.Logger
 }
 
@@ -36,12 +41,71 @@ type FioReconciler struct {
 // +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=fios/status,verbs=get;update;patch
 
 func (r *FioReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
-	_ = context.Background()
-	_ = r.Log.WithValues("fio", req.NamespacedName)
+	ctx := context.Background()
+	log := r.Log.WithValues("fio", req.NamespacedName)
 
-	// your logic here
+	var cr perfv1alpha1.Fio
+	if err := r.K8S.Client.Get(ctx, req.NamespacedName, &cr); err != nil {
+		return ctrl.Result{}, k8s.IgnoreNotFound(err)
+	}
+
+	crRef, err := reference.GetReference(r.K8S.Scheme, &cr)
+	if err != nil {
+		log.Error(err, "Unable to get reference to FIO CR")
+		return ctrl.Result{}, err
+	}
+
+	if err := r.newJob(ctx, &cr, crRef); err != nil {
+		r.K8S.EventRecorder.Eventf(crRef, corev1.EventTypeWarning, k8s.CreateFailed,
+			"Unable to create FIO job: %v", err)
+		return ctrl.Result{}, err
+	}
 
 	return ctrl.Result{}, nil
+}
+
+func (r *FioReconciler) newJob(ctx context.Context, cr *perfv1alpha1.Fio, crRef *corev1.ObjectReference) error {
+	labels := map[string]string{
+		"app":               "fio",
+		"kubestone-cr-name": cr.Name,
+	}
+	job := batchv1.Job{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      cr.Name,
+			Namespace: cr.Namespace,
+		},
+		Spec: batchv1.JobSpec{
+			Template: corev1.PodTemplateSpec{
+				ObjectMeta: metav1.ObjectMeta{
+					Labels: labels,
+				},
+				Spec: corev1.PodSpec{
+					Containers: []corev1.Container{
+						{
+							Name:            "fio",
+							Image:           "juliosantiesteban/fio",
+							ImagePullPolicy: corev1.PullIfNotPresent,
+						},
+					},
+					RestartPolicy: corev1.RestartPolicyNever,
+				},
+			},
+		},
+	}
+
+	// FIXME: The next three statements are common between serverdeployment, serverservice and clientpod,
+	// it would make sense to factor it into one function. For that a type should be found which applies
+	// for both SetControllerReference and Create's object.
+	if err := controllerutil.SetControllerReference(cr, &job, r.K8S.Scheme); err != nil {
+		return err
+	}
+	if err := r.K8S.Client.Create(ctx, &job); k8s.IgnoreAlreadyExists(err) != nil {
+		return err
+	}
+
+	r.K8S.EventRecorder.Eventf(crRef, corev1.EventTypeNormal, k8s.CreateSucceeded,
+		"Created FIO Job: %v @ Namespace: %v", job.Name, job.Namespace)
+	return nil
 }
 
 func (r *FioReconciler) SetupWithManager(mgr ctrl.Manager) error {

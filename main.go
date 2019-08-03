@@ -106,13 +106,19 @@ func main() {
 			Scheme:        mgr.GetScheme(),
 			EventRecorder: newEventRecorder(clientSet),
 		},
-		Log: ctrl.Log.WithName("controllers").WithName("iperf3")}).SetupWithManager(mgr); err != nil {
+		Log: ctrl.Log.WithName("controllers").WithName("iperf3"),
+	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "Iperf3")
 		os.Exit(1)
 	}
 	if err = (&controllers.FioReconciler{
-		Client: mgr.GetClient(),
-		Log:    ctrl.Log.WithName("controllers").WithName("Fio"),
+		K8S: k8s.Access{
+			Client:        mgr.GetClient(),
+			Clientset:     clientSet,
+			Scheme:        mgr.GetScheme(),
+			EventRecorder: newEventRecorder(clientSet),
+		},
+		Log: ctrl.Log.WithName("controllers").WithName("Fio"),
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "Fio")
 		os.Exit(1)

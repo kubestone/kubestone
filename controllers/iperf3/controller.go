@@ -71,7 +71,7 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 	serverReady, err := r.serverDeploymentReady(&cr)
 	if err != nil {
 		r.K8S.EventRecorder.Eventf(crRef, corev1.EventTypeWarning, k8s.CreateFailed,
-			"Unable to determing iperf3 Server Deployment state: %v", err)
+			"Unable to determine iperf3 Server Deployment state: %v", err)
 		return ctrl.Result{}, err
 	}
 	if !serverReady {

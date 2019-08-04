@@ -99,25 +99,22 @@ func main() {
 		os.Exit(1)
 	}
 
+	k8sAccess := k8s.Access{
+		Client:        mgr.GetClient(),
+		Clientset:     clientSet,
+		Scheme:        mgr.GetScheme(),
+		EventRecorder: newEventRecorder(clientSet),
+	}
+
 	if err = (&iperf3_controller.Reconciler{
-		K8S: k8s.Access{
-			Client:        mgr.GetClient(),
-			Clientset:     clientSet,
-			Scheme:        mgr.GetScheme(),
-			EventRecorder: newEventRecorder(clientSet),
-		},
+		K8S: k8sAccess,
 		Log: ctrl.Log.WithName("controllers").WithName("iperf3"),
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "Iperf3")
 		os.Exit(1)
 	}
 	if err = (&controllers.FioReconciler{
-		K8S: k8s.Access{
-			Client:        mgr.GetClient(),
-			Clientset:     clientSet,
-			Scheme:        mgr.GetScheme(),
-			EventRecorder: newEventRecorder(clientSet),
-		},
+		K8S: k8sAccess,
 		Log: ctrl.Log.WithName("controllers").WithName("Fio"),
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "Fio")

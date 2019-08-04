@@ -2,11 +2,11 @@
 FROM golang:1.12.5 as builder
 
 WORKDIR /workspace
-# Copy the Go Modules manifests
-COPY go.mod go.mod
-COPY go.sum go.sum
+
 # cache deps before building and copying source so that we don't need to re-download as much
 # and so that source changes don't invalidate our downloaded layer
+COPY go.mod go.mod
+COPY go.sum go.sum
 RUN go mod download
 
 # Copy the go source
@@ -18,11 +18,10 @@ COPY Makefile Makefile
 COPY main.go main.go
 
 # Build
-RUN make manager
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 GO111MODULE=on make manager
 
-# Use distroless as minimal base image to package the manager binary
-# Refer to https://github.com/GoogleContainerTools/distroless for more details
-FROM gcr.io/distroless/static:latest
+# Create final image
+FROM alpine:3.10
 WORKDIR /
 COPY --from=builder /workspace/bin/manager .
 ENTRYPOINT ["/manager"]

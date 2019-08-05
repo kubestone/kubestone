@@ -1,7 +1,28 @@
+---
 apiVersion: perf.kubestone.xridge.io/v1alpha1
 kind: Iperf3
 metadata:
   name: iperf3-sample
 spec:
-  # Add fields here
-  foo: bar
+  image:
+    name: xridge/iperf3:3.7.0
+    pullPolicy: IfNotPresent
+    # pullSecret: docker-pull-secret
+
+  serverConfiguration:
+    cmdLineArgs: --verbose
+    # nodeSelector: null
+    affinity:
+      # nodeAffinity: null
+      # podAffinity: null
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+            - key: app
+              operator: In
+              values:
+              - store
+          topologyKey: "kubernetes.io/hostname"
+
+  UDP: false

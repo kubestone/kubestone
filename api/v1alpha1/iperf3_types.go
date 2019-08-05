@@ -20,21 +20,55 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// Iperf3Spec defines the Iperf3 Benchmark Job
-type Iperf3Spec struct {
-	// time in seconds to transmit for
-	Time int32 `json:"time,omitempty"`
+// Iperf3ConfigurationSpec contains configuration parameters
+// with scheduling options for the both the iperf3 client
+// and server instances.
+type Iperf3ConfigurationSpec struct {
+	// Command line arguments appended to the
+	// predefined iperf3 parameters
+	// +optional
+	CmdLineArgs string `json:"cmdLineArgs"`
 
-	// Use UDP rather than TCP
+	// Labels to add to the iperf3 pod.
+	// +optional
+	PodLabels map[string]string `json:"podLabels,omitempty"`
+
+	// Scheduling related options to determine which
+	// node the iperf3 pod should be scheduled
+	// +optional
+	PodScheduling PodSchedulingSpec `json:"podScheduling,omitempty"`
+
+	// Host Network requested for the iperf3 pod, if enabled the
+	// hosts network namespace is used. Default to false.
+	// +optional
+	HostNetwork bool `json:"hostNetwork,omitempty"`
+}
+
+// Iperf3Spec defines the Iperf3 Benchmark Stone which
+// consist of server deployment with service definition
+// and client pod.
+type Iperf3Spec struct {
+	// Image defines the iperf3 docker image used for the benchmark
+	Image ImageSpec `json:"image"`
+
+	// ServerConfiguration contains the configuration of the iperf3 server
+	// +optional
+	ServerConfiguration Iperf3ConfigurationSpec `json:"serverConfiguration,omitempty"`
+
+	// ClientConfiguration contains the configuration of the iperf3 client
+	// +optional
+	ClientConfiguration Iperf3ConfigurationSpec `json:"clientConfiguration,omitempty"`
+
+	// Use UDP rather than TCP. If enabled the '--udp' parameter is set.
 	// +optional
 	UDP bool `json:"udp,omitempty"`
 }
 
-// Iperf3Status defines the observed state of Iperf3
+// Iperf3Status describes the current state of the benchmark
 type Iperf3Status struct {
-	// Shows if the benchmark is running
+	// State of execution
 	Running bool `json:"running"`
-	// Shows completion of benchmark
+	// State of completion
 	Completed bool `json:"completed"`
 }
 

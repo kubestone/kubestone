@@ -20,13 +20,16 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
-// NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
-
 // FioSpec defines the desired state of Fio
 type FioSpec struct {
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
+	// JobFiles lists the file names of the job files that fio should run
+	// +kubebuilder:validation:MinItems=1
+	JobFiles []string `json:"jobFiles"`
+
+	// RemoteJobFiles lists the URLs of optional remote job files. All the given
+	// files will be downloaded and you can use the `jobFiles` field to select which
+	// ones to run
+	RemoteJobFiles []string `json:"remoteJobFiles,omitempty"`
 }
 
 // FioStatus defines the observed state of Fio

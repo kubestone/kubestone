@@ -18,6 +18,7 @@ package controllers
 
 import (
 	"context"
+	"strings"
 
 	"github.com/go-logr/logr"
 	batchv1 "k8s.io/api/batch/v1"
@@ -69,6 +70,18 @@ func (r *FioReconciler) newJob(ctx context.Context, cr *perfv1alpha1.Fio, crRef 
 		"app":               "fio",
 		"kubestone-cr-name": cr.Name,
 	}
+
+	env := []corev1.EnvVar{
+		{Name: "JOB_FILES", Value: strings.Join(cr.Spec.JobFiles, " ")},
+	}
+	if len(cr.Spec.RemoteJobFiles) > 0 {
+		env = append(env, corev1.EnvVar{
+			Name: "REMOTE_JOB_FILES", Value: strings.Join(cr.Spec.RemoteJobFiles, " "),
+		})
+	}
+
+	backoffLimit := int32(0)
+
 	job := batchv1.Job{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      cr.Name,
@@ -83,13 +96,15 @@ func (r *FioReconciler) newJob(ctx context.Context, cr *perfv1alpha1.Fio, crRef 
 					Containers: []corev1.Container{
 						{
 							Name:            "fio",
-							Image:           "juliosantiesteban/fio",
-							ImagePullPolicy: corev1.PullIfNotPresent,
+							Image:           "xridge/fio",
+							ImagePullPolicy: corev1.PullAlways,
+							Env:             env,
 						},
 					},
 					RestartPolicy: corev1.RestartPolicyNever,
 				},
 			},
+			BackoffLimit: &backoffLimit,
 		},
 	}
 

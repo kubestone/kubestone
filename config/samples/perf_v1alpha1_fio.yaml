@@ -3,5 +3,6 @@ kind: Fio
 metadata:
   name: fio-sample
 spec:
-  # Add fields here
-  foo: bar
+  jobFiles:
+   - jobs/rand-read.fio
+   - jobs/rand-write.fio

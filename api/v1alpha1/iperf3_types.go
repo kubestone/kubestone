@@ -27,7 +27,7 @@ type Iperf3ConfigurationSpec struct {
 	// Command line arguments appended to the
 	// predefined iperf3 parameters
 	// +optional
-	CmdLineArgs string `json:"cmdLineArgs"`
+	CmdLineArgs string `json:"cmdLineArgs,omitempty"`
 
 	// Labels to add to the iperf3 pod.
 	// +optional

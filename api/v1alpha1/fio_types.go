@@ -22,6 +22,9 @@ import (
 
 // FioSpec defines the desired state of Fio
 type FioSpec struct {
+	// Image defines the fio docker image used for the benchmark
+	Image ImageSpec `json:"image"`
+
 	// JobFiles lists the file names of the job files that fio should run
 	// +kubebuilder:validation:MinItems=1
 	JobFiles []string `json:"jobFiles"`

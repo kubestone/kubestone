@@ -3,6 +3,8 @@ kind: Fio
 metadata:
   name: fio-sample
 spec:
+  image:
+    name: xridge/fio:latest
   jobFiles:
    - jobs/rand-read.fio
    - jobs/rand-write.fio

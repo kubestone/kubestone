@@ -82,6 +82,21 @@ func (r *FioReconciler) newJob(ctx context.Context, cr *perfv1alpha1.Fio, crRef 
 
 	backoffLimit := int32(0)
 
+	imagePullPolicy := corev1.PullPolicy(cr.Spec.Image.PullPolicy)
+	if imagePullPolicy == "" {
+		if strings.HasSuffix(cr.Spec.Image.Name, ":latest") {
+			imagePullPolicy = corev1.PullAlways
+		} else {
+			imagePullPolicy = corev1.PullIfNotPresent
+		}
+	}
+	imagePullSecrets := []corev1.LocalObjectReference{}
+	if cr.Spec.Image.PullSecret != "" {
+		imagePullSecrets = append(imagePullSecrets, corev1.LocalObjectReference{
+			Name: cr.Spec.Image.PullSecret,
+		})
+	}
+
 	job := batchv1.Job{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      cr.Name,
@@ -96,12 +111,13 @@ func (r *FioReconciler) newJob(ctx context.Context, cr *perfv1alpha1.Fio, crRef 
 					Containers: []corev1.Container{
 						{
 							Name:            "fio",
-							Image:           "xridge/fio",
-							ImagePullPolicy: corev1.PullAlways,
+							Image:           cr.Spec.Image.Name,
+							ImagePullPolicy: imagePullPolicy,
 							Env:             env,
 						},
 					},
-					RestartPolicy: corev1.RestartPolicyNever,
+					RestartPolicy:    corev1.RestartPolicyNever,
+					ImagePullSecrets: imagePullSecrets,
 				},
 			},
 			BackoffLimit: &backoffLimit,

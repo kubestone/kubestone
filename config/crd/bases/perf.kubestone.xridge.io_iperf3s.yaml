@@ -36,21 +36,20 @@ spec:
                 client
               properties:
                 cmdLineArgs:
-                  description: Command line arguments appended to the predefined iperf3
-                    parameters
+                  description: CmdLineArgs are appended to the predefined iperf3 parameters
                   type: string
                 hostNetwork:
-                  description: Host Network requested for the iperf3 pod, if enabled
+                  description: HostNetwork requested for the iperf3 pod, if enabled
                     the hosts network namespace is used. Default to false.
                   type: boolean
                 podLabels:
                   additionalProperties:
                     type: string
-                  description: Labels to add to the iperf3 pod.
+                  description: PodLabels are added to the iperf3 pod as labels.
                   type: object
                 podScheduling:
-                  description: Scheduling related options to determine which node
-                    the iperf3 pod should be scheduled
+                  description: PodScheduling contains options to determine which node
+                    the iperf3 pod should be scheduled on
                   properties:
                     affinity:
                       description: Affinity is a group of affinity scheduling rules.
@@ -839,21 +838,20 @@ spec:
                 server
               properties:
                 cmdLineArgs:
-                  description: Command line arguments appended to the predefined iperf3
-                    parameters
+                  description: CmdLineArgs are appended to the predefined iperf3 parameters
                   type: string
                 hostNetwork:
-                  description: Host Network requested for the iperf3 pod, if enabled
+                  description: HostNetwork requested for the iperf3 pod, if enabled
                     the hosts network namespace is used. Default to false.
                   type: boolean
                 podLabels:
                   additionalProperties:
                     type: string
-                  description: Labels to add to the iperf3 pod.
+                  description: PodLabels are added to the iperf3 pod as labels.
                   type: object
                 podScheduling:
-                  description: Scheduling related options to determine which node
-                    the iperf3 pod should be scheduled
+                  description: PodScheduling contains options to determine which node
+                    the iperf3 pod should be scheduled on
                   properties:
                     affinity:
                       description: Affinity is a group of affinity scheduling rules.
@@ -1620,8 +1618,8 @@ spec:
                   type: object
               type: object
             udp:
-              description: Use UDP rather than TCP. If enabled the '--udp' parameter
-                is set.
+              description: UDP to use rather than TCP. If enabled the '--udp' parameter
+                is added to iperf command line args
               type: boolean
           required:
           - image
@@ -1630,10 +1628,10 @@ spec:
           description: Iperf3Status describes the current state of the benchmark
           properties:
             completed:
-              description: State of completion
+              description: Completed shows the state of completion
               type: boolean
             running:
-              description: State of execution
+              description: Running shows the state of execution
               type: boolean
           required:
           - completed

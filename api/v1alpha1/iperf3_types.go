@@ -24,21 +24,20 @@ import (
 // with scheduling options for the both the iperf3 client
 // and server instances.
 type Iperf3ConfigurationSpec struct {
-	// Command line arguments appended to the
-	// predefined iperf3 parameters
+	// CmdLineArgs are appended to the predefined iperf3 parameters
 	// +optional
 	CmdLineArgs string `json:"cmdLineArgs,omitempty"`
 
-	// Labels to add to the iperf3 pod.
+	// PodLabels are added to the iperf3 pod as labels.
 	// +optional
 	PodLabels map[string]string `json:"podLabels,omitempty"`
 
-	// Scheduling related options to determine which
-	// node the iperf3 pod should be scheduled
+	// PodScheduling contains options to determine which
+	// node the iperf3 pod should be scheduled on
 	// +optional
 	PodScheduling PodSchedulingSpec `json:"podScheduling,omitempty"`
 
-	// Host Network requested for the iperf3 pod, if enabled the
+	// HostNetwork requested for the iperf3 pod, if enabled the
 	// hosts network namespace is used. Default to false.
 	// +optional
 	HostNetwork bool `json:"hostNetwork,omitempty"`
@@ -59,16 +58,17 @@ type Iperf3Spec struct {
 	// +optional
 	ClientConfiguration Iperf3ConfigurationSpec `json:"clientConfiguration,omitempty"`
 
-	// Use UDP rather than TCP. If enabled the '--udp' parameter is set.
+	// UDP to use rather than TCP.
+	// If enabled the '--udp' parameter is added to iperf command line args
 	// +optional
 	UDP bool `json:"udp,omitempty"`
 }
 
 // Iperf3Status describes the current state of the benchmark
 type Iperf3Status struct {
-	// State of execution
+	// Running shows the state of execution
 	Running bool `json:"running"`
-	// State of completion
+	// Completed shows the state of completion
 	Completed bool `json:"completed"`
 }
 

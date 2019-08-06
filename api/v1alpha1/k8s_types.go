@@ -18,7 +18,6 @@ package v1alpha1
 
 import (
 	corev1 "k8s.io/api/core/v1"
-	k8s_types "k8s.io/apimachinery/pkg/types"
 )
 
 // ImageSpec defines parameters for docker image executed on Kubernetes
@@ -29,7 +28,7 @@ type ImageSpec struct {
 	// Defaults to Always if :latest tag is specified, or IfNotPresent otherwise.
 	// +kubebuilder:validation:Enum=Always;Never;IfNotPresent
 	// +optional
-	PullPolicy string `json:"pullPolicy,omitempty"`
+	PullPolicy corev1.PullPolicy `json:"pullPolicy,omitempty"`
 	// PullSecret is an optional list of references to secrets
 	// in the same namespace to use for pulling any of the images
 	// +optional
@@ -52,11 +51,11 @@ type PodSchedulingSpec struct {
 	// it represents the OR of the selectors represented by the
 	// node selector terms.
 	// +optional
-	NodeSelector corev1.NodeSelector `json:"nodeSelector,omitempty"`
+	NodeSelector map[string]string `json:"nodeSelector,omitempty"`
 
 	// NodeName is a request to schedule this pod onto a specific node. If it is non-empty,
 	// the scheduler simply schedules this pod onto that node, assuming that it fits resource
 	// requirements.
 	// +optional
-	NodeName k8s_types.NodeName `json:"nodeName,omitempty"`
+	NodeName string `json:"nodeName,omitempty"`
 }

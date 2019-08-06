@@ -7,22 +7,32 @@ spec:
   image:
     name: xridge/iperf3:3.7.0
     pullPolicy: IfNotPresent
-    # pullSecret: docker-pull-secret
+    # pullSecret: null
 
   serverConfiguration:
     cmdLineArgs: --verbose
     # nodeSelector: null
-    affinity:
-      # nodeAffinity: null
-      # podAffinity: null
-      podAntiAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-        - labelSelector:
-            matchExpressions:
-            - key: app
-              operator: In
-              values:
-              - store
-          topologyKey: "kubernetes.io/hostname"
+    podLabels:
+      foo: bar
+
+    podScheduling:
+      affinity:
+        # nodeAffinity: null
+        # podAffinity: null
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - store
+            topologyKey: "kubernetes.io/hostname"
+      # tolerations: null
+      # nodeSelector: null
+      # nodeName: null
+    hostNetwork: false
+    
+  # clientConfiguration: null
 
   UDP: false

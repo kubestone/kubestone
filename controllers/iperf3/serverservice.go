@@ -26,6 +26,8 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 )
 
+// +kubebuilder:rbac:groups="",resources=services,verbs=get;list;create;delete
+
 func (r *Reconciler) newServerService(ctx context.Context, cr *perfv1alpha1.Iperf3, crRef *corev1.ObjectReference) error {
 	labels := map[string]string{
 		"app":               "iperf3",

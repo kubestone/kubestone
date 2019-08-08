@@ -35,6 +35,8 @@ import (
 
 const iperf3ServerPort = 5201
 
+// +kubebuilder:rbac:groups=apps,resources=deployments,verbs=get;list;create;delete
+
 func (r *Reconciler) newServerDeployment(ctx context.Context, cr *perfv1alpha1.Iperf3, crRef *corev1.ObjectReference) error {
 	replicas := int32(1)
 

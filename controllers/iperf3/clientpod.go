@@ -18,6 +18,8 @@ package iperf3
 
 import (
 	"context"
+	"fmt"
+	"strings"
 
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 
@@ -30,9 +32,10 @@ import (
 )
 
 func (r *Reconciler) newClientPod(ctx context.Context, cr *perfv1alpha1.Iperf3, crRef *corev1.ObjectReference) error {
+	iperfCmdLineArgs := fmt.Sprintf("-c %s %s", cr.Name, cr.Spec.ClientConfiguration.CmdLineArgs)
 	pod := corev1.Pod{
 		ObjectMeta: metav1.ObjectMeta{
-			Labels:    map[string]string{},
+			Labels:    cr.Spec.ClientConfiguration.PodLabels,
 			Name:      cr.Name + "-client",
 			Namespace: cr.Namespace,
 		},
@@ -41,12 +44,16 @@ func (r *Reconciler) newClientPod(ctx context.Context, cr *perfv1alpha1.Iperf3, 
 			Containers: []corev1.Container{
 				{
 					Name:            "client",
-					Image:           "networkstatic/iperf3",
-					ImagePullPolicy: corev1.PullIfNotPresent,
+					Image:           cr.Spec.Image.Name,
+					ImagePullPolicy: corev1.PullPolicy(cr.Spec.Image.PullPolicy),
 					Command:         []string{"iperf3"},
-					Args:            []string{"-c", cr.Name},
+					Args:            strings.Fields(iperfCmdLineArgs),
 				},
 			},
+			Affinity:     &cr.Spec.ClientConfiguration.PodScheduling.Affinity,
+			Tolerations:  cr.Spec.ClientConfiguration.PodScheduling.Tolerations,
+			NodeSelector: cr.Spec.ClientConfiguration.PodScheduling.NodeSelector,
+			NodeName:     cr.Spec.ClientConfiguration.PodScheduling.NodeName,
 		},
 	}
 

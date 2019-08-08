@@ -18,7 +18,9 @@ package iperf3
 
 import (
 	"context"
+	"fmt"
 	"strconv"
+	"strings"
 
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 
@@ -35,10 +37,20 @@ const iperf3ServerPort = 5201
 
 func (r *Reconciler) newServerDeployment(ctx context.Context, cr *perfv1alpha1.Iperf3, crRef *corev1.ObjectReference) error {
 	replicas := int32(1)
+
 	labels := map[string]string{
 		"app":               "iperf3",
 		"kubestone-cr-name": cr.Name,
 	}
+	// Let's be nice and don't mutate CRs label field
+	for k, v := range cr.Spec.ServerConfiguration.PodLabels {
+		labels[k] = v
+	}
+
+	iperfCmdLineArgs := fmt.Sprintf("-s -p %s %s",
+		strconv.Itoa(iperf3ServerPort),
+		cr.Spec.ClientConfiguration.CmdLineArgs)
+
 	deployment := appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      cr.Name,
@@ -57,10 +69,10 @@ func (r *Reconciler) newServerDeployment(ctx context.Context, cr *perfv1alpha1.I
 					Containers: []corev1.Container{
 						{
 							Name:            "server",
-							Image:           "networkstatic/iperf3",
-							ImagePullPolicy: corev1.PullIfNotPresent,
+							Image:           cr.Spec.Image.Name,
+							ImagePullPolicy: corev1.PullPolicy(cr.Spec.Image.PullPolicy),
 							Command:         []string{"iperf3"},
-							Args:            []string{"-s", "-p", strconv.Itoa(iperf3ServerPort)},
+							Args:            strings.Fields(iperfCmdLineArgs),
 							Ports: []corev1.ContainerPort{
 								{
 									Name:          "iperf-server",
@@ -81,6 +93,10 @@ func (r *Reconciler) newServerDeployment(ctx context.Context, cr *perfv1alpha1.I
 							*/
 						},
 					},
+					Affinity:     &cr.Spec.ServerConfiguration.PodScheduling.Affinity,
+					Tolerations:  cr.Spec.ServerConfiguration.PodScheduling.Tolerations,
+					NodeSelector: cr.Spec.ServerConfiguration.PodScheduling.NodeSelector,
+					NodeName:     cr.Spec.ServerConfiguration.PodScheduling.NodeName,
 				},
 			},
 		},

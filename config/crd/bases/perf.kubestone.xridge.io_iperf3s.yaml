@@ -36,21 +36,20 @@ spec:
                 client
               properties:
                 cmdLineArgs:
-                  description: Command line arguments appended to the predefined iperf3
-                    parameters
+                  description: CmdLineArgs are appended to the predefined iperf3 parameters
                   type: string
                 hostNetwork:
-                  description: Host Network requested for the iperf3 pod, if enabled
+                  description: HostNetwork requested for the iperf3 pod, if enabled
                     the hosts network namespace is used. Default to false.
                   type: boolean
                 podLabels:
                   additionalProperties:
                     type: string
-                  description: Labels to add to the iperf3 pod.
+                  description: PodLabels are added to the iperf3 pod as labels.
                   type: object
                 podScheduling:
-                  description: Scheduling related options to determine which node
-                    the iperf3 pod should be scheduled
+                  description: PodScheduling contains options to determine which node
+                    the iperf3 pod should be scheduled on
                   properties:
                     affinity:
                       description: Affinity is a group of affinity scheduling rules.
@@ -685,92 +684,12 @@ spec:
                         requirements.
                       type: string
                     nodeSelector:
+                      additionalProperties:
+                        type: string
                       description: A node selector represents the union of the results
                         of one or more label queries over a set of nodes; that is,
                         it represents the OR of the selectors represented by the node
                         selector terms.
-                      properties:
-                        nodeSelectorTerms:
-                          description: Required. A list of node selector terms. The
-                            terms are ORed.
-                          items:
-                            description: A null or empty node selector term matches
-                              no objects. The requirements of them are ANDed. The
-                              TopologySelectorTerm type implements a subset of the
-                              NodeSelectorTerm.
-                            properties:
-                              matchExpressions:
-                                description: A list of node selector requirements
-                                  by node's labels.
-                                items:
-                                  description: A node selector requirement is a selector
-                                    that contains values, a key, and an operator that
-                                    relates the key and values.
-                                  properties:
-                                    key:
-                                      description: The label key that the selector
-                                        applies to.
-                                      type: string
-                                    operator:
-                                      description: Represents a key's relationship
-                                        to a set of values. Valid operators are In,
-                                        NotIn, Exists, DoesNotExist. Gt, and Lt.
-                                      type: string
-                                    values:
-                                      description: An array of string values. If the
-                                        operator is In or NotIn, the values array
-                                        must be non-empty. If the operator is Exists
-                                        or DoesNotExist, the values array must be
-                                        empty. If the operator is Gt or Lt, the values
-                                        array must have a single element, which will
-                                        be interpreted as an integer. This array is
-                                        replaced during a strategic merge patch.
-                                      items:
-                                        type: string
-                                      type: array
-                                  required:
-                                  - key
-                                  - operator
-                                  type: object
-                                type: array
-                              matchFields:
-                                description: A list of node selector requirements
-                                  by node's fields.
-                                items:
-                                  description: A node selector requirement is a selector
-                                    that contains values, a key, and an operator that
-                                    relates the key and values.
-                                  properties:
-                                    key:
-                                      description: The label key that the selector
-                                        applies to.
-                                      type: string
-                                    operator:
-                                      description: Represents a key's relationship
-                                        to a set of values. Valid operators are In,
-                                        NotIn, Exists, DoesNotExist. Gt, and Lt.
-                                      type: string
-                                    values:
-                                      description: An array of string values. If the
-                                        operator is In or NotIn, the values array
-                                        must be non-empty. If the operator is Exists
-                                        or DoesNotExist, the values array must be
-                                        empty. If the operator is Gt or Lt, the values
-                                        array must have a single element, which will
-                                        be interpreted as an integer. This array is
-                                        replaced during a strategic merge patch.
-                                      items:
-                                        type: string
-                                      type: array
-                                  required:
-                                  - key
-                                  - operator
-                                  type: object
-                                type: array
-                            type: object
-                          type: array
-                      required:
-                      - nodeSelectorTerms
                       type: object
                     tolerations:
                       description: If specified, the pod's tolerations.
@@ -826,6 +745,10 @@ spec:
                   description: PullPolicy controls how the docker images are downloaded
                     Defaults to Always if :latest tag is specified, or IfNotPresent
                     otherwise.
+                  enum:
+                  - Always
+                  - Never
+                  - IfNotPresent
                   type: string
                 pullSecret:
                   description: PullSecret is an optional list of references to secrets
@@ -839,21 +762,20 @@ spec:
                 server
               properties:
                 cmdLineArgs:
-                  description: Command line arguments appended to the predefined iperf3
-                    parameters
+                  description: CmdLineArgs are appended to the predefined iperf3 parameters
                   type: string
                 hostNetwork:
-                  description: Host Network requested for the iperf3 pod, if enabled
+                  description: HostNetwork requested for the iperf3 pod, if enabled
                     the hosts network namespace is used. Default to false.
                   type: boolean
                 podLabels:
                   additionalProperties:
                     type: string
-                  description: Labels to add to the iperf3 pod.
+                  description: PodLabels are added to the iperf3 pod as labels.
                   type: object
                 podScheduling:
-                  description: Scheduling related options to determine which node
-                    the iperf3 pod should be scheduled
+                  description: PodScheduling contains options to determine which node
+                    the iperf3 pod should be scheduled on
                   properties:
                     affinity:
                       description: Affinity is a group of affinity scheduling rules.
@@ -1488,92 +1410,12 @@ spec:
                         requirements.
                       type: string
                     nodeSelector:
+                      additionalProperties:
+                        type: string
                       description: A node selector represents the union of the results
                         of one or more label queries over a set of nodes; that is,
                         it represents the OR of the selectors represented by the node
                         selector terms.
-                      properties:
-                        nodeSelectorTerms:
-                          description: Required. A list of node selector terms. The
-                            terms are ORed.
-                          items:
-                            description: A null or empty node selector term matches
-                              no objects. The requirements of them are ANDed. The
-                              TopologySelectorTerm type implements a subset of the
-                              NodeSelectorTerm.
-                            properties:
-                              matchExpressions:
-                                description: A list of node selector requirements
-                                  by node's labels.
-                                items:
-                                  description: A node selector requirement is a selector
-                                    that contains values, a key, and an operator that
-                                    relates the key and values.
-                                  properties:
-                                    key:
-                                      description: The label key that the selector
-                                        applies to.
-                                      type: string
-                                    operator:
-                                      description: Represents a key's relationship
-                                        to a set of values. Valid operators are In,
-                                        NotIn, Exists, DoesNotExist. Gt, and Lt.
-                                      type: string
-                                    values:
-                                      description: An array of string values. If the
-                                        operator is In or NotIn, the values array
-                                        must be non-empty. If the operator is Exists
-                                        or DoesNotExist, the values array must be
-                                        empty. If the operator is Gt or Lt, the values
-                                        array must have a single element, which will
-                                        be interpreted as an integer. This array is
-                                        replaced during a strategic merge patch.
-                                      items:
-                                        type: string
-                                      type: array
-                                  required:
-                                  - key
-                                  - operator
-                                  type: object
-                                type: array
-                              matchFields:
-                                description: A list of node selector requirements
-                                  by node's fields.
-                                items:
-                                  description: A node selector requirement is a selector
-                                    that contains values, a key, and an operator that
-                                    relates the key and values.
-                                  properties:
-                                    key:
-                                      description: The label key that the selector
-                                        applies to.
-                                      type: string
-                                    operator:
-                                      description: Represents a key's relationship
-                                        to a set of values. Valid operators are In,
-                                        NotIn, Exists, DoesNotExist. Gt, and Lt.
-                                      type: string
-                                    values:
-                                      description: An array of string values. If the
-                                        operator is In or NotIn, the values array
-                                        must be non-empty. If the operator is Exists
-                                        or DoesNotExist, the values array must be
-                                        empty. If the operator is Gt or Lt, the values
-                                        array must have a single element, which will
-                                        be interpreted as an integer. This array is
-                                        replaced during a strategic merge patch.
-                                      items:
-                                        type: string
-                                      type: array
-                                  required:
-                                  - key
-                                  - operator
-                                  type: object
-                                type: array
-                            type: object
-                          type: array
-                      required:
-                      - nodeSelectorTerms
                       type: object
                     tolerations:
                       description: If specified, the pod's tolerations.
@@ -1620,8 +1462,8 @@ spec:
                   type: object
               type: object
             udp:
-              description: Use UDP rather than TCP. If enabled the '--udp' parameter
-                is set.
+              description: UDP to use rather than TCP. If enabled the '--udp' parameter
+                is added to iperf command line args
               type: boolean
           required:
           - image
@@ -1630,10 +1472,10 @@ spec:
           description: Iperf3Status describes the current state of the benchmark
           properties:
             completed:
-              description: State of completion
+              description: Completed shows the state of completion
               type: boolean
             running:
-              description: State of execution
+              description: Running shows the state of execution
               type: boolean
           required:
           - completed

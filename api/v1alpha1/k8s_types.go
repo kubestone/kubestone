@@ -20,15 +20,19 @@ import (
 	corev1 "k8s.io/api/core/v1"
 )
 
+// PullPolicy controls how the docker images are downloaded
+// Defaults to Always if :latest tag is specified, or IfNotPresent otherwise.
+// +kubebuilder:validation:Enum=Always;Never;IfNotPresent
+type PullPolicy string
+
 // ImageSpec defines parameters for docker image executed on Kubernetes
 type ImageSpec struct {
 	// Name is the Docker Image location including the tag
 	Name string `json:"name"`
-	// PullPolicy controls how the docker images are downloaded
-	// Defaults to Always if :latest tag is specified, or IfNotPresent otherwise.
-	// +kubebuilder:validation:Enum=Always;Never;IfNotPresent
+
 	// +optional
-	PullPolicy corev1.PullPolicy `json:"pullPolicy,omitempty"`
+	PullPolicy PullPolicy `json:"pullPolicy,omitempty"`
+
 	// PullSecret is an optional list of references to secrets
 	// in the same namespace to use for pulling any of the images
 	// +optional

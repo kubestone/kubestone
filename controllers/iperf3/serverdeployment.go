@@ -70,7 +70,7 @@ func (r *Reconciler) newServerDeployment(ctx context.Context, cr *perfv1alpha1.I
 						{
 							Name:            "server",
 							Image:           cr.Spec.Image.Name,
-							ImagePullPolicy: cr.Spec.Image.PullPolicy,
+							ImagePullPolicy: corev1.PullPolicy(cr.Spec.Image.PullPolicy),
 							Command:         []string{"iperf3"},
 							Args:            strings.Fields(iperfCmdLineArgs),
 							Ports: []corev1.ContainerPort{

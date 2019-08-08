@@ -745,6 +745,10 @@ spec:
                   description: PullPolicy controls how the docker images are downloaded
                     Defaults to Always if :latest tag is specified, or IfNotPresent
                     otherwise.
+                  enum:
+                  - Always
+                  - Never
+                  - IfNotPresent
                   type: string
                 pullSecret:
                   description: PullSecret is an optional list of references to secrets

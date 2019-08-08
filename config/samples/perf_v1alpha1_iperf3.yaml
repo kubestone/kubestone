@@ -13,7 +13,7 @@ spec:
     cmdLineArgs: --verbose
     # nodeSelector: null
     podLabels:
-      foo: bar
+      iperf-mode: server
 
     podScheduling:
       affinity:
@@ -33,6 +33,17 @@ spec:
       # nodeName: null
     hostNetwork: false
     
-  # clientConfiguration: null
+  clientConfiguration:
+    podScheduling:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: iperf-mode
+                operator: In
+                values:
+                - server
+            topologyKey: "kubernetes.io/hostname"
 
-  UDP: false
+  udp: false

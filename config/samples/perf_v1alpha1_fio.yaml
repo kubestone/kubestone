@@ -4,5 +4,5 @@ metadata:
   name: fio-sample
 spec:
   jobFiles:
-   - jobs/rand-read.fio
-   - jobs/rand-write.fio
+   - /jobs/rand-read.fio
+   - /jobs/rand-write.fio

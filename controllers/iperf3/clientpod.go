@@ -33,12 +33,16 @@ import (
 
 // +kubebuilder:rbac:groups="",resources=pods,verbs=get;list;create;delete
 
+func podName(cr *perfv1alpha1.Iperf3) string {
+	return cr.Name + "-client"
+}
+
 func (r *Reconciler) newClientPod(ctx context.Context, cr *perfv1alpha1.Iperf3, crRef *corev1.ObjectReference) error {
 	iperfCmdLineArgs := fmt.Sprintf("-c %s %s", cr.Name, cr.Spec.ClientConfiguration.CmdLineArgs)
 	pod := corev1.Pod{
 		ObjectMeta: metav1.ObjectMeta{
 			Labels:    cr.Spec.ClientConfiguration.PodLabels,
-			Name:      cr.Name + "-client",
+			Name:      podName(cr),
 			Namespace: cr.Namespace,
 		},
 		Spec: corev1.PodSpec{
@@ -69,4 +73,16 @@ func (r *Reconciler) newClientPod(ctx context.Context, cr *perfv1alpha1.Iperf3, 
 	r.K8S.EventRecorder.Eventf(crRef, corev1.EventTypeNormal, k8s.CreateSucceeded,
 		"Created Iperf3 Client Pod: %v @ Namespace: %v", pod.Name, pod.Namespace)
 	return nil
+}
+
+func (r *Reconciler) clientPodFinished(cr *perfv1alpha1.Iperf3) (finished bool, err error) {
+	finished, err = false, nil
+	pod, err := r.K8S.Clientset.CoreV1().Pods(cr.Namespace).Get(podName(cr), metav1.GetOptions{})
+	if err != nil {
+		return finished, err
+	}
+
+	finished = pod.Status.Phase == corev1.PodSucceeded || pod.Status.Phase == corev1.PodFailed
+
+	return finished, err
 }

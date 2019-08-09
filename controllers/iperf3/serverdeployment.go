@@ -119,6 +119,22 @@ func (r *Reconciler) newServerDeployment(ctx context.Context, cr *perfv1alpha1.I
 	return nil
 }
 
+func (r *Reconciler) deleteServerDeployment(ctx context.Context, cr *perfv1alpha1.Iperf3, crRef *corev1.ObjectReference) error {
+	deployment, err := r.K8S.Clientset.AppsV1().Deployments(cr.Namespace).Get(cr.Name, metav1.GetOptions{})
+	if err != nil {
+		return err
+	}
+
+	if err := r.K8S.Client.Delete(ctx, deployment); err != nil {
+		return err
+	}
+
+	r.K8S.EventRecorder.Eventf(crRef, corev1.EventTypeNormal, k8s.DeleteSucceeded,
+		"Deleted Iperf3 Server Deployment: %v @ Namespace: %v", deployment.Name, deployment.Namespace)
+
+	return nil
+}
+
 func (r *Reconciler) serverDeploymentReady(cr *perfv1alpha1.Iperf3) (ready bool, err error) {
 	ready, err = false, nil
 	deployment, err := r.K8S.Clientset.AppsV1().Deployments(cr.Namespace).Get(cr.Name, metav1.GetOptions{})
@@ -126,9 +142,7 @@ func (r *Reconciler) serverDeploymentReady(cr *perfv1alpha1.Iperf3) (ready bool,
 		return ready, err
 	}
 
-	if deployment.Status.ReadyReplicas == *deployment.Spec.Replicas {
-		ready = true
-	}
+	ready = deployment.Status.ReadyReplicas == *deployment.Spec.Replicas
 
 	return ready, err
 }

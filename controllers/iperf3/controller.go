@@ -56,6 +56,17 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 		return ctrl.Result{}, err
 	}
 
+	if cr.Status.Completed {
+		return ctrl.Result{}, nil
+	}
+
+	cr.Status.Running = true
+	if err := r.K8S.Client.Status().Update(ctx, &cr); err != nil {
+		r.K8S.EventRecorder.Eventf(crRef, corev1.EventTypeWarning, k8s.CreateFailed,
+			"Unable to update iperf3 status: %v", err)
+		return ctrl.Result{}, err
+	}
+
 	if err := r.newServerDeployment(ctx, &cr, crRef); err != nil {
 		r.K8S.EventRecorder.Eventf(crRef, corev1.EventTypeWarning, k8s.CreateFailed,
 			"Unable to create iperf3 Server Deployment: %v", err)
@@ -75,13 +86,43 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 		return ctrl.Result{}, err
 	}
 	if !serverReady {
-		// Wait for the client pod to the deployment to be ready
+		// Wait for deployment to be ready
 		return ctrl.Result{Requeue: true}, nil
 	}
 
 	if err := r.newClientPod(ctx, &cr, crRef); err != nil {
 		r.K8S.EventRecorder.Eventf(crRef, corev1.EventTypeWarning, k8s.CreateFailed,
 			"Unable to create iperf3 client pod: %v", err)
+		return ctrl.Result{}, err
+	}
+
+	clientCompleted, err := r.clientPodFinished(&cr)
+	if err != nil {
+		r.K8S.EventRecorder.Eventf(crRef, corev1.EventTypeWarning, k8s.CreateFailed,
+			"Unable to determine iperf3 client pod state: %v", err)
+		return ctrl.Result{}, err
+	}
+	if !clientCompleted {
+		// Wait for the client pod to be completed
+		return ctrl.Result{Requeue: true}, nil
+	}
+
+	if err := r.deleteServerService(ctx, &cr, crRef); err != nil {
+		r.K8S.EventRecorder.Eventf(crRef, corev1.EventTypeWarning, k8s.CreateFailed,
+			"Unable to delete iperf3 server service: %v", err)
+		return ctrl.Result{}, err
+	}
+
+	if err := r.deleteServerDeployment(ctx, &cr, crRef); err != nil {
+		r.K8S.EventRecorder.Eventf(crRef, corev1.EventTypeWarning, k8s.CreateFailed,
+			"Unable to delete iperf3 server deployment: %v", err)
+		return ctrl.Result{}, err
+	}
+
+	cr.Status.Completed = true
+	if err := r.K8S.Client.Status().Update(ctx, &cr); err != nil {
+		r.K8S.EventRecorder.Eventf(crRef, corev1.EventTypeWarning, k8s.CreateFailed,
+			"Unable to update iperf3 status: %v", err)
 		return ctrl.Result{}, err
 	}
 

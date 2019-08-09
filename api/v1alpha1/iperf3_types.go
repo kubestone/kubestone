@@ -73,6 +73,7 @@ type Iperf3Status struct {
 }
 
 // +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
 
 // Iperf3 is the Schema for the iperf3s API
 type Iperf3 struct {

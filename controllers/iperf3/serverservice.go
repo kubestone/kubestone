@@ -61,3 +61,19 @@ func (r *Reconciler) newServerService(ctx context.Context, cr *perfv1alpha1.Iper
 		"Created Iperf3 Server Service: %v @ Namespace: %v", service.Name, service.Namespace)
 	return nil
 }
+
+func (r *Reconciler) deleteServerService(ctx context.Context, cr *perfv1alpha1.Iperf3, crRef *corev1.ObjectReference) error {
+	service, err := r.K8S.Clientset.CoreV1().Services(cr.Namespace).Get(cr.Name, metav1.GetOptions{})
+	if err != nil {
+		return err
+	}
+
+	if err := r.K8S.Client.Delete(ctx, service); err != nil {
+		return err
+	}
+
+	r.K8S.EventRecorder.Eventf(crRef, corev1.EventTypeNormal, k8s.DeleteSucceeded,
+		"Deleted Iperf3 Server Service: %v @ Namespace: %v", service.Name, service.Namespace)
+
+	return nil
+}

@@ -11,6 +11,8 @@ spec:
     kind: Iperf3
     plural: iperf3s
   scope: ""
+  subresources:
+    status: {}
   validation:
     openAPIV3Schema:
       description: Iperf3 is the Schema for the iperf3s API

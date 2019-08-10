@@ -21,22 +21,20 @@ import (
 	"os"
 
 	"github.com/go-logr/zapr"
-	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
-	iperf3_controller "github.com/xridge/kubestone/controllers/iperf3"
-	"github.com/xridge/kubestone/pkg/k8s"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/client-go/kubernetes"
-
-	"github.com/xridge/kubestone/controllers"
-	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
 	k8sscheme "k8s.io/client-go/kubernetes/scheme"
 	typedcorev1 "k8s.io/client-go/kubernetes/typed/core/v1"
 	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
-	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/client-go/tools/record"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
+
+	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
+	"github.com/xridge/kubestone/controllers"
+	iperf3ctrl "github.com/xridge/kubestone/controllers/iperf3"
+	"github.com/xridge/kubestone/pkg/k8s"
 	// +kubebuilder:scaffold:imports
 )
 
@@ -47,7 +45,7 @@ var (
 )
 
 func init() {
-	_ = clientgoscheme.AddToScheme(scheme)
+	_ = k8sscheme.AddToScheme(scheme)
 
 	_ = perfv1alpha1.AddToScheme(scheme)
 	// +kubebuilder:scaffold:scheme
@@ -73,7 +71,8 @@ func main() {
 
 	ctrl.SetLogger(zapr.NewLogger(rootLog))
 
-	mgr, err := ctrl.NewManager(ctrl.GetConfigOrDie(), ctrl.Options{
+	restClientConfig := ctrl.GetConfigOrDie()
+	mgr, err := ctrl.NewManager(restClientConfig, ctrl.Options{
 		Scheme:             scheme,
 		MetricsBindAddress: metricsAddr,
 		LeaderElection:     enableLeaderElection,
@@ -83,22 +82,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	clientConfig := clientcmd.NewNonInteractiveDeferredLoadingClientConfig(
-		clientcmd.NewDefaultClientConfigLoadingRules(),
-		&clientcmd.ConfigOverrides{})
-
-	restClientConfig, err := clientConfig.ClientConfig()
-	if err != nil {
-		setupLog.Error(err, "Unable to get kubernetes client config")
-		os.Exit(1)
-	}
-
-	clientSet, err := kubernetes.NewForConfig(restClientConfig)
-	if err != nil {
-		setupLog.Error(err, "Unable to build kubernetes clientSet")
-		os.Exit(1)
-	}
-
+	clientSet := kubernetes.NewForConfigOrDie(restClientConfig)
 	k8sAccess := k8s.Access{
 		Client:        mgr.GetClient(),
 		Clientset:     clientSet,
@@ -106,7 +90,7 @@ func main() {
 		EventRecorder: newEventRecorder(clientSet),
 	}
 
-	if err = (&iperf3_controller.Reconciler{
+	if err = (&iperf3ctrl.Reconciler{
 		K8S: k8sAccess,
 		Log: ctrl.Log.WithName("controllers").WithName("iperf3"),
 	}).SetupWithManager(mgr); err != nil {

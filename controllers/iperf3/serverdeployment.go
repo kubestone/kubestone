@@ -22,11 +22,10 @@ import (
 	"strconv"
 	"strings"
 
-	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
-
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/client-go/tools/reference"
 
 	"github.com/xridge/kubestone/pkg/k8s"
 
@@ -37,7 +36,7 @@ const iperf3ServerPort = 5201
 
 // +kubebuilder:rbac:groups=apps,resources=deployments,verbs=get;list;create;delete
 
-func (r *Reconciler) newServerDeployment(ctx context.Context, cr *perfv1alpha1.Iperf3, crRef *corev1.ObjectReference) error {
+func newServerDeployment(cr *perfv1alpha1.Iperf3) metav1.Object {
 	replicas := int32(1)
 
 	labels := map[string]string{
@@ -104,28 +103,21 @@ func (r *Reconciler) newServerDeployment(ctx context.Context, cr *perfv1alpha1.I
 		},
 	}
 
-	// FIXME: The next three statements are common between serverdeployment, serverservice and clientpod,
-	// it would make sense to factor it into one function. For that a type should be found which applies
-	// for both SetControllerReference and Create's object.
-	if err := controllerutil.SetControllerReference(cr, &deployment, r.K8S.Scheme); err != nil {
-		return err
-	}
-	if err := r.K8S.Client.Create(ctx, &deployment); k8s.IgnoreAlreadyExists(err) != nil {
-		return err
-	}
-
-	r.K8S.EventRecorder.Eventf(crRef, corev1.EventTypeNormal, k8s.CreateSucceeded,
-		"Created Iperf3 Server Deployment: %v @ Namespace: %v", deployment.Name, deployment.Namespace)
-	return nil
+	return &deployment
 }
 
-func (r *Reconciler) deleteServerDeployment(ctx context.Context, cr *perfv1alpha1.Iperf3, crRef *corev1.ObjectReference) error {
+func (r *Reconciler) deleteServerDeployment(ctx context.Context, cr *perfv1alpha1.Iperf3) error {
 	deployment, err := r.K8S.Clientset.AppsV1().Deployments(cr.Namespace).Get(cr.Name, metav1.GetOptions{})
 	if err != nil {
 		return err
 	}
 
 	if err := r.K8S.Client.Delete(ctx, deployment); err != nil {
+		return err
+	}
+
+	crRef, err := reference.GetReference(r.K8S.Scheme, cr)
+	if err != nil {
 		return err
 	}
 

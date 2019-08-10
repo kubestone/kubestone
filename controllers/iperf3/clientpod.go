@@ -17,16 +17,11 @@ limitations under the License.
 package iperf3
 
 import (
-	"context"
 	"fmt"
 	"strings"
 
-	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
-
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-
-	"github.com/xridge/kubestone/pkg/k8s"
 
 	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
 )
@@ -37,7 +32,7 @@ func podName(cr *perfv1alpha1.Iperf3) string {
 	return cr.Name + "-client"
 }
 
-func (r *Reconciler) newClientPod(ctx context.Context, cr *perfv1alpha1.Iperf3, crRef *corev1.ObjectReference) error {
+func newClientPod(cr *perfv1alpha1.Iperf3) metav1.Object {
 	iperfCmdLineArgs := fmt.Sprintf("-c %s %s", cr.Name, cr.Spec.ClientConfiguration.CmdLineArgs)
 	pod := corev1.Pod{
 		ObjectMeta: metav1.ObjectMeta{
@@ -63,16 +58,7 @@ func (r *Reconciler) newClientPod(ctx context.Context, cr *perfv1alpha1.Iperf3, 
 		},
 	}
 
-	if err := controllerutil.SetControllerReference(cr, &pod, r.K8S.Scheme); err != nil {
-		return err
-	}
-	if err := r.K8S.Client.Create(ctx, &pod); k8s.IgnoreAlreadyExists(err) != nil {
-		return err
-	}
-
-	r.K8S.EventRecorder.Eventf(crRef, corev1.EventTypeNormal, k8s.CreateSucceeded,
-		"Created Iperf3 Client Pod: %v @ Namespace: %v", pod.Name, pod.Namespace)
-	return nil
+	return &pod
 }
 
 func (r *Reconciler) clientPodFinished(cr *perfv1alpha1.Iperf3) (finished bool, err error) {

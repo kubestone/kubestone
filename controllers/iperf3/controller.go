@@ -20,10 +20,7 @@ import (
 	"context"
 
 	"github.com/go-logr/logr"
-	"k8s.io/client-go/tools/reference"
 	ctrl "sigs.k8s.io/controller-runtime"
-
-	corev1 "k8s.io/api/core/v1"
 
 	"github.com/xridge/kubestone/pkg/k8s"
 
@@ -42,47 +39,32 @@ type Reconciler struct {
 // Reconcile Iperf3 Job Requests
 func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 	ctx := context.Background()
-	log := r.Log.WithValues("iperf3", req.NamespacedName)
 
 	var cr perfv1alpha1.Iperf3
 	if err := r.K8S.Client.Get(ctx, req.NamespacedName, &cr); err != nil {
-		//log.Error(err, "Unable to fetch Iperf3 CR")
 		return ctrl.Result{}, k8s.IgnoreNotFound(err)
 	}
 
-	crRef, err := reference.GetReference(r.K8S.Scheme, &cr)
-	if err != nil {
-		log.Error(err, "Unable to get reference to Iperf3 CR")
-		return ctrl.Result{}, err
-	}
-
+	// Run to one completion
 	if cr.Status.Completed {
 		return ctrl.Result{}, nil
 	}
 
 	cr.Status.Running = true
 	if err := r.K8S.Client.Status().Update(ctx, &cr); err != nil {
-		r.K8S.EventRecorder.Eventf(crRef, corev1.EventTypeWarning, k8s.CreateFailed,
-			"Unable to update iperf3 status: %v", err)
 		return ctrl.Result{}, err
 	}
 
-	if err := r.newServerDeployment(ctx, &cr, crRef); err != nil {
-		r.K8S.EventRecorder.Eventf(crRef, corev1.EventTypeWarning, k8s.CreateFailed,
-			"Unable to create iperf3 Server Deployment: %v", err)
+	if err := r.K8S.CreateWithReference(ctx, newServerDeployment(&cr), &cr); err != nil {
 		return ctrl.Result{}, err
 	}
 
-	if err := r.newServerService(ctx, &cr, crRef); err != nil {
-		r.K8S.EventRecorder.Eventf(crRef, corev1.EventTypeWarning, k8s.CreateFailed,
-			"Unable to create iperf3 Server Service: %v", err)
+	if err := r.K8S.CreateWithReference(ctx, newServerService(&cr), &cr); err != nil {
 		return ctrl.Result{}, err
 	}
 
 	serverReady, err := r.serverDeploymentReady(&cr)
 	if err != nil {
-		r.K8S.EventRecorder.Eventf(crRef, corev1.EventTypeWarning, k8s.CreateFailed,
-			"Unable to determine iperf3 Server Deployment state: %v", err)
 		return ctrl.Result{}, err
 	}
 	if !serverReady {
@@ -90,16 +72,12 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 		return ctrl.Result{Requeue: true}, nil
 	}
 
-	if err := r.newClientPod(ctx, &cr, crRef); err != nil {
-		r.K8S.EventRecorder.Eventf(crRef, corev1.EventTypeWarning, k8s.CreateFailed,
-			"Unable to create iperf3 client pod: %v", err)
+	if err := r.K8S.CreateWithReference(ctx, newClientPod(&cr), &cr); err != nil {
 		return ctrl.Result{}, err
 	}
 
 	clientCompleted, err := r.clientPodFinished(&cr)
 	if err != nil {
-		r.K8S.EventRecorder.Eventf(crRef, corev1.EventTypeWarning, k8s.CreateFailed,
-			"Unable to determine iperf3 client pod state: %v", err)
 		return ctrl.Result{}, err
 	}
 	if !clientCompleted {
@@ -107,22 +85,17 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 		return ctrl.Result{Requeue: true}, nil
 	}
 
-	if err := r.deleteServerService(ctx, &cr, crRef); err != nil {
-		r.K8S.EventRecorder.Eventf(crRef, corev1.EventTypeWarning, k8s.CreateFailed,
-			"Unable to delete iperf3 server service: %v", err)
+	if err := r.deleteServerService(ctx, &cr); err != nil {
 		return ctrl.Result{}, err
 	}
 
-	if err := r.deleteServerDeployment(ctx, &cr, crRef); err != nil {
-		r.K8S.EventRecorder.Eventf(crRef, corev1.EventTypeWarning, k8s.CreateFailed,
-			"Unable to delete iperf3 server deployment: %v", err)
+	if err := r.deleteServerDeployment(ctx, &cr); err != nil {
 		return ctrl.Result{}, err
 	}
 
+	cr.Status.Running = false
 	cr.Status.Completed = true
 	if err := r.K8S.Client.Status().Update(ctx, &cr); err != nil {
-		r.K8S.EventRecorder.Eventf(crRef, corev1.EventTypeWarning, k8s.CreateFailed,
-			"Unable to update iperf3 status: %v", err)
 		return ctrl.Result{}, err
 	}
 

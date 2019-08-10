@@ -23,12 +23,11 @@ import (
 	"github.com/xridge/kubestone/pkg/k8s"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 )
 
 // +kubebuilder:rbac:groups="",resources=services,verbs=get;list;create;delete
 
-func (r *Reconciler) newServerService(ctx context.Context, cr *perfv1alpha1.Iperf3, crRef *corev1.ObjectReference) error {
+func newServerService(cr *perfv1alpha1.Iperf3) metav1.Object {
 	labels := map[string]string{
 		"app":               "iperf3",
 		"kubestone-cr-name": cr.Name,
@@ -50,19 +49,10 @@ func (r *Reconciler) newServerService(ctx context.Context, cr *perfv1alpha1.Iper
 		},
 	}
 
-	if err := controllerutil.SetControllerReference(cr, &service, r.K8S.Scheme); err != nil {
-		return err
-	}
-	if err := r.K8S.Client.Create(ctx, &service); k8s.IgnoreAlreadyExists(err) != nil {
-		return err
-	}
-
-	r.K8S.EventRecorder.Eventf(crRef, corev1.EventTypeNormal, k8s.CreateSucceeded,
-		"Created Iperf3 Server Service: %v @ Namespace: %v", service.Name, service.Namespace)
-	return nil
+	return &service
 }
 
-func (r *Reconciler) deleteServerService(ctx context.Context, cr *perfv1alpha1.Iperf3, crRef *corev1.ObjectReference) error {
+func (r *Reconciler) deleteServerService(ctx context.Context, cr *perfv1alpha1.Iperf3) error {
 	service, err := r.K8S.Clientset.CoreV1().Services(cr.Namespace).Get(cr.Name, metav1.GetOptions{})
 	if err != nil {
 		return err
@@ -72,7 +62,7 @@ func (r *Reconciler) deleteServerService(ctx context.Context, cr *perfv1alpha1.I
 		return err
 	}
 
-	r.K8S.EventRecorder.Eventf(crRef, corev1.EventTypeNormal, k8s.DeleteSucceeded,
+	r.K8S.EventRecorder.Eventf(cr, corev1.EventTypeNormal, k8s.DeleteSucceeded,
 		"Deleted Iperf3 Server Service: %v @ Namespace: %v", service.Name, service.Namespace)
 
 	return nil

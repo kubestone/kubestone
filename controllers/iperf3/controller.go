@@ -61,11 +61,11 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 		return ctrl.Result{}, err
 	}
 
-	if err := r.K8S.CreateWithReference(ctx, newServerDeployment(&cr), &cr); err != nil {
+	if err := r.K8S.CreateWithReference(ctx, NewServerDeployment(&cr), &cr); err != nil {
 		return ctrl.Result{}, err
 	}
 
-	if err := r.K8S.CreateWithReference(ctx, newServerService(&cr), &cr); err != nil {
+	if err := r.K8S.CreateWithReference(ctx, NewServerService(&cr), &cr); err != nil {
 		return ctrl.Result{}, err
 	}
 
@@ -78,7 +78,7 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 		return ctrl.Result{Requeue: true}, nil
 	}
 
-	if err := r.K8S.CreateWithReference(ctx, newClientPod(&cr), &cr); err != nil {
+	if err := r.K8S.CreateWithReference(ctx, NewClientPod(&cr), &cr); err != nil {
 		return ctrl.Result{}, err
 	}
 
@@ -91,6 +91,7 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 		return ctrl.Result{Requeue: true}, nil
 	}
 
+	//if err := r.K8S.DeleteObject(ctx, &cr); err != nil {
 	if err := r.deleteServerService(ctx, &cr); err != nil {
 		return ctrl.Result{}, err
 	}

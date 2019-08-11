@@ -17,6 +17,7 @@ package iperf3
 
 import (
 	"strconv"
+	"strings"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -26,7 +27,7 @@ import (
 	ksapi "github.com/xridge/kubestone/api/v1alpha1"
 )
 
-var _ = Describe("ServerDeployment", func() {
+var _ = Describe("Server Deployment", func() {
 	Describe("created from CR", func() {
 		var cr ksapi.Iperf3
 		var deployment *appsv1.Deployment
@@ -80,7 +81,7 @@ var _ = Describe("ServerDeployment", func() {
 					},
 				},
 			}
-			deployment = newServerDeployment(&cr)
+			deployment = NewServerDeployment(&cr)
 		})
 
 		Context("with Image details specified", func() {
@@ -103,15 +104,9 @@ var _ = Describe("ServerDeployment", func() {
 				Expect(deployment.Spec.Template.Spec.Containers[0].Args).To(
 					ContainElement("--server"))
 			})
-			It("--port is specified", func() {
-				deployment := newServerDeployment(&cr)
-				Expect(deployment.Spec.Template.Spec.Containers[0].Args).To(
-					ContainElement("--port"))
-			})
 			It("--port's value is specified", func() {
-				// FIXME: This check should be stricter: port value must come after --port
-				Expect(deployment.Spec.Template.Spec.Containers[0].Args).To(
-					ContainElement(strconv.Itoa(iperf3ServerPort)))
+				Expect(strings.Join(deployment.Spec.Template.Spec.Containers[0].Args, " ")).To(
+					ContainSubstring("--port " + strconv.Itoa(Iperf3ServerPort)))
 			})
 			It("should not contain --udp flag", func() {
 				Expect(deployment.Spec.Template.Spec.Containers[0].Args).NotTo(
@@ -121,7 +116,7 @@ var _ = Describe("ServerDeployment", func() {
 
 		Context("with UDP mode specified", func() {
 			cr.Spec.UDP = true
-			deployment := newServerDeployment(&cr)
+			deployment := NewServerDeployment(&cr)
 			It("should contain --udp flag in iperf args", func() {
 				Expect(deployment.Spec.Template.Spec.Containers[0].Args).To(
 					ContainElement("--udp"))

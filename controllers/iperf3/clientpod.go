@@ -28,20 +28,40 @@ import (
 
 // +kubebuilder:rbac:groups="",resources=pods,verbs=get;list;create;delete
 
-func podName(cr *perfv1alpha1.Iperf3) string {
-	return cr.Name + "-client"
+func clientPodName(cr *perfv1alpha1.Iperf3) string {
+	// Should not match with service name as the pod's
+	// hostname is set to it's name. If the two matches
+	// the destination ip will resolve to 127.0.0.1 and
+	// the server will be unreachable.
+	return serverServiceName(cr) + "-client"
 }
 
-func newClientPod(cr *perfv1alpha1.Iperf3) metav1.Object {
-	iperfCmdLineArgs := fmt.Sprintf("-c %s %s", cr.Name, cr.Spec.ClientConfiguration.CmdLineArgs)
+// NewClientPod creates an Iperf3 Client Pod (targetting the
+// Server Deployment via the Server Service) from the provided
+// IPerf3 Benchmark Definition.
+func NewClientPod(cr *perfv1alpha1.Iperf3) *corev1.Pod {
+	serverAddress := serverServiceName(cr)
+	iperfCmdLineArgs := fmt.Sprintf("--client %s --port %d ",
+		serverAddress, Iperf3ServerPort)
+
+	if cr.Spec.UDP {
+		iperfCmdLineArgs += "--udp "
+	}
+
+	iperfCmdLineArgs += cr.Spec.ClientConfiguration.CmdLineArgs
 	pod := corev1.Pod{
 		ObjectMeta: metav1.ObjectMeta{
 			Labels:    cr.Spec.ClientConfiguration.PodLabels,
-			Name:      podName(cr),
+			Name:      clientPodName(cr),
 			Namespace: cr.Namespace,
 		},
 		Spec: corev1.PodSpec{
 			RestartPolicy: corev1.RestartPolicyNever,
+			ImagePullSecrets: []corev1.LocalObjectReference{
+				{
+					Name: cr.Spec.Image.PullSecret,
+				},
+			},
 			Containers: []corev1.Container{
 				{
 					Name:            "client",
@@ -55,6 +75,7 @@ func newClientPod(cr *perfv1alpha1.Iperf3) metav1.Object {
 			Tolerations:  cr.Spec.ClientConfiguration.PodScheduling.Tolerations,
 			NodeSelector: cr.Spec.ClientConfiguration.PodScheduling.NodeSelector,
 			NodeName:     cr.Spec.ClientConfiguration.PodScheduling.NodeName,
+			HostNetwork:  cr.Spec.ClientConfiguration.HostNetwork,
 		},
 	}
 
@@ -63,7 +84,7 @@ func newClientPod(cr *perfv1alpha1.Iperf3) metav1.Object {
 
 func (r *Reconciler) clientPodFinished(cr *perfv1alpha1.Iperf3) (finished bool, err error) {
 	finished, err = false, nil
-	pod, err := r.K8S.Clientset.CoreV1().Pods(cr.Namespace).Get(podName(cr), metav1.GetOptions{})
+	pod, err := r.K8S.Clientset.CoreV1().Pods(cr.Namespace).Get(clientPodName(cr), metav1.GetOptions{})
 	if err != nil {
 		return finished, err
 	}

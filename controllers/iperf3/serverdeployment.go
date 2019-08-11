@@ -19,7 +19,6 @@ package iperf3
 import (
 	"context"
 	"fmt"
-	"strconv"
 	"strings"
 
 	appsv1 "k8s.io/api/apps/v1"
@@ -32,11 +31,19 @@ import (
 	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
 )
 
-const iperf3ServerPort = 5201
+// Iperf3ServerPort is the TCP or UDP port where
+// the iperf3 server deployment and service listens
+const Iperf3ServerPort = 5201
 
 // +kubebuilder:rbac:groups=apps,resources=deployments,verbs=get;list;create;delete
 
-func newServerDeployment(cr *perfv1alpha1.Iperf3) *appsv1.Deployment {
+func serverDeploymentName(cr *perfv1alpha1.Iperf3) string {
+	return cr.Name
+}
+
+// NewServerDeployment create a iperf3 server deployment from the
+// provided Iperf3 Benchmark Definition.
+func NewServerDeployment(cr *perfv1alpha1.Iperf3) *appsv1.Deployment {
 	replicas := int32(1)
 
 	labels := map[string]string{
@@ -48,18 +55,20 @@ func newServerDeployment(cr *perfv1alpha1.Iperf3) *appsv1.Deployment {
 		labels[k] = v
 	}
 
-	iperfCmdLineArgs := fmt.Sprintf("--server --port %s ",
-		strconv.Itoa(iperf3ServerPort))
+	iperfCmdLineArgs := fmt.Sprintf("--server --port %d ",
+		Iperf3ServerPort)
 
+	protocol := corev1.Protocol(corev1.ProtocolTCP)
 	if cr.Spec.UDP {
 		iperfCmdLineArgs += "--udp "
+		protocol = corev1.Protocol(corev1.ProtocolUDP)
 	}
 
 	iperfCmdLineArgs += cr.Spec.ClientConfiguration.CmdLineArgs
 
 	deployment := appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      cr.Name,
+			Name:      serverDeploymentName(cr),
 			Namespace: cr.Namespace,
 		},
 		Spec: appsv1.DeploymentSpec{
@@ -87,14 +96,15 @@ func newServerDeployment(cr *perfv1alpha1.Iperf3) *appsv1.Deployment {
 							Ports: []corev1.ContainerPort{
 								{
 									Name:          "iperf-server",
-									ContainerPort: iperf3ServerPort,
+									ContainerPort: Iperf3ServerPort,
+									Protocol:      protocol,
 								},
 							},
 							/* -- Causing iperf3 server to exit with 'too many errors'
 							ReadinessProbe: &corev1.Probe{
 								Handler: corev1.Handler{
 									TCPSocket: &corev1.TCPSocketAction{
-										Port: intstr.FromInt(iperf3ServerPort),
+										Port: intstr.FromInt(Iperf3ServerPort),
 									},
 								},
 								InitialDelaySeconds: 5,

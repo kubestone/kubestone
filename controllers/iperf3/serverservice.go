@@ -27,22 +27,32 @@ import (
 
 // +kubebuilder:rbac:groups="",resources=services,verbs=get;list;create;delete
 
-func newServerService(cr *perfv1alpha1.Iperf3) metav1.Object {
+func serverServiceName(cr *perfv1alpha1.Iperf3) string {
+	return cr.Name
+}
+
+// NewServerService creates k8s service (which targets the server deployment)
+// from the Iperf3 Benchmark Definition
+func NewServerService(cr *perfv1alpha1.Iperf3) *corev1.Service {
 	labels := map[string]string{
 		"app":               "iperf3",
 		"kubestone-cr-name": cr.Name,
 	}
+	protocol := corev1.Protocol(corev1.ProtocolTCP)
+	if cr.Spec.UDP {
+		protocol = corev1.Protocol(corev1.ProtocolUDP)
+	}
 	service := corev1.Service{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      cr.Name,
+			Name:      serverServiceName(cr),
 			Namespace: cr.Namespace,
 		},
 		Spec: corev1.ServiceSpec{
 			Ports: []corev1.ServicePort{
 				{
 					Name:     "iperf3",
-					Protocol: "TCP",
-					Port:     iperf3ServerPort,
+					Protocol: protocol,
+					Port:     Iperf3ServerPort,
 				},
 			},
 			Selector: labels,

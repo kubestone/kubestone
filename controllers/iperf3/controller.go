@@ -61,11 +61,13 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 		return ctrl.Result{}, err
 	}
 
-	if err := r.K8S.CreateWithReference(ctx, NewServerDeployment(&cr), &cr); err != nil {
+	serverDeployment := NewServerDeployment(&cr)
+	if err := r.K8S.CreateWithReference(ctx, serverDeployment, &cr); err != nil {
 		return ctrl.Result{}, err
 	}
 
-	if err := r.K8S.CreateWithReference(ctx, NewServerService(&cr), &cr); err != nil {
+	serverService := NewServerService(&cr)
+	if err := r.K8S.CreateWithReference(ctx, serverService, &cr); err != nil {
 		return ctrl.Result{}, err
 	}
 
@@ -91,12 +93,11 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 		return ctrl.Result{Requeue: true}, nil
 	}
 
-	//if err := r.K8S.DeleteObject(ctx, &cr); err != nil {
-	if err := r.deleteServerService(ctx, &cr); err != nil {
+	if err := r.K8S.DeleteObject(ctx, serverService, &cr); err != nil {
 		return ctrl.Result{}, err
 	}
 
-	if err := r.deleteServerDeployment(ctx, &cr); err != nil {
+	if err := r.K8S.DeleteObject(ctx, serverDeployment, &cr); err != nil {
 		return ctrl.Result{}, err
 	}
 

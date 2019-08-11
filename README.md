@@ -1,10 +1,13 @@
-# kubestone
+![](https://raw.githubusercontent.com/xridge/kubestone/master/images/kubestone-logo.png)
+
+
 [![CircleCI](https://circleci.com/gh/xridge/kubestone/tree/master.svg?style=shield)](https://circleci.com/gh/xridge/kubestone/tree/master)
 [![docker build](https://img.shields.io/docker/cloud/build/xridge/kubestone.svg)](https://hub.docker.com/r/xridge/kubestone)
 [![docker pulls](https://img.shields.io/docker/pulls/xridge/kubestone.svg)](https://hub.docker.com/r/xridge/kubestone)
 [![Go Report Card](https://goreportcard.com/badge/github.com/xridge/kubestone)](https://goreportcard.com/report/github.com/xridge/kubestone)
 [![license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
+#
 kubestone is a benchmark oriented Kubernetes Operator. 
 
 It provides cpu, memory and disk performance measurements

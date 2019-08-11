@@ -17,18 +17,15 @@ limitations under the License.
 package iperf3
 
 import (
-	"context"
-	"fmt"
-	"strings"
+	"strconv"
 
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/client-go/tools/reference"
-
-	"github.com/xridge/kubestone/pkg/k8s"
 
 	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
+
+	"github.com/firepear/qsplit"
 )
 
 // Iperf3ServerPort is the TCP or UDP port where
@@ -55,16 +52,18 @@ func NewServerDeployment(cr *perfv1alpha1.Iperf3) *appsv1.Deployment {
 		labels[k] = v
 	}
 
-	iperfCmdLineArgs := fmt.Sprintf("--server --port %d ",
-		Iperf3ServerPort)
+	iperfCmdLineArgs := []string{
+		"--server",
+		"--port", strconv.Itoa(Iperf3ServerPort)}
 
 	protocol := corev1.Protocol(corev1.ProtocolTCP)
 	if cr.Spec.UDP {
-		iperfCmdLineArgs += "--udp "
+		iperfCmdLineArgs = append(iperfCmdLineArgs, "--udp")
 		protocol = corev1.Protocol(corev1.ProtocolUDP)
 	}
 
-	iperfCmdLineArgs += cr.Spec.ClientConfiguration.CmdLineArgs
+	iperfCmdLineArgs = append(iperfCmdLineArgs,
+		qsplit.ToStrings([]byte(cr.Spec.ClientConfiguration.CmdLineArgs))...)
 
 	deployment := appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
@@ -92,7 +91,7 @@ func NewServerDeployment(cr *perfv1alpha1.Iperf3) *appsv1.Deployment {
 							Image:           cr.Spec.Image.Name,
 							ImagePullPolicy: corev1.PullPolicy(cr.Spec.Image.PullPolicy),
 							Command:         []string{"iperf3"},
-							Args:            strings.Fields(iperfCmdLineArgs),
+							Args:            iperfCmdLineArgs,
 							Ports: []corev1.ContainerPort{
 								{
 									Name:          "iperf-server",
@@ -127,28 +126,8 @@ func NewServerDeployment(cr *perfv1alpha1.Iperf3) *appsv1.Deployment {
 	return &deployment
 }
 
-func (r *Reconciler) deleteServerDeployment(ctx context.Context, cr *perfv1alpha1.Iperf3) error {
-	deployment, err := r.K8S.Clientset.AppsV1().Deployments(cr.Namespace).Get(cr.Name, metav1.GetOptions{})
-	if err != nil {
-		return err
-	}
-
-	if err := r.K8S.Client.Delete(ctx, deployment); err != nil {
-		return err
-	}
-
-	crRef, err := reference.GetReference(r.K8S.Scheme, cr)
-	if err != nil {
-		return err
-	}
-
-	r.K8S.EventRecorder.Eventf(crRef, corev1.EventTypeNormal, k8s.DeleteSucceeded,
-		"Deleted Iperf3 Server Deployment: %v @ Namespace: %v", deployment.Name, deployment.Namespace)
-
-	return nil
-}
-
 func (r *Reconciler) serverDeploymentReady(cr *perfv1alpha1.Iperf3) (ready bool, err error) {
+	// TODO: Move this to k8s.client
 	ready, err = false, nil
 	deployment, err := r.K8S.Clientset.AppsV1().Deployments(cr.Namespace).Get(cr.Name, metav1.GetOptions{})
 	if err != nil {

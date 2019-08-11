@@ -17,10 +17,7 @@ limitations under the License.
 package iperf3
 
 import (
-	"context"
-
 	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
-	"github.com/xridge/kubestone/pkg/k8s"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -60,20 +57,4 @@ func NewServerService(cr *perfv1alpha1.Iperf3) *corev1.Service {
 	}
 
 	return &service
-}
-
-func (r *Reconciler) deleteServerService(ctx context.Context, cr *perfv1alpha1.Iperf3) error {
-	service, err := r.K8S.Clientset.CoreV1().Services(cr.Namespace).Get(cr.Name, metav1.GetOptions{})
-	if err != nil {
-		return err
-	}
-
-	if err := r.K8S.Client.Delete(ctx, service); err != nil {
-		return err
-	}
-
-	r.K8S.EventRecorder.Eventf(cr, corev1.EventTypeNormal, k8s.DeleteSucceeded,
-		"Deleted Iperf3 Server Service: %v @ Namespace: %v", service.Name, service.Namespace)
-
-	return nil
 }

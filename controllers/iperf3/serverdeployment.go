@@ -36,7 +36,7 @@ const iperf3ServerPort = 5201
 
 // +kubebuilder:rbac:groups=apps,resources=deployments,verbs=get;list;create;delete
 
-func newServerDeployment(cr *perfv1alpha1.Iperf3) metav1.Object {
+func newServerDeployment(cr *perfv1alpha1.Iperf3) *appsv1.Deployment {
 	replicas := int32(1)
 
 	labels := map[string]string{
@@ -48,9 +48,14 @@ func newServerDeployment(cr *perfv1alpha1.Iperf3) metav1.Object {
 		labels[k] = v
 	}
 
-	iperfCmdLineArgs := fmt.Sprintf("-s -p %s %s",
-		strconv.Itoa(iperf3ServerPort),
-		cr.Spec.ClientConfiguration.CmdLineArgs)
+	iperfCmdLineArgs := fmt.Sprintf("--server --port %s ",
+		strconv.Itoa(iperf3ServerPort))
+
+	if cr.Spec.UDP {
+		iperfCmdLineArgs += "--udp "
+	}
+
+	iperfCmdLineArgs += cr.Spec.ClientConfiguration.CmdLineArgs
 
 	deployment := appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
@@ -67,6 +72,11 @@ func newServerDeployment(cr *perfv1alpha1.Iperf3) metav1.Object {
 					Labels: labels,
 				},
 				Spec: corev1.PodSpec{
+					ImagePullSecrets: []corev1.LocalObjectReference{
+						{
+							Name: cr.Spec.Image.PullSecret,
+						},
+					},
 					Containers: []corev1.Container{
 						{
 							Name:            "server",
@@ -98,6 +108,7 @@ func newServerDeployment(cr *perfv1alpha1.Iperf3) metav1.Object {
 					Tolerations:  cr.Spec.ServerConfiguration.PodScheduling.Tolerations,
 					NodeSelector: cr.Spec.ServerConfiguration.PodScheduling.NodeSelector,
 					NodeName:     cr.Spec.ServerConfiguration.PodScheduling.NodeName,
+					HostNetwork:  cr.Spec.ServerConfiguration.HostNetwork,
 				},
 			},
 		},

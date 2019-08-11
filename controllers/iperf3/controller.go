@@ -36,7 +36,13 @@ type Reconciler struct {
 // +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=iperf3s,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=iperf3s/status,verbs=get;update;patch
 
-// Reconcile Iperf3 Job Requests
+// Reconcile Iperf3 Benchmark Requests by creating:
+//   - iperf3 server deployment
+//   - iperf3 server service
+//   - iperf3 client pod
+// The creation of iperf3 client pod is postponed until the server
+// deployment completes. Once the iperf3 client pod is completed,
+// the server deployment and service objects are removed from k8s.
 func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 	ctx := context.Background()
 

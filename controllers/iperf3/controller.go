@@ -76,11 +76,11 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 		return ctrl.Result{}, err
 	}
 
-	clientCompleted, err := r.clientPodFinished(&cr)
+	clientPodFinished, err := r.clientPodFinished(&cr)
 	if err != nil {
 		return ctrl.Result{}, err
 	}
-	if !clientCompleted {
+	if !clientPodFinished {
 		// Wait for the client pod to be completed
 		return ctrl.Result{Requeue: true}, nil
 	}

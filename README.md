@@ -8,7 +8,7 @@
 [![license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
 #
-kubestone is a benchmarking Kubernetes Operator. 
+Kubestone is a benchmarking Kubernetes Operator.
 
 It provides cpu, memory and disk performance measurements
 for Kubernetes cluster via common set of benchmarks:
@@ -17,12 +17,12 @@ for Kubernetes cluster via common set of benchmarks:
  * CPU: [sysbench](https://wiki.gentoo.org/wiki/Sysbench)
  
 ## Benchmark definitions
-Benchmark are initiated by creating Custom Resources in
+Benchmarks are initiated by creating Custom Resources in
 any namespace in Kubernetes. When a new Kubestone CR is created
 the benchmark's workflow is executed.
 
 ## Usage
-### Prerequisities
+### Prerequisites
  * [Kubernetes](https://kubernetes.io) v1.14 (or newer)
  * [Kustomzie](https://kustomize.io) v3.10
  * [Go](https://golang.org) v1.12 (with `GO111MODULE=on`)
@@ -59,7 +59,7 @@ the benchmark's workflow is executed.
     ```
 
 ### Run benchmark
- * Create dedicated namespace for bencmarking
+ * Create dedicated namespace for benchmarking
  ```bash
   $ kubectl create namespace kubestone
     namespace/kubestone created

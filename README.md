@@ -30,45 +30,45 @@ the benchmark's workflow is executed.
 
 ### Install the Custom Resource Definitions
  * Install the CRDs to Kubernetes
-    ```bash
-    $ make install
-    /Users/dev/goenvs/bin/controller-gen "crd:trivialVersions=true" rbac:roleName=manager-role webhook paths="./..." output:crd:artifacts:config=config/crd/bases
-    kubectl apply -f config/crd/bases
-    customresourcedefinition.apiextensions.k8s.io/fios.perf.kubestone.xridge.io configured
-    customresourcedefinition.apiextensions.k8s.io/iperf3s.perf.kubestone.xridge.io configured
-    ```
+  ```bash
+  $ make install
+  /Users/dev/goenvs/bin/controller-gen "crd:trivialVersions=true" rbac:roleName=manager-role webhook paths="./..." output:crd:artifacts:config=config/crd/bases
+  kubectl apply -f config/crd/bases
+  customresourcedefinition.apiextensions.k8s.io/fios.perf.kubestone.xridge.io configured
+  customresourcedefinition.apiextensions.k8s.io/iperf3s.perf.kubestone.xridge.io configured
+  ```
  * Deploy the Operator
-    ```bash
-    $ make deploy
-    /Users/dev/goenvs/bin/controller-gen "crd:trivialVersions=true" rbac:roleName=manager-role webhook paths="./..." output:crd:artifacts:config=config/crd/bases
-    kubectl apply -f config/crd/bases
-    customresourcedefinition.apiextensions.k8s.io/fios.perf.kubestone.xridge.io created
-    customresourcedefinition.apiextensions.k8s.io/iperf3s.perf.kubestone.xridge.io created
-    kustomize build config/default | kubectl apply -f -
-    namespace/kubestone-system created
-    customresourcedefinition.apiextensions.k8s.io/fios.perf.kubestone.xridge.io configured
-    customresourcedefinition.apiextensions.k8s.io/iperf3s.perf.kubestone.xridge.io configured
-    role.rbac.authorization.k8s.io/kubestone-leader-election-role created
-    clusterrole.rbac.authorization.k8s.io/kubestone-manager-role created
-    clusterrole.rbac.authorization.k8s.io/kubestone-proxy-role created
-    rolebinding.rbac.authorization.k8s.io/kubestone-leader-election-rolebinding created
-    clusterrolebinding.rbac.authorization.k8s.io/kubestone-manager-rolebinding created
-    clusterrolebinding.rbac.authorization.k8s.io/kubestone-proxy-rolebinding created
-    service/kubestone-controller-manager-metrics-service created
-    deployment.apps/kubestone-controller-manager created
-    ```
+  ```bash
+  $ make deploy
+  /Users/dev/goenvs/bin/controller-gen "crd:trivialVersions=true" rbac:roleName=manager-role webhook paths="./..." output:crd:artifacts:config=config/crd/bases
+  kubectl apply -f config/crd/bases
+  customresourcedefinition.apiextensions.k8s.io/fios.perf.kubestone.xridge.io created
+  customresourcedefinition.apiextensions.k8s.io/iperf3s.perf.kubestone.xridge.io created
+  kustomize build config/default | kubectl apply -f -
+  namespace/kubestone-system created
+  customresourcedefinition.apiextensions.k8s.io/fios.perf.kubestone.xridge.io configured
+  customresourcedefinition.apiextensions.k8s.io/iperf3s.perf.kubestone.xridge.io configured
+  role.rbac.authorization.k8s.io/kubestone-leader-election-role created
+  clusterrole.rbac.authorization.k8s.io/kubestone-manager-role created
+  clusterrole.rbac.authorization.k8s.io/kubestone-proxy-role created
+  rolebinding.rbac.authorization.k8s.io/kubestone-leader-election-rolebinding created
+  clusterrolebinding.rbac.authorization.k8s.io/kubestone-manager-rolebinding created
+  clusterrolebinding.rbac.authorization.k8s.io/kubestone-proxy-rolebinding created
+  service/kubestone-controller-manager-metrics-service created
+  deployment.apps/kubestone-controller-manager created
+  ```
 
 ### Run benchmark
  * Create dedicated namespace for benchmarking
- ```bash
- $ kubectl create namespace kubestone
- namespace/kubestone created
- ```
+  ```bash
+   $ kubectl create namespace kubestone
+   namespace/kubestone created
+   ```
  * Start sample benchmark by creating CR
- ```bash
- $ kubectl create -n kubestone -f config/samples/perf_v1alpha1_iperf3.yaml
- iperf3.perf.kubestone.xridge.io/iperf3-sample created
- ```
+  ```bash
+  $ kubectl create -n kubestone -f config/samples/perf_v1alpha1_iperf3.yaml
+  iperf3.perf.kubestone.xridge.io/iperf3-sample created
+  ```
 
 Sample benchmarks are located in [config/samples/](config/samples).
 

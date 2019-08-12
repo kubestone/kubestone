@@ -12,9 +12,9 @@ Kubestone is a benchmarking Kubernetes Operator.
 
 It provides cpu, memory and disk performance measurements
 for Kubernetes cluster via common set of benchmarks:
- * Disk: [fio](https://fio.readthedocs.io)
- * Network: [IPerf3](https://iperf.fr)
- * CPU: [sysbench](https://wiki.gentoo.org/wiki/Sysbench)
+* Disk: [fio](https://fio.readthedocs.io)
+* Network: [IPerf3](https://iperf.fr)
+* CPU: [sysbench](https://wiki.gentoo.org/wiki/Sysbench)
  
 ## Benchmark definitions
 Benchmarks are initiated by creating Custom Resources in
@@ -23,13 +23,13 @@ the benchmark's workflow is executed.
 
 ## Usage
 ### Prerequisites
- * [Kubernetes](https://kubernetes.io) v1.14 (or newer)
- * [Kustomzie](https://kustomize.io) v3.10
- * [Go](https://golang.org) v1.12 (with `GO111MODULE=on`)
+* [Kubernetes](https://kubernetes.io) v1.14 (or newer)
+* [Kustomzie](https://kustomize.io) v3.10
+* [Go](https://golang.org) v1.12 (with `GO111MODULE=on`)
 
 
 ### Install the Custom Resource Definitions
- * Install the CRDs to Kubernetes
+* Install the CRDs to Kubernetes
   ```bash
   $ make install
   /Users/dev/goenvs/bin/controller-gen "crd:trivialVersions=true" rbac:roleName=manager-role webhook paths="./..." output:crd:artifacts:config=config/crd/bases
@@ -37,7 +37,7 @@ the benchmark's workflow is executed.
   customresourcedefinition.apiextensions.k8s.io/fios.perf.kubestone.xridge.io configured
   customresourcedefinition.apiextensions.k8s.io/iperf3s.perf.kubestone.xridge.io configured
   ```
- * Deploy the Operator
+* Deploy the Operator
   ```bash
   $ make deploy
   /Users/dev/goenvs/bin/controller-gen "crd:trivialVersions=true" rbac:roleName=manager-role webhook paths="./..." output:crd:artifacts:config=config/crd/bases
@@ -59,12 +59,12 @@ the benchmark's workflow is executed.
   ```
 
 ### Run benchmark
- * Create dedicated namespace for benchmarking
+* Create dedicated namespace for benchmarking
   ```bash
-   $ kubectl create namespace kubestone
-   namespace/kubestone created
-   ```
- * Start sample benchmark by creating CR
+  $ kubectl create namespace kubestone
+  namespace/kubestone created
+  ```
+* Start sample benchmark by creating CR
   ```bash
   $ kubectl create -n kubestone -f config/samples/perf_v1alpha1_iperf3.yaml
   iperf3.perf.kubestone.xridge.io/iperf3-sample created

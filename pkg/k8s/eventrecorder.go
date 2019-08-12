@@ -21,4 +21,6 @@ const (
 	CreateFailed = "CreateFailed"
 	// CreateSucceeded is an event provided via EventRecorder
 	CreateSucceeded = "CreateSucceeded"
+	// DeleteSucceeded is an event provided via EventRecorder
+	DeleteSucceeded = "DeleteSucceeded"
 )

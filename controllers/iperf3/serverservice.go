@@ -17,47 +17,44 @@ limitations under the License.
 package iperf3
 
 import (
-	"context"
-
 	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
-	"github.com/xridge/kubestone/pkg/k8s"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 )
 
 // +kubebuilder:rbac:groups="",resources=services,verbs=get;list;create;delete
 
-func (r *Reconciler) newServerService(ctx context.Context, cr *perfv1alpha1.Iperf3, crRef *corev1.ObjectReference) error {
+func serverServiceName(cr *perfv1alpha1.Iperf3) string {
+	return cr.Name
+}
+
+// NewServerService creates k8s service (which targets the server deployment)
+// from the Iperf3 Benchmark Definition
+func NewServerService(cr *perfv1alpha1.Iperf3) *corev1.Service {
 	labels := map[string]string{
 		"app":               "iperf3",
 		"kubestone-cr-name": cr.Name,
 	}
+	protocol := corev1.Protocol(corev1.ProtocolTCP)
+	if cr.Spec.UDP {
+		protocol = corev1.Protocol(corev1.ProtocolUDP)
+	}
 	service := corev1.Service{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      cr.Name,
+			Name:      serverServiceName(cr),
 			Namespace: cr.Namespace,
 		},
 		Spec: corev1.ServiceSpec{
 			Ports: []corev1.ServicePort{
 				{
 					Name:     "iperf3",
-					Protocol: "TCP",
-					Port:     iperf3ServerPort,
+					Protocol: protocol,
+					Port:     Iperf3ServerPort,
 				},
 			},
 			Selector: labels,
 		},
 	}
 
-	if err := controllerutil.SetControllerReference(cr, &service, r.K8S.Scheme); err != nil {
-		return err
-	}
-	if err := r.K8S.Client.Create(ctx, &service); k8s.IgnoreAlreadyExists(err) != nil {
-		return err
-	}
-
-	r.K8S.EventRecorder.Eventf(crRef, corev1.EventTypeNormal, k8s.CreateSucceeded,
-		"Created Iperf3 Server Service: %v @ Namespace: %v", service.Name, service.Namespace)
-	return nil
+	return &service
 }

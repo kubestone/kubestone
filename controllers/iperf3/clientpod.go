@@ -17,56 +17,83 @@ limitations under the License.
 package iperf3
 
 import (
-	"context"
-	"fmt"
-	"strings"
-
-	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
+	"strconv"
 
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	"github.com/xridge/kubestone/pkg/k8s"
-
+	"github.com/firepear/qsplit"
 	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
 )
 
 // +kubebuilder:rbac:groups="",resources=pods,verbs=get;list;create;delete
 
-func (r *Reconciler) newClientPod(ctx context.Context, cr *perfv1alpha1.Iperf3, crRef *corev1.ObjectReference) error {
-	iperfCmdLineArgs := fmt.Sprintf("-c %s %s", cr.Name, cr.Spec.ClientConfiguration.CmdLineArgs)
+func clientPodName(cr *perfv1alpha1.Iperf3) string {
+	// Should not match with service name as the pod's
+	// hostname is set to it's name. If the two matches
+	// the destination ip will resolve to 127.0.0.1 and
+	// the server will be unreachable.
+	return serverServiceName(cr) + "-client"
+}
+
+// NewClientPod creates an Iperf3 Client Pod (targetting the
+// Server Deployment via the Server Service) from the provided
+// IPerf3 Benchmark Definition.
+func NewClientPod(cr *perfv1alpha1.Iperf3) *corev1.Pod {
+	serverAddress := serverServiceName(cr)
+	iperfCmdLineArgs := []string{
+		"--client", serverAddress,
+		"--port", strconv.Itoa(Iperf3ServerPort),
+	}
+
+	if cr.Spec.UDP {
+		iperfCmdLineArgs = append(iperfCmdLineArgs, "--udp")
+	}
+
+	iperfCmdLineArgs = append(iperfCmdLineArgs,
+		qsplit.ToStrings([]byte(cr.Spec.ClientConfiguration.CmdLineArgs))...)
+
 	pod := corev1.Pod{
 		ObjectMeta: metav1.ObjectMeta{
 			Labels:    cr.Spec.ClientConfiguration.PodLabels,
-			Name:      cr.Name + "-client",
+			Name:      clientPodName(cr),
 			Namespace: cr.Namespace,
 		},
 		Spec: corev1.PodSpec{
 			RestartPolicy: corev1.RestartPolicyNever,
+			ImagePullSecrets: []corev1.LocalObjectReference{
+				{
+					Name: cr.Spec.Image.PullSecret,
+				},
+			},
 			Containers: []corev1.Container{
 				{
 					Name:            "client",
 					Image:           cr.Spec.Image.Name,
 					ImagePullPolicy: corev1.PullPolicy(cr.Spec.Image.PullPolicy),
 					Command:         []string{"iperf3"},
-					Args:            strings.Fields(iperfCmdLineArgs),
+					Args:            iperfCmdLineArgs,
 				},
 			},
 			Affinity:     &cr.Spec.ClientConfiguration.PodScheduling.Affinity,
 			Tolerations:  cr.Spec.ClientConfiguration.PodScheduling.Tolerations,
 			NodeSelector: cr.Spec.ClientConfiguration.PodScheduling.NodeSelector,
 			NodeName:     cr.Spec.ClientConfiguration.PodScheduling.NodeName,
+			HostNetwork:  cr.Spec.ClientConfiguration.HostNetwork,
 		},
 	}
 
-	if err := controllerutil.SetControllerReference(cr, &pod, r.K8S.Scheme); err != nil {
-		return err
-	}
-	if err := r.K8S.Client.Create(ctx, &pod); k8s.IgnoreAlreadyExists(err) != nil {
-		return err
+	return &pod
+}
+
+func (r *Reconciler) clientPodFinished(cr *perfv1alpha1.Iperf3) (finished bool, err error) {
+	// TODO: Move this to k8s.client
+	pod, err := r.K8S.Clientset.CoreV1().Pods(cr.Namespace).Get(clientPodName(cr), metav1.GetOptions{})
+	if err != nil {
+		return false, err
 	}
 
-	r.K8S.EventRecorder.Eventf(crRef, corev1.EventTypeNormal, k8s.CreateSucceeded,
-		"Created Iperf3 Client Pod: %v @ Namespace: %v", pod.Name, pod.Namespace)
-	return nil
+	finished = pod.Status.Phase == corev1.PodSucceeded || pod.Status.Phase == corev1.PodFailed
+
+	return finished, nil
 }

@@ -17,27 +17,30 @@ limitations under the License.
 package iperf3
 
 import (
-	"context"
-	"fmt"
 	"strconv"
-	"strings"
-
-	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	"github.com/xridge/kubestone/pkg/k8s"
-
 	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
+
+	"github.com/firepear/qsplit"
 )
 
-const iperf3ServerPort = 5201
+// Iperf3ServerPort is the TCP or UDP port where
+// the iperf3 server deployment and service listens
+const Iperf3ServerPort = 5201
 
 // +kubebuilder:rbac:groups=apps,resources=deployments,verbs=get;list;create;delete
 
-func (r *Reconciler) newServerDeployment(ctx context.Context, cr *perfv1alpha1.Iperf3, crRef *corev1.ObjectReference) error {
+func serverDeploymentName(cr *perfv1alpha1.Iperf3) string {
+	return cr.Name
+}
+
+// NewServerDeployment create a iperf3 server deployment from the
+// provided Iperf3 Benchmark Definition.
+func NewServerDeployment(cr *perfv1alpha1.Iperf3) *appsv1.Deployment {
 	replicas := int32(1)
 
 	labels := map[string]string{
@@ -49,13 +52,22 @@ func (r *Reconciler) newServerDeployment(ctx context.Context, cr *perfv1alpha1.I
 		labels[k] = v
 	}
 
-	iperfCmdLineArgs := fmt.Sprintf("-s -p %s %s",
-		strconv.Itoa(iperf3ServerPort),
-		cr.Spec.ClientConfiguration.CmdLineArgs)
+	iperfCmdLineArgs := []string{
+		"--server",
+		"--port", strconv.Itoa(Iperf3ServerPort)}
+
+	protocol := corev1.Protocol(corev1.ProtocolTCP)
+	if cr.Spec.UDP {
+		iperfCmdLineArgs = append(iperfCmdLineArgs, "--udp")
+		protocol = corev1.Protocol(corev1.ProtocolUDP)
+	}
+
+	iperfCmdLineArgs = append(iperfCmdLineArgs,
+		qsplit.ToStrings([]byte(cr.Spec.ClientConfiguration.CmdLineArgs))...)
 
 	deployment := appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      cr.Name,
+			Name:      serverDeploymentName(cr),
 			Namespace: cr.Namespace,
 		},
 		Spec: appsv1.DeploymentSpec{
@@ -68,24 +80,30 @@ func (r *Reconciler) newServerDeployment(ctx context.Context, cr *perfv1alpha1.I
 					Labels: labels,
 				},
 				Spec: corev1.PodSpec{
+					ImagePullSecrets: []corev1.LocalObjectReference{
+						{
+							Name: cr.Spec.Image.PullSecret,
+						},
+					},
 					Containers: []corev1.Container{
 						{
 							Name:            "server",
 							Image:           cr.Spec.Image.Name,
 							ImagePullPolicy: corev1.PullPolicy(cr.Spec.Image.PullPolicy),
 							Command:         []string{"iperf3"},
-							Args:            strings.Fields(iperfCmdLineArgs),
+							Args:            iperfCmdLineArgs,
 							Ports: []corev1.ContainerPort{
 								{
 									Name:          "iperf-server",
-									ContainerPort: iperf3ServerPort,
+									ContainerPort: Iperf3ServerPort,
+									Protocol:      protocol,
 								},
 							},
 							/* -- Causing iperf3 server to exit with 'too many errors'
 							ReadinessProbe: &corev1.Probe{
 								Handler: corev1.Handler{
 									TCPSocket: &corev1.TCPSocketAction{
-										Port: intstr.FromInt(iperf3ServerPort),
+										Port: intstr.FromInt(Iperf3ServerPort),
 									},
 								},
 								InitialDelaySeconds: 5,
@@ -99,36 +117,24 @@ func (r *Reconciler) newServerDeployment(ctx context.Context, cr *perfv1alpha1.I
 					Tolerations:  cr.Spec.ServerConfiguration.PodScheduling.Tolerations,
 					NodeSelector: cr.Spec.ServerConfiguration.PodScheduling.NodeSelector,
 					NodeName:     cr.Spec.ServerConfiguration.PodScheduling.NodeName,
+					HostNetwork:  cr.Spec.ServerConfiguration.HostNetwork,
 				},
 			},
 		},
 	}
 
-	// FIXME: The next three statements are common between serverdeployment, serverservice and clientpod,
-	// it would make sense to factor it into one function. For that a type should be found which applies
-	// for both SetControllerReference and Create's object.
-	if err := controllerutil.SetControllerReference(cr, &deployment, r.K8S.Scheme); err != nil {
-		return err
-	}
-	if err := r.K8S.Client.Create(ctx, &deployment); k8s.IgnoreAlreadyExists(err) != nil {
-		return err
-	}
-
-	r.K8S.EventRecorder.Eventf(crRef, corev1.EventTypeNormal, k8s.CreateSucceeded,
-		"Created Iperf3 Server Deployment: %v @ Namespace: %v", deployment.Name, deployment.Namespace)
-	return nil
+	return &deployment
 }
 
 func (r *Reconciler) serverDeploymentReady(cr *perfv1alpha1.Iperf3) (ready bool, err error) {
+	// TODO: Move this to k8s.client
 	ready, err = false, nil
 	deployment, err := r.K8S.Clientset.AppsV1().Deployments(cr.Namespace).Get(cr.Name, metav1.GetOptions{})
 	if err != nil {
 		return ready, err
 	}
 
-	if deployment.Status.ReadyReplicas == *deployment.Spec.Replicas {
-		ready = true
-	}
+	ready = deployment.Status.ReadyReplicas == *deployment.Spec.Replicas
 
 	return ready, err
 }

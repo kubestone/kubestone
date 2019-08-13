@@ -27,6 +27,7 @@ type FioSpec struct {
 
 	// BuiltinJobFiles contains a list of fio job files that are already present
 	// in the docker image
+	// +optional
 	BuiltinJobFiles []string `json:"builtinJobFiles,omitempty"`
 
 	// TODO: Add implementation for custom job files (job as string in CR)

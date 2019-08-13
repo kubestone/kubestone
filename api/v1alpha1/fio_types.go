@@ -35,6 +35,8 @@ type FioSpec struct {
 	// CmdLineArgs are appended to the predefined fio parameters
 	// +optional
 	CmdLineArgs string `json:"cmdLineArgs,omitempty"`
+
+	// TODO: Add affinity related structs (suggested by otto)
 }
 
 // FioStatus describes the current state of the benchmark

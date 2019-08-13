@@ -3,6 +3,13 @@ kind: Fio
 metadata:
   name: fio-sample
 spec:
-  jobFiles:
-   - /jobs/rand-read.fio
-   - /jobs/rand-write.fio
+  image:
+    name: xridge/fio:latest
+    pullPolicy: Always
+    # pullSecret: null
+
+  # builtinJobFiles:
+  #  - /jobs/rand-read.fio
+  #  - /jobs/rand-write.fio
+
+  cmdLineArgs: --name=randwrite --iodepth=1 --rw=randwrite --bs=4m --direct=1 --size=256M --numjobs=1

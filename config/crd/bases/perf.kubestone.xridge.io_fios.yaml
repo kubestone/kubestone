@@ -6,11 +6,20 @@ metadata:
   creationTimestamp: null
   name: fios.perf.kubestone.xridge.io
 spec:
+  additionalPrinterColumns:
+  - JSONPath: .status.running
+    name: Running
+    type: boolean
+  - JSONPath: .status.completed
+    name: Completed
+    type: boolean
   group: perf.kubestone.xridge.io
   names:
     kind: Fio
     plural: fios
   scope: ""
+  subresources:
+    status: {}
   validation:
     openAPIV3Schema:
       description: Fio is the Schema for the fios API
@@ -30,24 +39,52 @@ spec:
         spec:
           description: FioSpec defines the desired state of Fio
           properties:
-            jobFiles:
-              description: JobFiles lists the file names of the job files that fio
-                should run
+            builtinJobFiles:
+              description: BuiltinJobFiles contains a list of fio job files that are
+                already present in the docker image
               items:
                 type: string
               type: array
-            remoteJobFiles:
-              description: RemoteJobFiles lists the URLs of optional remote job files.
-                All the given files will be downloaded and you can use the `jobFiles`
-                field to select which ones to run
-              items:
-                type: string
-              type: array
+            cmdLineArgs:
+              description: CmdLineArgs are appended to the predefined fio parameters
+              type: string
+            image:
+              description: Image defines the fio docker image used for the benchmark
+              properties:
+                name:
+                  description: Name is the Docker Image location including the tag
+                  type: string
+                pullPolicy:
+                  description: PullPolicy controls how the docker images are downloaded
+                    Defaults to Always if :latest tag is specified, or IfNotPresent
+                    otherwise.
+                  enum:
+                  - Always
+                  - Never
+                  - IfNotPresent
+                  type: string
+                pullSecret:
+                  description: PullSecret is an optional list of references to secrets
+                    in the same namespace to use for pulling any of the images
+                  type: string
+              required:
+              - name
+              type: object
           required:
-          - jobFiles
+          - image
           type: object
         status:
-          description: FioStatus defines the observed state of Fio
+          description: FioStatus describes the current state of the benchmark
+          properties:
+            completed:
+              description: Completed shows the state of completion
+              type: boolean
+            running:
+              description: Running shows the state of execution
+              type: boolean
+          required:
+          - completed
+          - running
           type: object
       type: object
   versions:

@@ -33,13 +33,9 @@ func NewJob(cr *perfv1alpha1.Fio) *batchv1.Job {
 	}
 
 	fioCmdLineArgs := []string{}
-
 	fioCmdLineArgs = append(fioCmdLineArgs,
 		qsplit.ToStrings([]byte(cr.Spec.CmdLineArgs))...)
-
-	for _, builtinJobFile := range cr.Spec.BuiltinJobFiles {
-		fioCmdLineArgs = append(fioCmdLineArgs, builtinJobFile)
-	}
+	fioCmdLineArgs = append(fioCmdLineArgs, cr.Spec.BuiltinJobFiles...)
 
 	backoffLimit := int32(0)
 
@@ -60,6 +56,11 @@ func NewJob(cr *perfv1alpha1.Fio) *batchv1.Job {
 							Image:           cr.Spec.Image.Name,
 							ImagePullPolicy: corev1.PullPolicy(cr.Spec.Image.PullPolicy),
 							Args:            fioCmdLineArgs,
+						},
+					},
+					ImagePullSecrets: []corev1.LocalObjectReference{
+						{
+							Name: cr.Spec.Image.PullSecret,
 						},
 					},
 					RestartPolicy: corev1.RestartPolicyNever,

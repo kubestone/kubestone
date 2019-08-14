@@ -9,6 +9,8 @@ jobs:
     working_directory: /go/src/github.com/xridge/kubestone
     steps:
       - checkout
+
+      # Unit test
       - run:
           name: Install kubebuilder
           command: |
@@ -18,6 +20,7 @@ jobs:
             tar -zxvf kubebuilder_${version}_linux_${arch}.tar.gz
             sudo mv kubebuilder_${version}_linux_${arch} /usr/local/kubebuilder
             export PATH=$PATH:/usr/local/kubebuilder/bin
-
       - run: make test
-      - run: make
+
+      # End-to-end test
+      - run: ./tests/e2e/e2e-test-in-kind.sh

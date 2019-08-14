@@ -22,23 +22,35 @@ import (
 
 // FioSpec defines the desired state of Fio
 type FioSpec struct {
-	// JobFiles lists the file names of the job files that fio should run
-	// +kubebuilder:validation:MinItems=1
-	JobFiles []string `json:"jobFiles"`
+	// Image defines the fio docker image used for the benchmark
+	Image ImageSpec `json:"image"`
 
-	// RemoteJobFiles lists the URLs of optional remote job files. All the given
-	// files will be downloaded and you can use the `jobFiles` field to select which
-	// ones to run
-	RemoteJobFiles []string `json:"remoteJobFiles,omitempty"`
+	// BuiltinJobFiles contains a list of fio job files that are already present
+	// in the docker image
+	// +optional
+	BuiltinJobFiles []string `json:"builtinJobFiles,omitempty"`
+
+	// TODO: Add implementation for custom job files (job as string in CR)
+
+	// CmdLineArgs are appended to the predefined fio parameters
+	// +optional
+	CmdLineArgs string `json:"cmdLineArgs,omitempty"`
+
+	// TODO: Add affinity related structs (suggested by otto)
 }
 
-// FioStatus defines the observed state of Fio
+// FioStatus describes the current state of the benchmark
 type FioStatus struct {
-	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
+	// Running shows the state of execution
+	Running bool `json:"running"`
+	// Completed shows the state of completion
+	Completed bool `json:"completed"`
 }
 
 // +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
+// +kubebuilder:printcolumn:name="Running",type="boolean",JSONPath=".status.running"
+// +kubebuilder:printcolumn:name="Completed",type="boolean",JSONPath=".status.completed"
 
 // Fio is the Schema for the fios API
 type Fio struct {

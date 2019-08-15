@@ -31,8 +31,8 @@ jobs:
       - run:
           name: Upgrade golang to 1.12
           command: |
-            sudo apt-get -y remove golang
             ls -l /usr/local
+            sudo rm -rf /usr/local/go
             VERSION=1.12.8
             OS=linux
             ARCH=amd64

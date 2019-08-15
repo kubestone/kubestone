@@ -15,7 +15,7 @@ for Kubernetes cluster via common set of benchmarks:
 * Disk: [fio](https://fio.readthedocs.io)
 * Network: [IPerf3](https://iperf.fr)
 * CPU: [sysbench](https://wiki.gentoo.org/wiki/Sysbench)
- 
+
 ## Benchmark definitions
 Benchmarks are initiated by creating Custom Resources in
 any namespace in Kubernetes. When a new Kubestone CR is created
@@ -64,10 +64,14 @@ the benchmark's workflow is executed.
   $ kubectl create namespace kubestone
   namespace/kubestone created
   ```
-* Start sample benchmark by creating CR
+* Start sample iperf3 benchmark by creating CR
   ```bash
   $ kubectl create -n kubestone -f config/samples/perf_v1alpha1_iperf3.yaml
   iperf3.perf.kubestone.xridge.io/iperf3-sample created
+  ```
+* Start sample fio benchmark by creating CR
+  ```bash
+  $ kustomize build config/samples/fio/overlays/builtin_jobs | kubectl create -n kubestone -f -
   ```
 
 Sample benchmarks are located in [config/samples/](config/samples).

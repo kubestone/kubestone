@@ -48,6 +48,13 @@ spec:
             cmdLineArgs:
               description: CmdLineArgs are appended to the predefined fio parameters
               type: string
+            customJobFiles:
+              description: 'CustomJobFiles contains a list of custom fio job files
+                The exact format of fio job files is documented here: https://fio.readthedocs.io/en/latest/fio_doc.html#job-file-format
+                The job files defined here will be mounted to the fio benchmark container'
+              items:
+                type: string
+              type: array
             image:
               description: Image defines the fio docker image used for the benchmark
               properties:

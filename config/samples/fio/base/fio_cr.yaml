@@ -1,0 +1,9 @@
+apiVersion: perf.kubestone.xridge.io/v1alpha1
+kind: Fio
+metadata:
+  name: fio-sample
+spec:
+  image:
+    name: xridge/fio:latest
+    pullPolicy: Always
+  cmdLineArgs: --name=randwrite --iodepth=1 --rw=randwrite --bs=4m --size=256M

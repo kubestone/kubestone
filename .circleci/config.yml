@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build:
+  run_unit_tests:
     docker:
       - image: circleci/golang:1.12.5
         environment:
@@ -9,8 +9,6 @@ jobs:
     working_directory: /go/src/github.com/xridge/kubestone
     steps:
       - checkout
-
-      # Unit test
       - run:
           name: Install kubebuilder
           command: |
@@ -22,5 +20,16 @@ jobs:
             export PATH=$PATH:/usr/local/kubebuilder/bin
       - run: make test
 
-      # End-to-end test
-      - run: ./tests/e2e/e2e-test-in-kind.sh
+  run_e2e_tests:
+    machine:
+      image: ubuntu-1604:201903-01
+      docker_layer_caching: true
+
+    working_directory: /go/src/github.com/xridge/kubestone
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Start e2e test
+          command: |
+            ./tests/e2e/e2e-test-in-kind.sh

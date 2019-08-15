@@ -28,7 +28,6 @@ jobs:
     working_directory: /go/src/github.com/xridge/kubestone
     steps:
       - checkout
-      - setup_remote_docker
       - run:
           name: Start e2e test
           command: |

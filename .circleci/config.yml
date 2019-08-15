@@ -39,6 +39,15 @@ jobs:
             sudo tar -C /usr/local -xzf go$VERSION.$OS-$ARCH.tar.gz
             go version
       - run:
+          name: Install Kustomize
+          command: |
+            VERSION=3.1.0
+            OS=linux
+            ARCH=amd64
+            curl -L -O https://github.com/kubernetes-sigs/kustomize/releases/download/v${VERSION}/kustomize_${VERSION}_${OS}_${ARCH}
+            chmod +x kustomize_${VERSION}_${OS}_${ARCH}
+            mv kustomize_${VERSION}_${OS}_${ARCH} /usr/local/bin/kustomize
+      - run:
           name: Start e2e test
           command: |
             export GO111MODULE=on

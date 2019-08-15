@@ -46,7 +46,7 @@ jobs:
             ARCH=amd64
             curl -L -O https://github.com/kubernetes-sigs/kustomize/releases/download/v${VERSION}/kustomize_${VERSION}_${OS}_${ARCH}
             chmod +x kustomize_${VERSION}_${OS}_${ARCH}
-            mv kustomize_${VERSION}_${OS}_${ARCH} /usr/local/bin/kustomize
+            sudo mv kustomize_${VERSION}_${OS}_${ARCH} /usr/local/bin/kustomize
       - run:
           name: Start e2e test
           command: |

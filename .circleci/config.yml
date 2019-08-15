@@ -31,12 +31,14 @@ jobs:
       - run:
           name: Upgrade golang to 1.12
           command: |
+            apt-get -y remove golang
+            ls -l /usr/local
             VERSION=1.12.8
             OS=linux
             ARCH=amd64
             cd /tmp
             curl -L -O https://dl.google.com/go/go${VERSION}.${OS}-${ARCH}.tar.gz
-            tar -C /usr/local -xzf go$VERSION.$OS-$ARCH.tar.gz
+            sudo tar -C /usr/local -xzf go$VERSION.$OS-$ARCH.tar.gz
             echo "export PATH=$PATH:/usr/local/go/bin" >> ~/.profile
       - run:
           name: Start e2e test

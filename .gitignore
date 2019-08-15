@@ -22,6 +22,8 @@ bin
 *.swp
 *.swo
 *~
+.vscode/*
+!.vscode/launch.json
 
 # direnv
 .envrc

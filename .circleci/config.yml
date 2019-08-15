@@ -25,7 +25,7 @@ jobs:
       image: ubuntu-1604:201903-01
       docker_layer_caching: true
 
-    working_directory: /go/src/github.com/xridge/kubestone
+    working_directory: ~/go/src/github.com/xridge/kubestone
     steps:
       - checkout
       - run:

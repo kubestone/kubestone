@@ -1,0 +1,22 @@
+apiVersion: perf.kubestone.xridge.io/v1alpha1
+kind: Fio
+metadata:
+  name: fio-sample
+spec:
+  customJobFiles:
+   - |
+    [global]
+    name=fio-seq-reads
+    filename=fio-seq-reads
+    rw=read
+    bs=64K
+    direct=1
+    numjobs=1
+    time_based=1
+    runtime=60
+
+    [file1]
+    size=1G
+    ioengine=libaio
+    iodepth=16
+  cmdLineArgs:

@@ -55,7 +55,12 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 		return ctrl.Result{}, err
 	}
 
-	job := NewJob(&cr)
+	configMap := NewConfigMap(&cr)
+	if err := r.K8S.CreateWithReference(ctx, configMap, &cr); err != nil {
+		return ctrl.Result{}, err
+	}
+
+	job := NewJob(&cr, configMap)
 	if err := r.K8S.CreateWithReference(ctx, job, &cr); err != nil {
 		return ctrl.Result{}, err
 	}
@@ -70,6 +75,10 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 		return ctrl.Result{Requeue: true}, nil
 	}
 
+	// The cr could have been modified since the last time we got it
+	if err := r.K8S.Client.Get(ctx, req.NamespacedName, &cr); err != nil {
+		return ctrl.Result{}, k8s.IgnoreNotFound(err)
+	}
 	cr.Status.Running = false
 	cr.Status.Completed = true
 	if err := r.K8S.Client.Status().Update(ctx, &cr); err != nil {

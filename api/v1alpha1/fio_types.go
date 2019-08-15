@@ -30,7 +30,12 @@ type FioSpec struct {
 	// +optional
 	BuiltinJobFiles []string `json:"builtinJobFiles,omitempty"`
 
-	// TODO: Add implementation for custom job files (job as string in CR)
+	// CustomJobFiles contains a list of custom fio job files
+	// The exact format of fio job files is documented here:
+	// https://fio.readthedocs.io/en/latest/fio_doc.html#job-file-format
+	// The job files defined here will be mounted to the fio benchmark container
+	// +optional
+	CustomJobFiles []string `json:"customJobFiles,omitempty"`
 
 	// CmdLineArgs are appended to the predefined fio parameters
 	// +optional

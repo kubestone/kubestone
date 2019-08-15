@@ -26,7 +26,7 @@ import (
 )
 
 // NewJob creates a fio benchmark job
-func NewJob(cr *perfv1alpha1.Fio) *batchv1.Job {
+func NewJob(cr *perfv1alpha1.Fio, configMap *corev1.ConfigMap) *batchv1.Job {
 	labels := map[string]string{
 		"app":               "fio",
 		"kubestone-cr-name": cr.Name,
@@ -36,6 +36,9 @@ func NewJob(cr *perfv1alpha1.Fio) *batchv1.Job {
 	fioCmdLineArgs = append(fioCmdLineArgs,
 		qsplit.ToStrings([]byte(cr.Spec.CmdLineArgs))...)
 	fioCmdLineArgs = append(fioCmdLineArgs, cr.Spec.BuiltinJobFiles...)
+	for i := 0; i < len(cr.Spec.CustomJobFiles); i++ {
+		fioCmdLineArgs = append(fioCmdLineArgs, "/custom-jobs/"+CustomJobName(i))
+	}
 
 	backoffLimit := int32(0)
 
@@ -56,6 +59,9 @@ func NewJob(cr *perfv1alpha1.Fio) *batchv1.Job {
 							Image:           cr.Spec.Image.Name,
 							ImagePullPolicy: corev1.PullPolicy(cr.Spec.Image.PullPolicy),
 							Args:            fioCmdLineArgs,
+							VolumeMounts: []corev1.VolumeMount{
+								{Name: "custom-jobs", MountPath: "/custom-jobs"},
+							},
 						},
 					},
 					ImagePullSecrets: []corev1.LocalObjectReference{
@@ -64,6 +70,18 @@ func NewJob(cr *perfv1alpha1.Fio) *batchv1.Job {
 						},
 					},
 					RestartPolicy: corev1.RestartPolicyNever,
+					Volumes: []corev1.Volume{
+						{
+							Name: "custom-jobs",
+							VolumeSource: corev1.VolumeSource{
+								ConfigMap: &corev1.ConfigMapVolumeSource{
+									LocalObjectReference: corev1.LocalObjectReference{
+										Name: configMap.Name,
+									},
+								},
+							},
+						},
+					},
 				},
 			},
 			BackoffLimit: &backoffLimit,

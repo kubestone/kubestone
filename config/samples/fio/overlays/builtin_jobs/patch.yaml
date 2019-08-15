@@ -1,0 +1,9 @@
+apiVersion: perf.kubestone.xridge.io/v1alpha1
+kind: Fio
+metadata:
+  name: fio-sample
+spec:
+  builtinJobFiles:
+   - /jobs/rand-read.fio
+   - /jobs/rand-write.fio
+  cmdLineArgs:

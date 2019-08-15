@@ -36,7 +36,7 @@ func clientPodName(cr *perfv1alpha1.Iperf3) string {
 	return serverServiceName(cr) + "-client"
 }
 
-// NewClientPod creates an Iperf3 Client Pod (targetting the
+// NewClientPod creates an Iperf3 Client Pod (targeting the
 // Server Deployment via the Server Service) from the provided
 // IPerf3 Benchmark Definition.
 func NewClientPod(cr *perfv1alpha1.Iperf3) *corev1.Pod {

@@ -18,6 +18,7 @@ package v1alpha1
 
 import (
 	corev1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 // PullPolicy controls how the docker images are downloaded
@@ -62,4 +63,42 @@ type PodSchedulingSpec struct {
 	// requirements.
 	// +optional
 	NodeName string `json:"nodeName,omitempty"`
+}
+
+// PersistentVolumeAccessMode defines the way the pv is mounted
+// +kubebuilder:validation:Enum=ReadWriteOnce;ReadOnlyMany;ReadWriteMany
+type PersistentVolumeAccessMode string
+
+// PersistentVolumeMode describes how a volume is intended to be consumed, either Block or Filesystem.
+// +kubebuilder:validation:Enum=Block;Filesystem
+type PersistentVolumeMode string
+
+// PersistentVolumeSize defines the size of the PV
+// +kubebuilder:validation:Pattern=^\d+(\.\d+)?([KMGTP]i?)?$
+type PersistentVolumeSize string
+
+// PersistentVolumeClaimSpec describes the common attributes of storage devices
+// and allows a Source for provider-specific attributes
+type PersistentVolumeClaimSpec struct {
+	// Size defines the size of the PVC
+	Size PersistentVolumeSize `json:"size"`
+	// AccessModes contains the desired access modes the volume should have.
+	// More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#access-modes-1
+	// +optional
+	AccessModes []PersistentVolumeAccessMode `json:"accessModes,omitempty"`
+	// Selector is a label query over volumes to consider for binding.
+	// +optional
+	Selector *metav1.LabelSelector `json:"selector,omitempty" protobuf:"bytes,4,opt,name=selector"`
+	// VolumeName is the binding reference to the PersistentVolume backing this claim.
+	// +optional
+	VolumeName string `json:"volumeName,omitempty"`
+	// StorageClassName is the name of the StorageClass required by the claim.
+	// More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#class-1
+	// +optional
+	StorageClassName *string `json:"storageClassName,omitempty"`
+	// VolumeMode defines what type of volume is required by the claim.
+	// Value of Filesystem is implied when not included in claim spec.
+	// This is a beta feature.
+	// +optional
+	VolumeMode *PersistentVolumeMode `json:"volumeMode,omitempty"`
 }

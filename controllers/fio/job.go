@@ -26,7 +26,7 @@ import (
 )
 
 // NewJob creates a fio benchmark job
-func NewJob(cr *perfv1alpha1.Fio, configMap *corev1.ConfigMap) *batchv1.Job {
+func NewJob(cr *perfv1alpha1.Fio, configMap *corev1.ConfigMap, pvcName *string) *batchv1.Job {
 	labels := map[string]string{
 		"app":               "fio",
 		"kubestone-cr-name": cr.Name,
@@ -41,6 +41,37 @@ func NewJob(cr *perfv1alpha1.Fio, configMap *corev1.ConfigMap) *batchv1.Job {
 	}
 
 	backoffLimit := int32(0)
+
+	volumes := []corev1.Volume{}
+	volumeMounts := []corev1.VolumeMount{}
+	if len(cr.Spec.CustomJobFiles) > 0 {
+		volumes = append(volumes, corev1.Volume{
+			Name: "custom-jobs",
+			VolumeSource: corev1.VolumeSource{
+				ConfigMap: &corev1.ConfigMapVolumeSource{
+					LocalObjectReference: corev1.LocalObjectReference{
+						Name: configMap.Name,
+					},
+				},
+			},
+		})
+		volumeMounts = append(volumeMounts, corev1.VolumeMount{
+			Name: "custom-jobs", MountPath: "/custom-jobs",
+		})
+	}
+	if pvcName != nil {
+		volumes = append(volumes, corev1.Volume{
+			Name: "data",
+			VolumeSource: corev1.VolumeSource{
+				PersistentVolumeClaim: &corev1.PersistentVolumeClaimVolumeSource{
+					ClaimName: *pvcName,
+				},
+			},
+		})
+		volumeMounts = append(volumeMounts, corev1.VolumeMount{
+			Name: "data", MountPath: "/data",
+		})
+	}
 
 	job := batchv1.Job{
 		ObjectMeta: metav1.ObjectMeta{
@@ -59,9 +90,7 @@ func NewJob(cr *perfv1alpha1.Fio, configMap *corev1.ConfigMap) *batchv1.Job {
 							Image:           cr.Spec.Image.Name,
 							ImagePullPolicy: corev1.PullPolicy(cr.Spec.Image.PullPolicy),
 							Args:            fioCmdLineArgs,
-							VolumeMounts: []corev1.VolumeMount{
-								{Name: "custom-jobs", MountPath: "/custom-jobs"},
-							},
+							VolumeMounts:    volumeMounts,
 						},
 					},
 					ImagePullSecrets: []corev1.LocalObjectReference{
@@ -70,18 +99,7 @@ func NewJob(cr *perfv1alpha1.Fio, configMap *corev1.ConfigMap) *batchv1.Job {
 						},
 					},
 					RestartPolicy: corev1.RestartPolicyNever,
-					Volumes: []corev1.Volume{
-						{
-							Name: "custom-jobs",
-							VolumeSource: corev1.VolumeSource{
-								ConfigMap: &corev1.ConfigMapVolumeSource{
-									LocalObjectReference: corev1.LocalObjectReference{
-										Name: configMap.Name,
-									},
-								},
-							},
-						},
-					},
+					Volumes:       volumes,
 				},
 			},
 			BackoffLimit: &backoffLimit,

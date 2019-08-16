@@ -6,6 +6,13 @@ metadata:
   creationTimestamp: null
   name: iperf3s.perf.kubestone.xridge.io
 spec:
+  additionalPrinterColumns:
+  - JSONPath: .status.running
+    name: Running
+    type: boolean
+  - JSONPath: .status.completed
+    name: Completed
+    type: boolean
   group: perf.kubestone.xridge.io
   names:
     kind: Iperf3

@@ -44,7 +44,7 @@ var _ = Describe("fio job", func() {
 			configMap := corev1.ConfigMap{
 				ObjectMeta: metav1.ObjectMeta{Name: "cm"},
 			}
-			job = NewJob(&cr, &configMap)
+			job = NewJob(&cr, &configMap, nil)
 		})
 
 		Context("with Image details specified", func() {
@@ -74,8 +74,9 @@ var _ = Describe("fio job", func() {
 		})
 	})
 
-	Describe("cr with builtin job files", func() {
+	Describe("cr with builtin job files and volume", func() {
 		var cr perfv1alpha1.Fio
+		var pvcName string
 		var job *batchv1.Job
 
 		BeforeEach(func() {
@@ -91,7 +92,8 @@ var _ = Describe("fio job", func() {
 			configMap := corev1.ConfigMap{
 				ObjectMeta: metav1.ObjectMeta{Name: "cm"},
 			}
-			job = NewJob(&cr, &configMap)
+			pvcName = "test-pvc"
+			job = NewJob(&cr, &configMap, &pvcName)
 		})
 
 		Context("with Image details specified", func() {
@@ -109,6 +111,13 @@ var _ = Describe("fio job", func() {
 			It("should have those files", func() {
 				Expect(job.Spec.Template.Spec.Containers[0].Args).To(
 					ContainElement("/jobs/rand-read.fio"))
+			})
+		})
+
+		Context("with pvc name specified", func() {
+			It("we should have the pvc attached to the pod", func() {
+				Expect(job.Spec.Template.Spec.Volumes[0].PersistentVolumeClaim.ClaimName).To(
+					Equal(pvcName))
 			})
 		})
 	})

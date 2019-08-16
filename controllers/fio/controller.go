@@ -20,6 +20,8 @@ import (
 	"context"
 
 	"github.com/go-logr/logr"
+	corev1 "k8s.io/api/core/v1"
+	"k8s.io/client-go/tools/reference"
 	ctrl "sigs.k8s.io/controller-runtime"
 
 	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
@@ -44,6 +46,10 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 	if err := r.K8S.Client.Get(ctx, req.NamespacedName, &cr); err != nil {
 		return ctrl.Result{}, k8s.IgnoreNotFound(err)
 	}
+	crReference, err := reference.GetReference(r.K8S.Scheme, &cr)
+	if err != nil {
+		return ctrl.Result{}, err
+	}
 
 	// Run to one completion
 	if cr.Status.Completed {
@@ -60,7 +66,22 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 		return ctrl.Result{}, err
 	}
 
-	job := NewJob(&cr, configMap)
+	pvcName := cr.Spec.PersistentVolumeClaimName
+	if pvcName == nil {
+		pvc, err := NewPersistentVolumeClaim(&cr)
+		if err != nil {
+			r.K8S.EventRecorder.Eventf(crReference, corev1.EventTypeNormal, k8s.CreateSucceeded,
+				"Failed to create PVC. Error: ", err)
+		}
+		if pvc != nil {
+			if err := r.K8S.CreateWithReference(ctx, pvc, &cr); err != nil {
+				return ctrl.Result{}, err
+			}
+			pvcName = &pvc.Name
+		}
+	}
+
+	job := NewJob(&cr, configMap, pvcName)
 	if err := r.K8S.CreateWithReference(ctx, job, &cr); err != nil {
 		return ctrl.Result{}, err
 	}

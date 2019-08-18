@@ -32,6 +32,7 @@ type Reconciler struct {
 	Log logr.Logger
 }
 
+// +kubebuilder:rbac:groups="",resources=persistentvolumeclaims,verbs=create
 // +kubebuilder:rbac:groups=batch,resources=jobs,verbs=get;list;create;delete
 // +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=fios,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=fios/status,verbs=get;update;patch

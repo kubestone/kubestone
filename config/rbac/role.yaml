@@ -9,6 +9,12 @@ rules:
 - apiGroups:
   - ""
   resources:
+  - persistentvolumeclaims
+  verbs:
+  - create
+- apiGroups:
+  - ""
+  resources:
   - pods
   verbs:
   - create

@@ -20,6 +20,18 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
+// FioPodSpec contains the configuration for the benchmark pods
+type FioPodConfigurationSpec struct {
+	// PodLabels are added to the pod as labels.
+	// +optional
+	PodLabels map[string]string `json:"podLabels,omitempty"`
+
+	// PodScheduling contains options to determine which
+	// node the pod should be scheduled on
+	// +optional
+	PodScheduling PodSchedulingSpec `json:"podScheduling,omitempty"`
+}
+
 // FioSpec defines the desired state of Fio
 type FioSpec struct {
 	// Image defines the fio docker image used for the benchmark
@@ -41,7 +53,9 @@ type FioSpec struct {
 	// +optional
 	CmdLineArgs string `json:"cmdLineArgs,omitempty"`
 
-	// TODO: Add affinity related structs (suggested by otto)
+	// PodConfig contains the configuration for the benchmark pod, including
+	// pod labels and scheduling policies (affinity, toleration, node selector...)
+	PodConfig FioPodConfigurationSpec `json:"podConfig,omitempty"`
 }
 
 // FioStatus describes the current state of the benchmark

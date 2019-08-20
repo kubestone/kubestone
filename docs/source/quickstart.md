@@ -1,6 +1,6 @@
 # Quickstart
 
-### Run a benchmark
+## Run a benchmark
 
 Create a dedicated namespace for benchmarking
 

@@ -1,5 +1,4 @@
-Welcome to kubestone's documentation!
-=====================================
+.. image:: images/kubestone-logo.png
 
 Kubestone is a `Kubernetes Operator`_ that can run benchmarks on your Kubernetes
 cluster. Following the Operator Pattern, benchmarks are defined as Custom

@@ -102,3 +102,15 @@ type PersistentVolumeClaimSpec struct {
 	// +optional
 	VolumeMode *PersistentVolumeMode `json:"volumeMode,omitempty"`
 }
+
+// PodConfigurationSpec contains the configuration for the benchmark pods
+type PodConfigurationSpec struct {
+	// PodLabels are added to the pod as labels.
+	// +optional
+	PodLabels map[string]string `json:"podLabels,omitempty"`
+
+	// PodScheduling contains options to determine which
+	// node the pod should be scheduled on
+	// +optional
+	PodScheduling PodSchedulingSpec `json:"podScheduling,omitempty"`
+}

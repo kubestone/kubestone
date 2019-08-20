@@ -54,11 +54,11 @@ spec:
                 podLabels:
                   additionalProperties:
                     type: string
-                  description: PodLabels are added to the iperf3 pod as labels.
+                  description: PodLabels are added to the pod as labels.
                   type: object
                 podScheduling:
                   description: PodScheduling contains options to determine which node
-                    the iperf3 pod should be scheduled on
+                    the pod should be scheduled on
                   properties:
                     affinity:
                       description: Affinity is a group of affinity scheduling rules.
@@ -780,11 +780,11 @@ spec:
                 podLabels:
                   additionalProperties:
                     type: string
-                  description: PodLabels are added to the iperf3 pod as labels.
+                  description: PodLabels are added to the pod as labels.
                   type: object
                 podScheduling:
                   description: PodScheduling contains options to determine which node
-                    the iperf3 pod should be scheduled on
+                    the pod should be scheduled on
                   properties:
                     affinity:
                       description: Affinity is a group of affinity scheduling rules.

@@ -40,7 +40,7 @@ var _ = Describe("fio job", func() {
 						PullSecret: "a-pull-secret",
 					},
 					CmdLineArgs: "--name=randwrite --iodepth=1 --rw=randwrite --bs=4m --direct=1 --size=256M --numjobs=1",
-					PodConfig: perfv1alpha1.FioPodConfigurationSpec{
+					PodConfig: ksapi.PodConfigurationSpec{
 						PodLabels: map[string]string{"labels": "are", "still": "useful"},
 						PodScheduling: ksapi.PodSchedulingSpec{
 							Affinity: corev1.Affinity{

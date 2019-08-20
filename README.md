@@ -24,7 +24,7 @@ the benchmark's workflow is executed.
 ## Usage
 ### Prerequisites
 * [Kubernetes](https://kubernetes.io) v1.14 (or newer)
-* [Kustomzie](https://kustomize.io) v3.10
+* [Kustomize](https://kustomize.io) v3.10
 * [Go](https://golang.org) v1.12 (with `GO111MODULE=on`)
 
 

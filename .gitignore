@@ -27,3 +27,6 @@ bin
 
 # direnv
 .envrc
+
+# Documentation
+docs/build/

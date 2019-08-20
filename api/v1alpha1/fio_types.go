@@ -41,7 +41,9 @@ type FioSpec struct {
 	// +optional
 	CmdLineArgs string `json:"cmdLineArgs,omitempty"`
 
-	// TODO: Add affinity related structs (suggested by otto)
+	// PodConfig contains the configuration for the benchmark pod, including
+	// pod labels and scheduling policies (affinity, toleration, node selector...)
+	PodConfig PodConfigurationSpec `json:"podConfig,omitempty"`
 }
 
 // FioStatus describes the current state of the benchmark

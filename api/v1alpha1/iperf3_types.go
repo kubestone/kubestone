@@ -24,18 +24,11 @@ import (
 // with scheduling options for the both the iperf3 client
 // and server instances.
 type Iperf3ConfigurationSpec struct {
+	PodConfigurationSpec `json:",inline"`
+
 	// CmdLineArgs are appended to the predefined iperf3 parameters
 	// +optional
 	CmdLineArgs string `json:"cmdLineArgs,omitempty"`
-
-	// PodLabels are added to the iperf3 pod as labels.
-	// +optional
-	PodLabels map[string]string `json:"podLabels,omitempty"`
-
-	// PodScheduling contains options to determine which
-	// node the iperf3 pod should be scheduled on
-	// +optional
-	PodScheduling PodSchedulingSpec `json:"podScheduling,omitempty"`
 
 	// HostNetwork requested for the iperf3 pod, if enabled the
 	// hosts network namespace is used. Default to false.

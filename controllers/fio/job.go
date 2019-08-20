@@ -31,6 +31,9 @@ func NewJob(cr *perfv1alpha1.Fio, configMap *corev1.ConfigMap) *batchv1.Job {
 		"app":               "fio",
 		"kubestone-cr-name": cr.Name,
 	}
+	for key, value := range cr.Spec.PodConfig.PodLabels {
+		labels[key] = value
+	}
 
 	fioCmdLineArgs := []string{}
 	fioCmdLineArgs = append(fioCmdLineArgs,
@@ -82,6 +85,10 @@ func NewJob(cr *perfv1alpha1.Fio, configMap *corev1.ConfigMap) *batchv1.Job {
 							},
 						},
 					},
+					Affinity:     &cr.Spec.PodConfig.PodScheduling.Affinity,
+					Tolerations:  cr.Spec.PodConfig.PodScheduling.Tolerations,
+					NodeSelector: cr.Spec.PodConfig.PodScheduling.NodeSelector,
+					NodeName:     cr.Spec.PodConfig.PodScheduling.NodeName,
 				},
 			},
 			BackoffLimit: &backoffLimit,

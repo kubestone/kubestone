@@ -81,7 +81,7 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 	}
 
 	// Check if finished
-	jobFinished, err := r.isJobFinished(&cr)
+	jobFinished, err := r.K8S.IsJobFinished(&cr)
 	if err != nil {
 		return ctrl.Result{}, err
 	}

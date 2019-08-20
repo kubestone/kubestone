@@ -41,6 +41,11 @@ type Access struct {
 	EventRecorder record.EventRecorder
 }
 
+type NamespacedObject interface {
+	GetName() string
+	GetNamespace() string
+}
+
 // CreateWithReference method creates a kubernetes resource and
 // sets the owner reference to a given object. It provides basic
 // idempotency (by ignoring Already Exists errors).
@@ -123,4 +128,16 @@ func (a *Access) DeleteObject(ctx context.Context, object, owner metav1.Object) 
 	}
 
 	return nil
+}
+
+// IsJobFinished returns true if the given job has already succeeded or failed
+func (a *Access) IsJobFinished(object NamespacedObject) (finished bool, err error) {
+	job, err := a.Clientset.BatchV1().Jobs(object.GetNamespace()).Get(
+		object.GetName(), metav1.GetOptions{})
+	if err != nil {
+		return false, err
+	}
+
+	finished = job.Status.Succeeded+job.Status.Failed > 0
+	return finished, nil
 }

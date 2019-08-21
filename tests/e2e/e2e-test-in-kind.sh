@@ -70,7 +70,7 @@ main() {
     $(dirname $0)/deploy-kubestone.sh
 
     pushd ../../
-    go test ./tests/e2e
+    go test ./tests/e2e/...
     popd
 }
 

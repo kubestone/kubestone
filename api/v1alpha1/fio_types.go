@@ -56,6 +56,7 @@ type FioSpec struct {
 
 	// PodConfig contains the configuration for the benchmark pod, including
 	// pod labels and scheduling policies (affinity, toleration, node selector...)
+	// +optional
 	PodConfig PodConfigurationSpec `json:"podConfig,omitempty"`
 }
 

@@ -13,78 +13,98 @@ rules:
   verbs:
   - create
 - apiGroups:
-  - ""
-  resources:
-  - pods
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-- apiGroups:
-  - ""
-  resources:
-  - services
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-- apiGroups:
-  - apps
-  resources:
-  - deployments
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-- apiGroups:
   - batch
   resources:
   - jobs
   verbs:
-  - create
-  - delete
   - get
   - list
+  - create
+  - delete
 - apiGroups:
   - perf.kubestone.xridge.io
   resources:
   - fios
   verbs:
-  - create
-  - delete
   - get
   - list
-  - patch
-  - update
   - watch
+  - create
+  - update
+  - patch
+  - delete
 - apiGroups:
   - perf.kubestone.xridge.io
   resources:
   - fios/status
   verbs:
   - get
-  - patch
   - update
+  - patch
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  verbs:
+  - get
+  - list
+  - create
+  - delete
 - apiGroups:
   - perf.kubestone.xridge.io
   resources:
   - iperf3s
   verbs:
-  - create
-  - delete
   - get
   - list
-  - patch
-  - update
   - watch
+  - create
+  - update
+  - patch
+  - delete
 - apiGroups:
   - perf.kubestone.xridge.io
   resources:
   - iperf3s/status
   verbs:
   - get
-  - patch
   - update
+  - patch
+- apiGroups:
+  - apps
+  resources:
+  - deployments
+  verbs:
+  - get
+  - list
+  - create
+  - delete
+- apiGroups:
+  - ""
+  resources:
+  - services
+  verbs:
+  - get
+  - list
+  - create
+  - delete
+- apiGroups:
+  - perf.kubestone.xridge.io
+  resources:
+  - sysbenches
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+- apiGroups:
+  - perf.kubestone.xridge.io
+  resources:
+  - sysbenches/status
+  verbs:
+  - get
+  - update
+  - patch

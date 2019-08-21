@@ -25,6 +25,19 @@ type FioSpec struct {
 	// Image defines the fio docker image used for the benchmark
 	Image ImageSpec `json:"image"`
 
+	// PersistentVolumeClaimName is the name of the existing persistence volume
+	// claim that will be used by the benchmark pod. If undefined, you can either
+	// use PersistentVolumeClaim to create and use a PVC, or nothing to run the
+	// benchmark inside the pod.
+	// +optional
+	PersistentVolumeClaimName *string `json:"persistentVolumeClaimName,omitempty"`
+
+	// PersistentVolumeClaim describes the persistent volume claim that will be
+	// created and used by the pod. This field is ignored if PersistentVolumeClaimName
+	// is given, in that case the pod will use the PVC by that given name.
+	// +optional
+	PersistentVolumeClaim *PersistentVolumeClaimSpec `json:"persistentVolumeClaim,omitempty"`
+
 	// BuiltinJobFiles contains a list of fio job files that are already present
 	// in the docker image
 	// +optional

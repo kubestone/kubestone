@@ -32,6 +32,7 @@ type Reconciler struct {
 	Log logr.Logger
 }
 
+// +kubebuilder:rbac:groups="",resources=persistentvolumeclaims,verbs=create
 // +kubebuilder:rbac:groups=batch,resources=jobs,verbs=get;list;create;delete
 // +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=fios,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=fios/status,verbs=get;update;patch
@@ -60,7 +61,21 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 		return ctrl.Result{}, err
 	}
 
-	job := NewJob(&cr, configMap)
+	pvcName := cr.Spec.PersistentVolumeClaimName
+	if pvcName == nil {
+		pvc, err := NewPersistentVolumeClaim(&cr)
+		if err != nil {
+			return ctrl.Result{}, err
+		}
+		if pvc != nil {
+			if err := r.K8S.CreateWithReference(ctx, pvc, &cr); err != nil {
+				return ctrl.Result{}, err
+			}
+			pvcName = &pvc.Name
+		}
+	}
+
+	job := NewJob(&cr, configMap, pvcName)
 	if err := r.K8S.CreateWithReference(ctx, job, &cr); err != nil {
 		return ctrl.Result{}, err
 	}

@@ -29,8 +29,7 @@ var ctx = context.Background()
 var scheme = runtime.NewScheme()
 
 func init() {
-	var err error
-	err = perfv1alpha1.AddToScheme(scheme)
+	err := perfv1alpha1.AddToScheme(scheme)
 	if err != nil {
 		panic(err)
 	}

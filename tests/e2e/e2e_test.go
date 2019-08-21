@@ -80,7 +80,7 @@ var _ = Describe("end to end test", func() {
 
 		Context("created job", func() {
 			It("Should finish in a pre-defined time", func() {
-				timeout := 120
+				timeout := 60
 				cr := &v1alpha1.Iperf3{}
 				namespacedName := types.NamespacedName{
 					Namespace: e2eNamespace,

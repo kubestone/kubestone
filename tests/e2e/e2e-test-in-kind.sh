@@ -60,7 +60,8 @@ main() {
     export PATH=$PATH:${BIN_DIR}
 
     install_kind_release
-    "${KIND}" create cluster --loglevel=debug
+    kind_config="$(dirname $0)/kind-two-worker-cluster.yaml"
+    "${KIND}" create cluster --loglevel=debug --config ${kind_config}
     KUBECONFIG="$("${KIND}" get kubeconfig-path)"
     export KUBECONFIG
 

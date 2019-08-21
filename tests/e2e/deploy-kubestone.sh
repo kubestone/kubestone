@@ -42,11 +42,16 @@ validate_kubestone_deployment() {
         deployments/kubestone-controller-manager
 }
 
+show_all_objects() {
+    kubectl get all --all-namespaces
+}
+
 main() {
     build_kubestone
     upload_kubestone_to_kind
     deploy_kubestone
     validate_kubestone_deployment
+    show_all_objects
 }
 
 main

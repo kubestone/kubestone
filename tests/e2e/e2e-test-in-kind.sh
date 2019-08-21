@@ -69,11 +69,7 @@ main() {
 
     $(dirname $0)/deploy-kubestone.sh
 
-    pushd ../../
-    go version
-    export GO111MODULE=on
     go test ./tests/e2e/...
-    popd
 }
 
 main

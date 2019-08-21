@@ -29,9 +29,12 @@ var ctx = context.Background()
 var scheme = runtime.NewScheme()
 
 func init() {
-	perfv1alpha1.AddToScheme(scheme)
-
 	var err error
+	err = perfv1alpha1.AddToScheme(scheme)
+	if err != nil {
+		panic(err)
+	}
+
 	client, err = ctrlclient.New(restClientConfig, ctrlclient.Options{Scheme: scheme})
 	if err != nil {
 		panic(err)

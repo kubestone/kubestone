@@ -69,7 +69,9 @@ main() {
 
     $(dirname $0)/deploy-kubestone.sh
 
-    # TODO: Add test execution logic here (via go test)
+    pushd ../../
+    go test ./tests/e2e
+    popd
 }
 
 main

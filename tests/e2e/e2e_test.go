@@ -10,9 +10,12 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/xridge/kubestone/api/v1alpha1"
+	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
 	ctrl "sigs.k8s.io/controller-runtime"
 	ctrlclient "sigs.k8s.io/controller-runtime/pkg/client"
+
+	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
 )
 
 const (
@@ -23,10 +26,13 @@ const (
 var restClientConfig = ctrl.GetConfigOrDie()
 var client ctrlclient.Client
 var ctx = context.Background()
+var scheme = runtime.NewScheme()
 
 func init() {
+	perfv1alpha1.AddToScheme(scheme)
+
 	var err error
-	client, err = ctrlclient.New(restClientConfig, ctrlclient.Options{})
+	client, err = ctrlclient.New(restClientConfig, ctrlclient.Options{Scheme: scheme})
 	if err != nil {
 		panic(err)
 	}
@@ -64,7 +70,7 @@ var _ = Describe("end to end test", func() {
 		})
 
 		Context("creation from samples", func() {
-			_, _, err := run("kubectl create -f " + iperf3SampleCR)
+			_, _, err := run("kubectl create -n " + e2eNamespace + " -f " + iperf3SampleCR)
 			It("should create iperf3-sample cr", func() {
 				Expect(err).To(BeNil())
 			})

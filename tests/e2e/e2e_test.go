@@ -88,6 +88,9 @@ var _ = Describe("end to end test", func() {
 				}
 				Expect(client.Get(ctx, namespacedName, cr)).To(Succeed())
 				Eventually(func() bool {
+					if err := client.Get(ctx, namespacedName, cr); err != nil {
+						panic(err)
+					}
 					return (cr.Status.Running == false) && (cr.Status.Completed)
 				}, timeout).Should(BeTrue())
 			})

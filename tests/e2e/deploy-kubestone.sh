@@ -16,7 +16,7 @@
 
 set -eEuo pipefail
 
-# FIXME: Should use an other tag to avoid confusion
+# TODO: end-to-end test should use it's own tag
 DOCKER_IMAGE="xridge/kubestone:latest"
 KUBESTONE_ROOT=$(dirname $0)/../../
 

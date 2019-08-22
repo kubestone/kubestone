@@ -27,8 +27,6 @@ KUBECTL="${BIN_DIR}/kubectl"
 cleanup() {
     kubectl get all --all-namespaces || true
     kubectl logs -n kubestone-system $(kubectl get pods -n kubestone-system -o name | grep controller) || true
-    kubectl describe -n kubestone-e2e iperf3 iperf3-sample || true
-    kubectl get -n kubestone-e2e iperf3 iperf3-sample -o yaml || true
     "${KIND}" delete cluster || true
     rm -rf "${BIN_DIR}"
 }

@@ -10,6 +10,8 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/xridge/kubestone/api/v1alpha1"
+	appsv1 "k8s.io/api/apps/v1"
+	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -86,13 +88,36 @@ var _ = Describe("end to end test", func() {
 					Namespace: e2eNamespace,
 					Name:      "iperf3-sample",
 				}
-				Expect(client.Get(ctx, namespacedName, cr)).To(Succeed())
 				Eventually(func() bool {
 					if err := client.Get(ctx, namespacedName, cr); err != nil {
 						panic(err)
 					}
 					return (cr.Status.Running == false) && (cr.Status.Completed)
 				}, timeout).Should(BeTrue())
+			})
+			It("Should leave one successful pod", func() {
+				pod := &corev1.Pod{}
+				namespacedName := types.NamespacedName{
+					Namespace: e2eNamespace,
+					Name:      "iperf3-sample-client",
+				}
+				Expect(client.Get(ctx, namespacedName, pod)).To(Succeed())
+			})
+			It("Should not leave deployment", func() {
+				deployment := &appsv1.Deployment{}
+				namespacedName := types.NamespacedName{
+					Namespace: e2eNamespace,
+					Name:      "iperf3-sample",
+				}
+				Expect(client.Get(ctx, namespacedName, deployment)).NotTo(Succeed())
+			})
+			It("Should not leave service", func() {
+				service := &corev1.Service{}
+				namespacedName := types.NamespacedName{
+					Namespace: e2eNamespace,
+					Name:      "iperf3-sample",
+				}
+				Expect(client.Get(ctx, namespacedName, service)).NotTo(Succeed())
 			})
 		})
 	})

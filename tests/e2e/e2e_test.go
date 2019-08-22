@@ -49,11 +49,9 @@ var scheme = runtime.NewScheme()
 
 func init() {
 	_ = k8sscheme.AddToScheme(scheme)
-	err := perfv1alpha1.AddToScheme(scheme)
-	if err != nil {
-		panic(err)
-	}
+	_ = perfv1alpha1.AddToScheme(scheme)
 
+	var err error
 	client, err = ctrlclient.New(restClientConfig, ctrlclient.Options{Scheme: scheme})
 	if err != nil {
 		panic(err)

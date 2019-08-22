@@ -21,7 +21,7 @@ test: generate fmt lint manifests
 
 # Run end to end tests
 e2e-test:
-	./tests/e2e/e2e-test-in-kind.sh
+	./tests/e2e/bin/e2e-test-in-kind.sh
 
 # Build manager binary
 manager: generate fmt vet

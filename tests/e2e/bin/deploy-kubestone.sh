@@ -18,7 +18,7 @@ set -eEuo pipefail
 
 # TODO: end-to-end test should use it's own tag
 DOCKER_IMAGE="xridge/kubestone:latest"
-KUBESTONE_ROOT=$(dirname $0)/../../
+KUBESTONE_ROOT=$(dirname $0)/../../../
 
 build_kubestone() {
     pushd ${KUBESTONE_ROOT}

@@ -19,9 +19,38 @@ package e2e
 import (
 	"testing"
 
+	"context"
+
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+
+	"k8s.io/apimachinery/pkg/runtime"
+	k8sscheme "k8s.io/client-go/kubernetes/scheme"
+	ctrl "sigs.k8s.io/controller-runtime"
+	ctrlclient "sigs.k8s.io/controller-runtime/pkg/client"
+
+	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
 )
+
+const (
+	e2eNamespace = "kubestone-e2e"
+)
+
+var restClientConfig = ctrl.GetConfigOrDie()
+var client ctrlclient.Client
+var ctx = context.Background()
+var scheme = runtime.NewScheme()
+
+func init() {
+	_ = k8sscheme.AddToScheme(scheme)
+	_ = perfv1alpha1.AddToScheme(scheme)
+
+	var err error
+	client, err = ctrlclient.New(restClientConfig, ctrlclient.Options{Scheme: scheme})
+	if err != nil {
+		panic(err)
+	}
+}
 
 func TestEndToEnd(t *testing.T) {
 	RegisterFailHandler(Fail)

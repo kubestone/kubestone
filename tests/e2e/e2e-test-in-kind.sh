@@ -73,7 +73,7 @@ main() {
 
     $(dirname $0)/deploy-kubestone.sh
 
-    go test ./tests/e2e/...
+    go test -v ./tests/e2e/...
 }
 
 main

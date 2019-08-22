@@ -9,6 +9,12 @@ rules:
 - apiGroups:
   - ""
   resources:
+  - events
+  verbs:
+  - create
+- apiGroups:
+  - ""
+  resources:
   - configmaps
   verbs:
   - create
@@ -36,6 +42,7 @@ rules:
   - delete
   - get
   - list
+  - watch
 - apiGroups:
   - apps
   resources:
@@ -45,6 +52,7 @@ rules:
   - delete
   - get
   - list
+  - watch
 - apiGroups:
   - batch
   resources:

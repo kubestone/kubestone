@@ -27,11 +27,9 @@ import (
 func run(command string) (stdout, stderr string, err error) {
 	commandArray := qsplit.ToStrings([]byte(command))
 	cmd := exec.Command(commandArray[0], commandArray[1:]...)
-	var stdOut bytes.Buffer
-	var stdErr bytes.Buffer
+	var stdOut, stdErr bytes.Buffer
 	cmd.Stdout, cmd.Stderr = &stdOut, &stdErr
-	err = cmd.Run()
-	if err != nil {
+	if err = cmd.Run(); err != nil {
 		log.Printf("Error during execution of `%v`\nerr: %v\nstdout: %v\nstderr: %v\n",
 			command, err, stdOut.String(), stdErr.String())
 		return "", "", err

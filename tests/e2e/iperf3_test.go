@@ -68,6 +68,7 @@ var _ = Describe("end to end test", func() {
 					Name:      "iperf3-sample-client",
 				}
 				Expect(client.Get(ctx, namespacedName, pod)).To(Succeed())
+				Expect(pod.Status.Phase).To(Equal(corev1.PodSucceeded))
 			})
 			It("Should not leave deployment", func() {
 				deployment := &appsv1.Deployment{}

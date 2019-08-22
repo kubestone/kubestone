@@ -55,7 +55,7 @@ var _ = Describe("end to end test", func() {
 				}
 				Eventually(func() bool {
 					if err := client.Get(ctx, namespacedName, cr); err != nil {
-						panic(err)
+						Fail("Unable to get iperf3 CR")
 					}
 					return (cr.Status.Running == false) && (cr.Status.Completed)
 				}, timeout).Should(BeTrue())

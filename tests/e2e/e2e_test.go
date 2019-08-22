@@ -16,6 +16,7 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	ctrl "sigs.k8s.io/controller-runtime"
 	ctrlclient "sigs.k8s.io/controller-runtime/pkg/client"
+	k8sscheme "k8s.io/client-go/kubernetes/scheme"
 
 	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
 )
@@ -31,6 +32,7 @@ var ctx = context.Background()
 var scheme = runtime.NewScheme()
 
 func init() {
+	_ = k8sscheme.AddToScheme(scheme)
 	err := perfv1alpha1.AddToScheme(scheme)
 	if err != nil {
 		panic(err)

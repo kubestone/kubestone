@@ -49,6 +49,7 @@ var _ = Describe("end to end test", func() {
 			It("Should finish in a pre-defined time", func() {
 				timeout := 60
 				cr := &v1alpha1.Iperf3{}
+				// TODO: find the respective objects via the CR owner reference
 				namespacedName := types.NamespacedName{
 					Namespace: e2eNamespace,
 					Name:      "iperf3-sample",

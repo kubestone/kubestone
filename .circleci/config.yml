@@ -62,7 +62,7 @@ jobs:
             export GO111MODULE=on
             export GOPATH=~/go
             export PATH=$PATH:$GOPATH/bin
-            ./tests/e2e/e2e-test-in-kind.sh
+            make e2e-test
 
 workflows:
   version: 2

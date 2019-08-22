@@ -14,9 +14,9 @@ import (
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
+	k8sscheme "k8s.io/client-go/kubernetes/scheme"
 	ctrl "sigs.k8s.io/controller-runtime"
 	ctrlclient "sigs.k8s.io/controller-runtime/pkg/client"
-	k8sscheme "k8s.io/client-go/kubernetes/scheme"
 
 	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
 )
@@ -61,20 +61,14 @@ func run(command string) (stdout, stderr string, err error) {
 }
 
 var _ = Describe("end to end test", func() {
+	Context("preparing namespace", func() {
+		_, _, err := run("kubectl create namespace " + e2eNamespace)
+		It("should succeed", func() {
+			Expect(err).To(BeNil())
+		})
+	})
+
 	Describe("for iperf3", func() {
-		//var dummy int
-
-		BeforeEach(func() {
-			//dummy = 1
-		})
-
-		Context("preparing namespace", func() {
-			_, _, err := run("kubectl create namespace " + e2eNamespace)
-			It("should succeed", func() {
-				Expect(err).To(BeNil())
-			})
-		})
-
 		Context("creation from samples", func() {
 			_, _, err := run("kubectl create -n " + e2eNamespace + " -f " + iperf3SampleCR)
 			It("should create iperf3-sample cr", func() {
@@ -122,5 +116,8 @@ var _ = Describe("end to end test", func() {
 				Expect(client.Get(ctx, namespacedName, service)).NotTo(Succeed())
 			})
 		})
+	})
+	Describe("for fio", func() {
+		// FIXME: Add fio e2e
 	})
 })

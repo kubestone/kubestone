@@ -60,7 +60,7 @@ install_kubectl_release() {
 }
 
 main() {
-    export PATH=$PATH:${BIN_DIR}
+    export PATH=${BIN_DIR}:${PATH}
 
     install_kind_release
     kind_config="$(dirname $0)/kind-two-worker-cluster.yaml"

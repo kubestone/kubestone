@@ -133,6 +133,6 @@ func (a *Access) IsJobFinished(namespacedName types.NamespacedName) (finished bo
 		return false, err
 	}
 
-	finished = job.Status.Succeeded+job.Status.Failed > 0
+	finished = job.Status.CompletionTime != nil
 	return finished, nil
 }

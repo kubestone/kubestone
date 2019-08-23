@@ -115,14 +115,3 @@ func NewJob(cr *perfv1alpha1.Fio, configMap *corev1.ConfigMap, pvcName *string) 
 
 	return &job
 }
-
-func (r *Reconciler) isJobFinished(cr *perfv1alpha1.Fio) (finished bool, err error) {
-	// TODO: Move this to k8s.client
-	job, err := r.K8S.Clientset.BatchV1().Jobs(cr.Namespace).Get(cr.Name, metav1.GetOptions{})
-	if err != nil {
-		return false, err
-	}
-
-	finished = job.Status.Succeeded+job.Status.Failed > 0
-	return finished, nil
-}

@@ -20,6 +20,7 @@ import (
 	"context"
 
 	"github.com/go-logr/logr"
+	"k8s.io/apimachinery/pkg/types"
 	ctrl "sigs.k8s.io/controller-runtime"
 
 	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
@@ -82,7 +83,10 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 	}
 
 	// Check if finished
-	jobFinished, err := r.isJobFinished(&cr)
+	jobFinished, err := r.K8S.IsJobFinished(types.NamespacedName{
+		Namespace: cr.Namespace,
+		Name:      cr.Name,
+	})
 	if err != nil {
 		return ctrl.Result{}, err
 	}

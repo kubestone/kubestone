@@ -22,7 +22,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// +kubebuilder:rbac:groups="",resources=services,verbs=get;list;create;delete
+// +kubebuilder:rbac:groups="",resources=services,verbs=get;list;create;delete;watch
 
 func serverServiceName(cr *perfv1alpha1.Iperf3) string {
 	return cr.Name

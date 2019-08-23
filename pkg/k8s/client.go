@@ -124,3 +124,15 @@ func (a *Access) DeleteObject(ctx context.Context, object, owner metav1.Object) 
 
 	return nil
 }
+
+// IsJobFinished returns true if the given job has already succeeded or failed
+func (a *Access) IsJobFinished(namespacedName types.NamespacedName) (finished bool, err error) {
+	job, err := a.Clientset.BatchV1().Jobs(namespacedName.Namespace).Get(
+		namespacedName.Name, metav1.GetOptions{})
+	if err != nil {
+		return false, err
+	}
+
+	finished = job.Status.CompletionTime != nil
+	return finished, nil
+}

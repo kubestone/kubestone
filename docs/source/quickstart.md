@@ -16,4 +16,4 @@ $ kustomize build config/samples/fio/overlays/builtin_jobs | kubectl create -n k
 fio.perf.kubestone.xridge.io/fio-sample created
 ```
 
-Additional benchmarks are located in the config/samples/ directory.
+Additional benchmarks are located in the [github repository](https://github.com/xridge/kubestone/tree/master/config/samples).

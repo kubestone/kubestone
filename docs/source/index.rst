@@ -14,8 +14,8 @@ Kubestone currently supports the following benchmarks:
    - `iperf3`_
 
 .. _Kubernetes Operator: https://kubernetes.io/docs/concepts/extend-kubernetes/operator/
-.. _fio: https://fio.readthedocs.io/
-.. _iperf3: https://iperf.fr/
+.. _fio: benchmarks/disk.html#fio
+.. _iperf3: benchmarks/network.html#iperf3
 
 .. toctree::
    :maxdepth: 2

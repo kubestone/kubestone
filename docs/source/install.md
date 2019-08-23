@@ -8,7 +8,7 @@
 
 The following command will
 
-* create namespace (`kubestone-system`) for the kubestone operator
+* create namespace `kubestone-system` for the kubestone operator
 * install the CRDs to the cluster
 * create the necessary roles and rolebindings
 * install and start the operator

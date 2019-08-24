@@ -1,2 +1,1 @@
-Markdown==2.6.11
-sphinx-markdown-tables==0.0.9
+mkdocs-material==4.4.1

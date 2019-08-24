@@ -18,8 +18,8 @@
 # -- Project information -----------------------------------------------------
 
 project = 'kubestone'
-copyright = '2019, xridge'
-author = 'xridge'
+copyright = '2019, xridge.io'
+author = 'xridge kubestone contributors'
 
 
 # -- General configuration ---------------------------------------------------
@@ -27,7 +27,10 @@ author = 'xridge'
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['recommonmark']
+extensions = [
+    #'recommonmark',
+    'sphinx_markdown_tables'
+    ]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -42,7 +45,13 @@ source_suffix = {
     '.md': 'markdown',
 }
 
+source_parsers = {
+    '.md': 'recommonmark.parser.CommonMarkParser',
+}
+
 master_doc = 'index'
+
+html_logo = 'images/kubestone-logo.png'
 
 # -- Options for HTML output -------------------------------------------------
 

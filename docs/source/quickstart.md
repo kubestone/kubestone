@@ -1,19 +1,6 @@
-# Quickstart
+# Kubestone Quickstart Guide
 
-## Run a benchmark
 
-Create a dedicated namespace for benchmarking
 
-```bash
-$ kubectl create namespace kubestone
-namespace/kubestone created
-```
+Hello
 
-Start sample fio benchmark by creating CR
-
-```bash
-$ kustomize build config/samples/fio/overlays/builtin_jobs | kubectl create -n kubestone -f -
-fio.perf.kubestone.xridge.io/fio-sample created
-```
-
-Additional benchmarks are located in the [github repository](https://github.com/xridge/kubestone/tree/master/config/samples).

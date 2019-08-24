@@ -1,0 +1,2 @@
+Markdown==2.6.11
+sphinx-markdown-tables==0.0.9

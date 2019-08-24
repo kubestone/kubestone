@@ -1,2 +1,3 @@
 site_name: Kubestone
+docs_dir: docs/
 theme: material

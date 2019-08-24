@@ -32,7 +32,7 @@ Kubestone is a benchmarking [Operator](https://kubernetes.io/docs/concepts/exten
 
 
 
-Please follow the [quickstart guide](docs/quickstart) to see how a benchmarks can be creted.
+Please follow the [quickstart guide](quickstart.md) to see how a benchmarks can be creted.
 
 
 

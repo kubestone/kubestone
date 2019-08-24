@@ -32,7 +32,7 @@ import (
 // the iperf3 server deployment and service listens
 const Iperf3ServerPort = 5201
 
-// +kubebuilder:rbac:groups=apps,resources=deployments,verbs=get;list;create;delete
+// +kubebuilder:rbac:groups=apps,resources=deployments,verbs=get;list;create;delete;watch
 
 func serverDeploymentName(cr *perfv1alpha1.Iperf3) string {
 	return cr.Name

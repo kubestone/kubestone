@@ -52,6 +52,8 @@ func init() {
 	// +kubebuilder:scaffold:scheme
 }
 
+// +kubebuilder:rbac:groups="",resources=events,verbs=create
+
 func newEventRecorder(clientSet *kubernetes.Clientset) record.EventRecorder {
 	eventBroadcaster := record.NewBroadcaster()
 	eventBroadcaster.StartLogging(rootLog.Sugar().Infof)

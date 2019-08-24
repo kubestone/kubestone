@@ -15,9 +15,13 @@ GOLANGCI_VERSION = v1.17.1
 
 all: manager
 
-# Run tests
+# Run unit tests
 test: generate fmt lint manifests
-	go test ./api/... ./controllers/... ./pkg/... -coverprofile cover.out
+	go test -v ./api/... ./controllers/... ./pkg/... -coverprofile cover.out
+
+# Run end to end tests
+e2e-test:
+	./tests/e2e/bin/e2e-test-in-kind.sh
 
 # Build manager binary
 manager: generate fmt vet

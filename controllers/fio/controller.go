@@ -20,6 +20,7 @@ import (
 	"context"
 
 	"github.com/go-logr/logr"
+	"k8s.io/apimachinery/pkg/types"
 	ctrl "sigs.k8s.io/controller-runtime"
 
 	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
@@ -32,6 +33,7 @@ type Reconciler struct {
 	Log logr.Logger
 }
 
+// +kubebuilder:rbac:groups="",resources=configmaps,verbs=create
 // +kubebuilder:rbac:groups="",resources=persistentvolumeclaims,verbs=create
 // +kubebuilder:rbac:groups=batch,resources=jobs,verbs=get;list;create;delete
 // +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=fios,verbs=get;list;watch;create;update;patch;delete
@@ -81,7 +83,10 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 	}
 
 	// Check if finished
-	jobFinished, err := r.isJobFinished(&cr)
+	jobFinished, err := r.K8S.IsJobFinished(types.NamespacedName{
+		Namespace: cr.Namespace,
+		Name:      cr.Name,
+	})
 	if err != nil {
 		return ctrl.Result{}, err
 	}

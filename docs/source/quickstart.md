@@ -240,7 +240,7 @@ Since the Custom Resource has ownership on the created resources, the underlying
 
 
 
-## Next steps
+# Next steps
 
 Now you are familiar with the key concepts of Kubestone, it is time to explore and benchmark.
 
@@ -250,7 +250,7 @@ If you are interested in other benchmarks, please refer to our [benchmark suite]
 
 
 
-## Tips
+# Tips
 
 In the commands executed above, we needed to specify the namespace. 
 

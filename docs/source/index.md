@@ -46,7 +46,7 @@ You can reach us on Slack and via the [Kubestone Mail Group](https://groups.goog
 
 All contributions are welcome! Bug reports, fixes, new features, documentation improvements and ideas help us to create the most comprehensive benchmark suite for Kubernetes. 
 
-If you would like to get involved please read the development guide. 
+If you would like to get involved please read the [development guide](devguide.md). 
 
 Issues labelled with '[good first issue](https://github.com/xridge/kubestone/labels/good%20first%20issue)' and '[help wanted](https://github.com/xridge/kubestone/labels/help%20wanted)' are good starting points to join the community.
 

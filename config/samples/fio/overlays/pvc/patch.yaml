@@ -6,4 +6,4 @@ spec:
   persistentVolumeClaim:
     accessModes:
     - ReadWriteOnce
-    size: 5G
+    size: 1Gi

@@ -1,18 +1,17 @@
 # Kubestone
-Kubestone is a benchmarking [Kubernetes Operator](https://kubernetes.io/docs/concepts/extend-kubernetes/operator/) that can evaluate the performance of Kubernetes Clusters. 
+Kubestone is a benchmarking [Operator](https://kubernetes.io/docs/concepts/extend-kubernetes/operator/) that can evaluate the performance of [Kubernetes](https://kubernetes.io) clusters. 
 
 
 
 ## Features
 
 - **Supports common set of benchmarks** to measure:
-  CPU, Disk and Network and Application performance
+  CPU, Disk, Network and Application performance
 
-- **Fine-grained control on Kubernetes Scheduling primitives**:
+- **Fine-grained control over Kubernetes Scheduling primitives**:
   Affinity, Anti-Affinity, Tolerations, Storage Classes and Node Selection  
 
 - **Cloud Native benchmarking**: 
-
   Runs are defined as Custom Resources. Benchmarks are executed within the cluster using Kubernetes resources: Pods, Jobs, Deployments and Services.
 
 - **Extensible**: 
@@ -33,32 +32,37 @@ Kubestone is a benchmarking [Kubernetes Operator](https://kubernetes.io/docs/con
 
 
 
+Please follow the [quickstart guide](docs/quickstart) to see how a benchmarks can be creted.
+
+
+
 ## Installation
 
-### Requirements
+**Requirements**
 
 - [Kubernetes](https://kubernetes.io/) v1.14 (or newer)
 - [Kustomize](https://kustomize.io/) v3.10
+- Cluster admin privileges
 
-### Steps
+Deploy Kubestone to `kubestone-system` namespace with the following command:
 
-
+```
+$ kustomize build github.com/xridge/kubestone/config/default | kubectl apply -f -
+```
 
 
 
 ### Community
 
-Slack channel comes here
-
-Mail group comes here too
+You can reach us on Slack and via the [Kubestone Mail Group](https://groups.google.com/forum/#!forum/kubestone). 
 
 
 
 ### Contributing
 
-All contributions are welcome! Bug reports, fixes, new features, documentation improvements and ideas help us jointly create the most comprehensive benchmark suite for Kubernetes. 
+All contributions are welcome! Bug reports, fixes, new features, documentation improvements and ideas help us to create the most comprehensive benchmark suite for Kubernetes. 
 
-If you would like to get involved please read through on the development guide. 
+If you would like to get involved please read the development guide. 
 
 Issues labelled with '[good first issue](https://github.com/xridge/kubestone/labels/good%20first%20issue)' and '[help wanted](https://github.com/xridge/kubestone/labels/help%20wanted)' are good starting points to join the community.
 

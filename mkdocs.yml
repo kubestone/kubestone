@@ -1,3 +1,5 @@
 site_name: Kubestone
 docs_dir: docs/
-theme: material
+theme: 
+  name: material
+  logo: docs/source/images/kubestone-logo.png

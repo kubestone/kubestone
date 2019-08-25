@@ -246,7 +246,7 @@ Now you are familiar with the key concepts of Kubestone, it is time to explore a
 
 You can play around with Fio Benchmark via it's `cmdLineArgs`, Persistent Volume and Scheduling related settings. You can find more information about that in Fio's benchmark page.
 
-If you are interested in other benchmarks, please refer to our [benchmark suite](benchmarks/index.md).
+If you are interested in other benchmarks, please refer to our [benchmark suite](benchmarks-index.md).
 
 
 

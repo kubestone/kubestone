@@ -20,10 +20,11 @@ Kubestone is a benchmarking [Operator](https://kubernetes.io/docs/concepts/exten
 
 ## Benchmarks
 
-{!benchmark-status.md!}
-
+{!benchmarks/status.md!}
 
 Follow the [quickstart guide](quickstart.md) to see how Kubestone can be deployed and how benchmarks can be run.
+
+For complete documentation please refer to the [CRD API Docs page](apidocs.md).
 
 
 

@@ -18,34 +18,37 @@ If `PersistentVolumeClaim` is provided in the CR the respective PVC will be used
 !!! warning
     If the PersistentVolumeClaim is not specified, Docker's layered fs performance will be measured
 
-## Sample benchmark
-To run a sample benchmark with PVC mode, the following command can be used:
-```
-$ kustomize build github.com/xridge/kubestone/config/samples/fio/overlays/pvc | kubectl create --namespace kubestone -f -
-```
-
-Please refer to the [quickstart guide](quickstart.md) for further details.
 
 
-
-
-## Reference configuration
+## Example configuration
 You can find [configuration examples](https://github.com/xridge/kubestone/tree/master/config/samples/fio) in the GitHub repository.
 
 
 
-## Further documentation
+## Sample benchmark
+To run a sample benchmark with PVC mode, the following command can be used:
+```bash
+$ kustomize build github.com/xridge/kubestone/config/samples/fio/overlays/pvc | kubectl create --namespace kubestone -f -
+```
 
-The complete documentation of fio (and other benchmarks') CR can be found in the API Docs.
+Please refer to the [quickstart guide](../quickstart.md) for further details.
+
+
+
+
+## Fio Configuration
+
+The complete documentation of fio CR can be found in the [API Docs](../apidocs.md#perf.kubestone.xridge.io/v1alpha1.FioSpec).
+
 
 
 
 ## Docker Image
 
-[Docker Image for Fio](https://hub.docker.com/r/xridge/fio) is provided via [xridge's fio repository](https://hub.docker.com/r/xridge/fio).
+[Docker Image for Fio](https://hub.docker.com/r/xridge/fio) is provided via [xridge's fio repository](https://github.com/xridge/fio-docker).
 
 
 
 ## Legal
 
-Fio is licensed as GPL v2. 
+Fio is licensed as GPLv2. 

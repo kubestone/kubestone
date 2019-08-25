@@ -1,5 +1,7 @@
+![Kubestone](images/kubestone-logo-notext.png)  
 # Kubestone
-Kubestone is a benchmarking [Operator](https://kubernetes.io/docs/concepts/extend-kubernetes/operator/) that can evaluate the performance of [Kubernetes](https://kubernetes.io) clusters. 
+
+Kubestone is a benchmarking [Operator](https://kubernetes.io/docs/concepts/extend-kubernetes/operator/) that can evaluate the performance of [Kubernetes](https://kubernetes.io) installations. 
 
 
 

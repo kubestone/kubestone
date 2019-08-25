@@ -8,4 +8,3 @@ As benchmarks are executed in Kubernetes, they must be containerized to work on 
 {!benchmark-status.md!}
 
 *Please follow the link provided under **Benchmark name** to see the individual documentation related to the benchmark.*
-

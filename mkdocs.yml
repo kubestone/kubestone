@@ -1,9 +1,13 @@
 site_name: Kubestone
 nav:
   - Home: index.md
-  - Quickstart: quickstart.md
-  - Benchmarks: benchmarks
-  - Dev guide: devguide.md
+  - Quickstart guide: quickstart.md
+  - Benchmarks:
+      - 'Benchmarks index': benchmarks/index.md
+      - 'Fio': benchmarks/fio.md
+      - 'Iperf3': benchmarks/iperf3.md
+      - 'SysBench': benchmarks/sysbench.md
+  - Development guide: devguide.md
 
 docs_dir: docs/
 

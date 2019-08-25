@@ -3,5 +3,10 @@ kind: Sysbench
 metadata:
   name: sysbench-sample
 spec:
-  # Add fields here
-  foo: bar
+  image:
+    name: xridge/sysbench:latest
+    # pullPolicy: IfNotPresent
+    # pullSecret: null
+  options: --threads=2 --time=20
+  testName: cpu
+  command: run

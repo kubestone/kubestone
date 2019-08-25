@@ -9,13 +9,13 @@ rules:
 - apiGroups:
   - ""
   resources:
-  - events
+  - configmaps
   verbs:
   - create
 - apiGroups:
   - ""
   resources:
-  - configmaps
+  - events
   verbs:
   - create
 - apiGroups:
@@ -25,98 +25,100 @@ rules:
   verbs:
   - create
 - apiGroups:
+  - ""
+  resources:
+  - pods
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+- apiGroups:
+  - ""
+  resources:
+  - services
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - watch
+- apiGroups:
+  - apps
+  resources:
+  - deployments
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - watch
+- apiGroups:
   - batch
   resources:
   - jobs
   verbs:
-  - get
-  - list
   - create
   - delete
+  - get
+  - list
 - apiGroups:
   - perf.kubestone.xridge.io
   resources:
   - fios
   verbs:
+  - create
+  - delete
   - get
   - list
-  - watch
-  - create
-  - update
   - patch
-  - delete
+  - update
+  - watch
 - apiGroups:
   - perf.kubestone.xridge.io
   resources:
   - fios/status
   verbs:
   - get
-  - update
   - patch
-- apiGroups:
-  - ""
-  resources:
-  - pods
-  verbs:
-  - get
-  - list
-  - create
-  - delete
+  - update
 - apiGroups:
   - perf.kubestone.xridge.io
   resources:
   - iperf3s
   verbs:
+  - create
+  - delete
   - get
   - list
-  - watch
-  - create
-  - update
   - patch
-  - delete
+  - update
+  - watch
 - apiGroups:
   - perf.kubestone.xridge.io
   resources:
   - iperf3s/status
   verbs:
   - get
-  - update
   - patch
-- apiGroups:
-  - apps
-  resources:
-  - deployments
-  verbs:
-  - get
-  - list
-  - create
-  - delete
-- apiGroups:
-  - ""
-  resources:
-  - services
-  verbs:
-  - get
-  - list
-  - create
-  - delete
+  - update
 - apiGroups:
   - perf.kubestone.xridge.io
   resources:
   - sysbenches
   verbs:
+  - create
+  - delete
   - get
   - list
-  - watch
-  - create
-  - update
   - patch
-  - delete
+  - update
+  - watch
 - apiGroups:
   - perf.kubestone.xridge.io
   resources:
   - sysbenches/status
   verbs:
   - get
-  - update
   - patch
+  - update

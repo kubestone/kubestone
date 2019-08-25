@@ -19,10 +19,11 @@ extra:
   social:
     - type: 'github'
       link: 'https://github.com/xridge/kubestone'
-    - type: 'twitter'
-      link: 'https://twitter.com/kubestone'
     - type: 'linkedin'
-      link: 'https://linkedin.com/in/xridge'
+      link: 'https://linkedin.com/company/xridge'
+
+plugins:
+  - search
 
 markdown_extensions:
   - toc:

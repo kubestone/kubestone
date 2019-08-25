@@ -1,5 +1,30 @@
 site_name: Kubestone
+nav:
+  - Home: index.md
+  - Quickstart: quickstart.md
+  - Benchmarks: benchmarks
+  - Dev guide: devguide.md
+
 docs_dir: docs/
+
+repo_name: 'xridge/kubestone'
+repo_url: 'https://github.com/xridge/kubestone'
+
+extra:
+  social:
+    - type: 'github'
+      link: 'https://github.com/xridge/kubestone'
+    - type: 'twitter'
+      link: 'https://twitter.com/kubestone'
+    - type: 'linkedin'
+      link: 'https://linkedin.com/in/xridge'
+
+markdown_extensions:
+  - toc:
+      permalink: true
+
 theme: 
   name: material
-  logo: docs/source/images/kubestone-logo.png
+  palette:
+    primary: 'white'
+  logo: images/kubestone-logo.png

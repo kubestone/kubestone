@@ -3,10 +3,11 @@ nav:
   - Home: index.md
   - Quickstart guide: quickstart.md
   - Benchmarks:
-      - 'Benchmarks index': benchmarks/index.md
+      - 'Benchmarks home': benchmarks-index.md
       - 'Fio': benchmarks/fio.md
       - 'Iperf3': benchmarks/iperf3.md
       - 'SysBench': benchmarks/sysbench.md
+  - CRD API docs: apidocs.md
   - Development guide: devguide.md
 
 docs_dir: docs/

@@ -255,3 +255,4 @@ If you are interested in other benchmarks, please refer to our [benchmark suite]
 In the commands executed above, we needed to specify the namespace. 
 
 This step can be avoided if the namespace is specified in your kubernetes config file. One convenient tool to do so is `kubens`, which is part of the [kubectx program suite](https://kubectx.dev).
+

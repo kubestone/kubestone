@@ -1,7 +1,7 @@
 # Iperf3 - Network bandwidth benchmark
 
 !!! quote
-   iPerf3 is a tool for active measurements of the maximum achievable bandwidth on IP networks. It supports tuning of various parameters related to timing, buffers and protocols (TCP, UDP, SCTP with IPv4 and IPv6). 
+    iPerf3 is a tool for active measurements of the maximum achievable bandwidth on IP networks. It supports tuning of various parameters related to timing, buffers and protocols (TCP, UDP, SCTP with IPv4 and IPv6). 
 
 With the [iperf3](https://iperf.fr/) benchmark you can measure the I/O performance of the network hardware and stack used in your Kubernetes cluster. 
 
@@ -9,24 +9,42 @@ With the [iperf3](https://iperf.fr/) benchmark you can measure the I/O performan
 
 ## Mode of operation
 
-TBD
+As iperf3 requires a server and a client the controller creates the following objects during benchmark:
 
-## Sample benchmark
-TBD
+- Server Deployment
 
-Please refer to the [quickstart guide](quickstart.md) for details on generic principles and setup of Kubestone.
+- Server Service
+
+- Client Pod
+
+  
+
+At the first step, the Server Deployment and Service is created. Once both becomes available, the Client Pod is created to execute the benchmark. Once the benchmark is completed (regardless of it's success), the server deployment and service is deleted from Kubernetes.
+
+In order to avoid measuring loopback performance it is advised that you set the affinity and anti-affinity scheduling primitives for the benchmark. The provided sample benchmark provides and example on how to avoid executing the client and the server on the same machine. For further documentation please refer to Kubernetes' [respective documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/).
 
 
 
+## Example configuration
 
-## Reference configuration
 You can find [configuration example](https://github.com/xridge/kubestone/blob/master/config/samples/perf_v1alpha1_iperf3.yaml) in the GitHub repository.
 
 
 
-## Further documentation
+## Sample benchmark
+```bash
+kubectl create --namespace kubestone -f https://github.com/xridge/kubestone/blob/master/config/samples/perf_v1alpha1_iperf3.yaml
+```
 
-The complete documentation of iperf3 (and other benchmarks') CR can be found in the API Docs.
+
+Please refer to the [quickstart guide](../quickstart.md) for details on generic principles and setup of Kubestone.
+
+
+
+
+## IPerf3 Configuration
+
+The complete documentation of iperf3 CR can be found in the [API Docs](../apidocs.md#perf.kubestone.xridge.io/v1alpha1.Iperf3Spec).
 
 
 

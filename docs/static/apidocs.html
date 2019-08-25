@@ -1,0 +1,939 @@
+<p>Packages:</p>
+<ul>
+<li>
+<a href="#perf.kubestone.xridge.io%2fv1alpha1">perf.kubestone.xridge.io/v1alpha1</a>
+</li>
+</ul>
+<h2 id="perf.kubestone.xridge.io/v1alpha1">perf.kubestone.xridge.io/v1alpha1</h2>
+<p>
+<p>Package v1alpha1 is the v1alpha1 version of the API.</p>
+</p>
+Resource Types:
+<ul></ul>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.Fio">Fio
+</h3>
+<p>
+<p>Fio is the Schema for the fios API</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>metadata</code></br>
+<em>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#objectmeta-v1-meta">
+Kubernetes meta/v1.ObjectMeta
+</a>
+</em>
+</td>
+<td>
+Refer to the Kubernetes API documentation for the fields of the
+<code>metadata</code> field.
+</td>
+</tr>
+<tr>
+<td>
+<code>spec</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">
+FioSpec
+</a>
+</em>
+</td>
+<td>
+<br/>
+<br/>
+<table>
+<tr>
+<td>
+<code>image</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.ImageSpec">
+ImageSpec
+</a>
+</em>
+</td>
+<td>
+<p>Image defines the fio docker image used for the benchmark</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>persistentVolumeClaimName</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>PersistentVolumeClaimName is the name of the existing persistence volume
+claim that will be used by the benchmark pod. If undefined, you can either
+use PersistentVolumeClaim to create and use a PVC, or nothing to run the
+benchmark inside the pod.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>persistentVolumeClaim</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PersistentVolumeClaimSpec">
+PersistentVolumeClaimSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>PersistentVolumeClaim describes the persistent volume claim that will be
+created and used by the pod. This field is ignored if PersistentVolumeClaimName
+is given, in that case the pod will use the PVC by that given name.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>builtinJobFiles</code></br>
+<em>
+[]string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>BuiltinJobFiles contains a list of fio job files that are already present
+in the docker image</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>customJobFiles</code></br>
+<em>
+[]string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>CustomJobFiles contains a list of custom fio job files
+The exact format of fio job files is documented here:
+<a href="https://fio.readthedocs.io/en/latest/fio_doc.html#job-file-format">https://fio.readthedocs.io/en/latest/fio_doc.html#job-file-format</a>
+The job files defined here will be mounted to the fio benchmark container</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>cmdLineArgs</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>CmdLineArgs are appended to the predefined fio parameters</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>podConfig</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PodConfigurationSpec">
+PodConfigurationSpec
+</a>
+</em>
+</td>
+<td>
+<p>PodConfig contains the configuration for the benchmark pod, including
+pod labels and scheduling policies (affinity, toleration, node selector&hellip;)</p>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<code>status</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.FioStatus">
+FioStatus
+</a>
+</em>
+</td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.Fio">Fio</a>)
+</p>
+<p>
+<p>FioSpec defines the desired state of Fio</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>image</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.ImageSpec">
+ImageSpec
+</a>
+</em>
+</td>
+<td>
+<p>Image defines the fio docker image used for the benchmark</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>persistentVolumeClaimName</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>PersistentVolumeClaimName is the name of the existing persistence volume
+claim that will be used by the benchmark pod. If undefined, you can either
+use PersistentVolumeClaim to create and use a PVC, or nothing to run the
+benchmark inside the pod.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>persistentVolumeClaim</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PersistentVolumeClaimSpec">
+PersistentVolumeClaimSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>PersistentVolumeClaim describes the persistent volume claim that will be
+created and used by the pod. This field is ignored if PersistentVolumeClaimName
+is given, in that case the pod will use the PVC by that given name.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>builtinJobFiles</code></br>
+<em>
+[]string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>BuiltinJobFiles contains a list of fio job files that are already present
+in the docker image</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>customJobFiles</code></br>
+<em>
+[]string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>CustomJobFiles contains a list of custom fio job files
+The exact format of fio job files is documented here:
+<a href="https://fio.readthedocs.io/en/latest/fio_doc.html#job-file-format">https://fio.readthedocs.io/en/latest/fio_doc.html#job-file-format</a>
+The job files defined here will be mounted to the fio benchmark container</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>cmdLineArgs</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>CmdLineArgs are appended to the predefined fio parameters</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>podConfig</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PodConfigurationSpec">
+PodConfigurationSpec
+</a>
+</em>
+</td>
+<td>
+<p>PodConfig contains the configuration for the benchmark pod, including
+pod labels and scheduling policies (affinity, toleration, node selector&hellip;)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.FioStatus">FioStatus
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.Fio">Fio</a>)
+</p>
+<p>
+<p>FioStatus describes the current state of the benchmark</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>running</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+<p>Running shows the state of execution</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>completed</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+<p>Completed shows the state of completion</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.ImageSpec">ImageSpec
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3Spec">Iperf3Spec</a>)
+</p>
+<p>
+<p>ImageSpec defines parameters for docker image executed on Kubernetes</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>name</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<p>Name is the Docker Image location including the tag</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>pullPolicy</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PullPolicy">
+PullPolicy
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+</td>
+</tr>
+<tr>
+<td>
+<code>pullSecret</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>PullSecret is an optional list of references to secrets
+in the same namespace to use for pulling any of the images</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.Iperf3">Iperf3
+</h3>
+<p>
+<p>Iperf3 is the Schema for the iperf3s API</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>metadata</code></br>
+<em>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#objectmeta-v1-meta">
+Kubernetes meta/v1.ObjectMeta
+</a>
+</em>
+</td>
+<td>
+Refer to the Kubernetes API documentation for the fields of the
+<code>metadata</code> field.
+</td>
+</tr>
+<tr>
+<td>
+<code>spec</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3Spec">
+Iperf3Spec
+</a>
+</em>
+</td>
+<td>
+<br/>
+<br/>
+<table>
+<tr>
+<td>
+<code>image</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.ImageSpec">
+ImageSpec
+</a>
+</em>
+</td>
+<td>
+<p>Image defines the iperf3 docker image used for the benchmark</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>serverConfiguration</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3ConfigurationSpec">
+Iperf3ConfigurationSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>ServerConfiguration contains the configuration of the iperf3 server</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>clientConfiguration</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3ConfigurationSpec">
+Iperf3ConfigurationSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>ClientConfiguration contains the configuration of the iperf3 client</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>udp</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>UDP to use rather than TCP.
+If enabled the &lsquo;&ndash;udp&rsquo; parameter is added to iperf command line args</p>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<code>status</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3Status">
+Iperf3Status
+</a>
+</em>
+</td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.Iperf3ConfigurationSpec">Iperf3ConfigurationSpec
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3Spec">Iperf3Spec</a>)
+</p>
+<p>
+<p>Iperf3ConfigurationSpec contains configuration parameters
+with scheduling options for the both the iperf3 client
+and server instances.</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>PodConfigurationSpec</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PodConfigurationSpec">
+PodConfigurationSpec
+</a>
+</em>
+</td>
+<td>
+<p>
+(Members of <code>PodConfigurationSpec</code> are embedded into this type.)
+</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>cmdLineArgs</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>CmdLineArgs are appended to the predefined iperf3 parameters</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>hostNetwork</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>HostNetwork requested for the iperf3 pod, if enabled the
+hosts network namespace is used. Default to false.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.Iperf3Spec">Iperf3Spec
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3">Iperf3</a>)
+</p>
+<p>
+<p>Iperf3Spec defines the Iperf3 Benchmark Stone which
+consist of server deployment with service definition
+and client pod.</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>image</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.ImageSpec">
+ImageSpec
+</a>
+</em>
+</td>
+<td>
+<p>Image defines the iperf3 docker image used for the benchmark</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>serverConfiguration</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3ConfigurationSpec">
+Iperf3ConfigurationSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>ServerConfiguration contains the configuration of the iperf3 server</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>clientConfiguration</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3ConfigurationSpec">
+Iperf3ConfigurationSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>ClientConfiguration contains the configuration of the iperf3 client</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>udp</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>UDP to use rather than TCP.
+If enabled the &lsquo;&ndash;udp&rsquo; parameter is added to iperf command line args</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.Iperf3Status">Iperf3Status
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3">Iperf3</a>)
+</p>
+<p>
+<p>Iperf3Status describes the current state of the benchmark</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>running</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+<p>Running shows the state of execution</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>completed</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+<p>Completed shows the state of completion</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.PersistentVolumeAccessMode">PersistentVolumeAccessMode
+(<code>string</code> alias)</p></h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PersistentVolumeClaimSpec">PersistentVolumeClaimSpec</a>)
+</p>
+<p>
+<p>PersistentVolumeAccessMode defines the way the pv is mounted</p>
+</p>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.PersistentVolumeClaimSpec">PersistentVolumeClaimSpec
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>)
+</p>
+<p>
+<p>PersistentVolumeClaimSpec describes the common attributes of storage devices
+and allows a Source for provider-specific attributes</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>size</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PersistentVolumeSize">
+PersistentVolumeSize
+</a>
+</em>
+</td>
+<td>
+<p>Size defines the size of the PVC</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>accessModes</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PersistentVolumeAccessMode">
+[]PersistentVolumeAccessMode
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>AccessModes contains the desired access modes the volume should have.
+More info: <a href="https://kubernetes.io/docs/concepts/storage/persistent-volumes#access-modes-1">https://kubernetes.io/docs/concepts/storage/persistent-volumes#access-modes-1</a></p>
+</td>
+</tr>
+<tr>
+<td>
+<code>selector</code></br>
+<em>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#labelselector-v1-meta">
+Kubernetes meta/v1.LabelSelector
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Selector is a label query over volumes to consider for binding.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>volumeName</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>VolumeName is the binding reference to the PersistentVolume backing this claim.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>storageClassName</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>StorageClassName is the name of the StorageClass required by the claim.
+More info: <a href="https://kubernetes.io/docs/concepts/storage/persistent-volumes#class-1">https://kubernetes.io/docs/concepts/storage/persistent-volumes#class-1</a></p>
+</td>
+</tr>
+<tr>
+<td>
+<code>volumeMode</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PersistentVolumeMode">
+PersistentVolumeMode
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>VolumeMode defines what type of volume is required by the claim.
+Value of Filesystem is implied when not included in claim spec.
+This is a beta feature.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.PersistentVolumeMode">PersistentVolumeMode
+(<code>string</code> alias)</p></h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PersistentVolumeClaimSpec">PersistentVolumeClaimSpec</a>)
+</p>
+<p>
+<p>PersistentVolumeMode describes how a volume is intended to be consumed, either Block or Filesystem.</p>
+</p>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.PersistentVolumeSize">PersistentVolumeSize
+(<code>string</code> alias)</p></h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PersistentVolumeClaimSpec">PersistentVolumeClaimSpec</a>)
+</p>
+<p>
+<p>PersistentVolumeSize defines the size of the PV</p>
+</p>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.PodConfigurationSpec">PodConfigurationSpec
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3ConfigurationSpec">Iperf3ConfigurationSpec</a>)
+</p>
+<p>
+<p>PodConfigurationSpec contains the configuration for the benchmark pods</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>podLabels</code></br>
+<em>
+map[string]string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>PodLabels are added to the pod as labels.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>podScheduling</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PodSchedulingSpec">
+PodSchedulingSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>PodScheduling contains options to determine which
+node the pod should be scheduled on</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.PodSchedulingSpec">PodSchedulingSpec
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PodConfigurationSpec">PodConfigurationSpec</a>)
+</p>
+<p>
+<p>PodSchedulingSpec encapsulates the scheduling related
+fields of a Kubernetes Pod</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>affinity</code></br>
+<em>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#affinity-v1-core">
+Kubernetes core/v1.Affinity
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Affinity is a group of affinity scheduling rules.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>tolerations</code></br>
+<em>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#toleration-v1-core">
+[]Kubernetes core/v1.Toleration
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>If specified, the pod&rsquo;s tolerations.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>nodeSelector</code></br>
+<em>
+map[string]string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>A node selector represents the union of the results of
+one or more label queries over a set of nodes; that is,
+it represents the OR of the selectors represented by the
+node selector terms.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>nodeName</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>NodeName is a request to schedule this pod onto a specific node. If it is non-empty,
+the scheduler simply schedules this pod onto that node, assuming that it fits resource
+requirements.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.PullPolicy">PullPolicy
+(<code>string</code> alias)</p></h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.ImageSpec">ImageSpec</a>)
+</p>
+<p>
+<p>PullPolicy controls how the docker images are downloaded
+Defaults to Always if :latest tag is specified, or IfNotPresent otherwise.</p>
+</p>
+<hr/>
+<p><em>
+Generated with <code>gen-crd-api-reference-docs</code>
+on git commit <code>05e36f0</code>.
+</em></p>

@@ -11,8 +11,8 @@ Kubestone is a benchmarking [Operator](https://kubernetes.io/docs/concepts/exten
   CPU, Disk, Network and Application performance
 - **Fine-grained control over Kubernetes Scheduling primitives**:
   Affinity, Anti-Affinity, Tolerations, Storage Classes and Node Selection  
-- **Cloud Native benchmarking**: 
-  Runs are defined as Custom Resources. Benchmarks are executed within the cluster using Kubernetes resources: Pods, Jobs, Deployments and Services.
+- **Cloud Native**: 
+  Benchmarks runs are defined as Custom Resources and executed in the cluster using  Kubernetes resources: Pods, Jobs, Deployments and Services.
 - **Extensible**: 
   New benchmarks can easily be added by implementing a new controller. 
 
@@ -29,7 +29,7 @@ Follow the [quickstart guide](quickstart.md) to see how Kubestone can be deploye
 
 ## Community
 
-You can reach us on Slack and via the [Kubestone Mail Group](https://groups.google.com/forum/#!forum/kubestone). 
+You can reach us on [Slack](https://join.slack.com/t/kubestone/signup) and via the [Kubestone Mail Group](https://groups.google.com/forum/#!forum/kubestone). 
 
 
 
@@ -39,7 +39,11 @@ All contributions are welcome! Bug reports, fixes, new features, documentation i
 
 If you would like to get involved please read the [development guide](devguide.md). 
 
-Issues labelled with '[good first issue](https://github.com/xridge/kubestone/labels/good%20first%20issue)' and '[help wanted](https://github.com/xridge/kubestone/labels/help%20wanted)' are good starting points to join the community.
+Issues labelled with '[good first issue](https://github.com/xridge/kubestone/labels/good%20first%20issue)' and '[help wanted](https://github.com/xridge/kubestone/labels/help%20wanted)' in [Kubestone repository](https://github.com/xridge/kubestone) are good starting points to join the community.
+
+
+
+For long term plans please refer to the [Projects](https://github.com/xridge/kubestone/projects) and [Milestones](https://github.com/xridge/kubestone/milestones) pages.
 
 
 

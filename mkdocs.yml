@@ -22,6 +22,9 @@ extra:
 markdown_extensions:
   - toc:
       permalink: true
+  - markdown_include.include:
+      base_path: docs/
+  - admonition
 
 theme: 
   name: material

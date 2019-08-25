@@ -30,4 +30,4 @@ theme:
   name: material
   palette:
     primary: 'white'
-  logo: images/kubestone-logo.png
+  logo: images/kubestone-logo-notext.png

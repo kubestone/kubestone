@@ -12,7 +12,7 @@ Kubestone is a benchmarking [Operator](https://kubernetes.io/docs/concepts/exten
 - **Fine-grained control over Kubernetes Scheduling primitives**:
   Affinity, Anti-Affinity, Tolerations, Storage Classes and Node Selection  
 - **Cloud Native**: 
-  Benchmarks runs are defined as Custom Resources and executed in the cluster using  Kubernetes resources: Pods, Jobs, Deployments and Services.
+  Benchmarks runs are defined as Custom Resources and executed in the cluster using Kubernetes resources: Pods, Jobs, Deployments and Services.
 - **Extensible**: 
   New benchmarks can easily be added by implementing a new controller. 
 

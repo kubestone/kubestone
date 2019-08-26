@@ -46,7 +46,7 @@ $ kubectl create namespace kubestone
 
 After the namespace is created you can use it to post a benchmark request to the cluster. 
 
-The resulting  benchmark executions will reside in this namespace. 
+The resulting benchmark executions will reside in this namespace. 
 
 
 
@@ -60,7 +60,7 @@ Kustomize takes a [base yaml](https://github.com/xridge/kubestone/blob/master/co
 $ kustomize build github.com/xridge/kubestone/config/samples/fio/overlays/pvc
 ```
 
-*Note: Kustomize has [extensive documentation](https://github.com/kubernetes-sigs/kustomize/tree/master/docs) about it's operation. It is advised to have a basic understanding on how Kustomize works as Kubestone uses it's features for both deployment and benchmark execution.*
+*Note: Kustomize has [extensive documentation](https://github.com/kubernetes-sigs/kustomize/tree/master/docs) about it's operation. It is advised to have a basic understanding of how Kustomize works as Kubestone uses it's features for both deployment and benchmark execution.*
 
 
 
@@ -86,7 +86,7 @@ spec:
 When we create this resource in Kubernetes, the operator interprets it and creates the associated benchmark. The fields of the Custom Resource controls how the benchmark will be executed:
 
 - `metadata.name`: Identifies the Custom Resource. Later, this can be used to query or delete the benchmark in the cluster.
-- `cmdLineArgs`: Arguments passed to the benchmark. In this case we are providing the arguments to fio (a filesystem benchmark). It instructs the benchmark to execute a random write test with 4Mb of block size  with an overall transfer size of 256 MB.
+- `cmdLineArgs`: Arguments passed to the benchmark. In this case we are providing the arguments to fio (a filesystem benchmark). It instructs the benchmark to execute a random write test with 4Mb of block size with an overall transfer size of 256 MB.
 - `image.name`: Describes the Docker Image of the benchmark. In case of [Fio](https://fio.readthedocs.io/) we are using [xridge's fio Docker Image](https://cloud.docker.com/u/xridge/repository/docker/xridge/fio), which is built from [this repository](https://github.com/xridge/fio-docker/).
 - `persistentVolumeClaim`: Given that Fio is a disk benchmark we can set a PersistentVolumeClaim for the benchmark to be executed. The above setup instructs Kubernetes to take 5GB of space from the default StorageClass and use it for the benchmark.
 
@@ -96,7 +96,7 @@ When we create this resource in Kubernetes, the operator interprets it and creat
 
 Now, as we understand the definition of the benchmark we can try to execute it.
 
-*Note: Make sure you installed the kubest operator and have it running before executing this step.*
+*Note: Make sure you installed the kubestone operator and have it running before executing this step.*
 
 ```bash
 $ kustomize build github.com/xridge/kubestone/config/samples/fio/overlays/pvc | kubectl create --namespace kubestone -f -
@@ -106,7 +106,7 @@ Since we pipe the output of the `kustomize build` command into `kubectl create`,
 
 
 
-The resulting object can be queried using the object's type (`fio`)  and it's name (`fio-sample`):
+The resulting object can be queried using the object's type (`fio`) and it's name (`fio-sample`):
 
 ```bash
 $ kubectl describe --namespace kubestone fio fio-sample

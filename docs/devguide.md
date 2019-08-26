@@ -11,7 +11,7 @@ As with all operators, the manager deployment ties together multiple controllers
 
 
 !!! hint
-    If you are not familiar with Kubebuilder, it is advised to read through it's [super awesome documentation](https://book.kubebuilder.io). It contains very detailed information on how a reconcile loop should be created. This information will be essential if you would like to add support for a new benchmark in Kubestone.
+    If you are not familiar with Kubebuilder, it is advised to read through it's [super awesome documentation](https://book.kubebuilder.io). It contains very detailed information on how the reconcile loop should be created. This information will be essential if you would like to add support for a new benchmark in Kubestone.
 
 
 
@@ -26,7 +26,7 @@ The following software are required to build and run Kubestone:
 - [kubectl](https://kubernetes.io/docs/reference/kubectl/overview/)
 - [kustomize 3.10](https://kustomize.io/)
 
-Kubestone uses the Module feature of Go 1.11.  You need to make sure that you enable it for your environment:
+Kubestone uses the Module feature of Go 1.11. You need to make sure that you enable it for your environment:
 ```bash
 $ export GO111MODULE=on
 ```
@@ -117,7 +117,7 @@ $ kubebuilder create api --group perf --version v1alpha1 --kind MyBenchmark
 
 
 
-The command above creates the scaffold for the benchmark's datastructures, controller and CRD:
+The command above creates the scaffold for the benchmark's data structures, controller and CRD:
 
 ```bash
 $ git status
@@ -155,13 +155,13 @@ Every benchmark needs a set of input parameters. In Kubestone, the input paramet
 
 
 
-The benchmark logic should be implemented in the reconcile loop, located under `controllers/mybenchmark_controller.go`. For information on how the reconcile loop should be implemented please refer to Kubebuilder's documentation or take a look in one of the already implemented benchmark for guidance.
+The benchmark logic should be implemented in the reconcile loop, located under `controllers/mybenchmark_controller.go`. For information on how the reconcile loop should be implemented please refer to Kubebuilder's documentation or take a look in one of the already implemented benchmarks for guidance.
 
 
 
 ### Testing the benchmark
 
-Once you are ready with the implementation of the benchmark you can use the created CRs (`config/samples/perf_v1alpha1_mybenchmark.yaml`) to trigger an execution.
+Once you are ready with the implementation of the benchmark you can use the created CRs (`config/samples/perf_v1alpha1_mybenchmark.yaml`) to trigger execution.
 
 The new parameters introduced in `api/v1alpha1/mybenchmark_types.go` should also be reflected in the CR. 
 
@@ -224,12 +224,11 @@ If you happen to find a bug or added a new benchmark or improved the documentati
 If you are proposing a new benchmark, please make sure that:
 
 1. It meets the formal standards (`make fmt vet lint` should pass)
-2. Have reasonable amount of tests:
-   1. Unit tests where it make sense
+2. Have a reasonable amount of tests:
+   1. Unit tests where it makes sense
    2. System tests for at least one of the provided examples
 3. Have enough documentation for the users to get started
 
 
 
 If you have any questions, got stuck please reach out to us in [Slack](https://kubestone.slack.com).
-

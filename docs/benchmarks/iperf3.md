@@ -3,7 +3,7 @@
 !!! quote
     iPerf3 is a tool for active measurements of the maximum achievable bandwidth on IP networks. It supports tuning of various parameters related to timing, buffers and protocols (TCP, UDP, SCTP with IPv4 and IPv6). 
 
-With the [iperf3](https://iperf.fr/) benchmark you can measure the I/O performance of the network hardware and stack used in your Kubernetes cluster. 
+With the [iperf3](https://iperf.fr/) benchmark, you can measure the I/O performance of the network hardware and stack used in your Kubernetes cluster. 
 
 
 
@@ -19,9 +19,9 @@ As iperf3 requires a server and a client the controller creates the following ob
 
   
 
-At the first step, the Server Deployment and Service is created. Once both becomes available, the Client Pod is created to execute the benchmark. Once the benchmark is completed (regardless of it's success), the server deployment and service is deleted from Kubernetes.
+At the first step, the Server Deployment and Service are created. Once both becomes available, the Client Pod is created to execute the benchmark. Once the benchmark is completed (regardless of it's success), the server deployment and service is deleted from Kubernetes.
 
-In order to avoid measuring loopback performance it is advised that you set the affinity and anti-affinity scheduling primitives for the benchmark. The provided sample benchmark provides and example on how to avoid executing the client and the server on the same machine. For further documentation please refer to Kubernetes' [respective documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/).
+In order to avoid measuring loopback performance, it is advised that you set the affinity and anti-affinity scheduling primitives for the benchmark. The provided sample benchmark shows how to avoid executing the client and the server on the same machine. For further documentation please refer to Kubernetes' [respective documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/).
 
 
 

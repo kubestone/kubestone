@@ -33,7 +33,8 @@ import (
 )
 
 const (
-	e2eNamespace = "kubestone-e2e"
+	e2eNamespaceIperf3   = "kubestone-e2e-iperf3"
+	e2eNamespaceSysbench = "kubestone-e2e-sysbench"
 )
 
 var restClientConfig = ctrl.GetConfigOrDie()

@@ -7,6 +7,6 @@ spec:
     name: xridge/sysbench:latest
     # pullPolicy: IfNotPresent
     # pullSecret: null
-  options: --threads=2 --time=20
+  options: --threads=1 --time=10
   testName: cpu
   command: run

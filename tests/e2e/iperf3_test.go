@@ -31,7 +31,7 @@ const (
 
 var _ = Describe("end to end test", func() {
 	Context("preparing namespace", func() {
-		_, _, err := run("kubectl create namespace " + e2eNamespace)
+		_, _, err := run("kubectl create namespace " + e2eNamespaceIperf3)
 		It("should succeed", func() {
 			Expect(err).To(BeNil())
 		})
@@ -39,7 +39,7 @@ var _ = Describe("end to end test", func() {
 
 	Describe("for iperf3", func() {
 		Context("creation from samples", func() {
-			_, _, err := run("kubectl create -n " + e2eNamespace + " -f " + iperf3SampleCR)
+			_, _, err := run("kubectl create -n " + e2eNamespaceIperf3 + " -f " + iperf3SampleCR)
 			It("should create iperf3-sample cr", func() {
 				Expect(err).To(BeNil())
 			})
@@ -51,7 +51,7 @@ var _ = Describe("end to end test", func() {
 				cr := &v1alpha1.Iperf3{}
 				// TODO: find the respective objects via the CR owner reference
 				namespacedName := types.NamespacedName{
-					Namespace: e2eNamespace,
+					Namespace: e2eNamespaceIperf3,
 					Name:      "iperf3-sample",
 				}
 				Eventually(func() bool {
@@ -64,7 +64,7 @@ var _ = Describe("end to end test", func() {
 			It("Should leave one successful pod", func() {
 				pod := &corev1.Pod{}
 				namespacedName := types.NamespacedName{
-					Namespace: e2eNamespace,
+					Namespace: e2eNamespaceIperf3,
 					Name:      "iperf3-sample-client",
 				}
 				Expect(client.Get(ctx, namespacedName, pod)).To(Succeed())
@@ -73,7 +73,7 @@ var _ = Describe("end to end test", func() {
 			It("Should not leave deployment", func() {
 				deployment := &appsv1.Deployment{}
 				namespacedName := types.NamespacedName{
-					Namespace: e2eNamespace,
+					Namespace: e2eNamespaceIperf3,
 					Name:      "iperf3-sample",
 				}
 				Expect(client.Get(ctx, namespacedName, deployment)).NotTo(Succeed())
@@ -81,7 +81,7 @@ var _ = Describe("end to end test", func() {
 			It("Should not leave service", func() {
 				service := &corev1.Service{}
 				namespacedName := types.NamespacedName{
-					Namespace: e2eNamespace,
+					Namespace: e2eNamespaceIperf3,
 					Name:      "iperf3-sample",
 				}
 				Expect(client.Get(ctx, namespacedName, service)).NotTo(Succeed())

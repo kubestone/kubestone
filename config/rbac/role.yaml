@@ -9,13 +9,13 @@ rules:
 - apiGroups:
   - ""
   resources:
-  - events
+  - configmaps
   verbs:
   - create
 - apiGroups:
   - ""
   resources:
-  - configmaps
+  - events
   verbs:
   - create
 - apiGroups:

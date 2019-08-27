@@ -38,3 +38,7 @@ theme:
   palette:
     primary: 'white'
   logo: images/kubestone-logo-notext.png
+
+google_analytics:
+  - 'UA-146023212-2'
+  - 'auto'

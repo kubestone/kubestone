@@ -62,14 +62,15 @@ func NewJob(cr *perfv1alpha1.Fio, configMap *corev1.ConfigMap, pvcName *string) 
 			Name: "custom-jobs", MountPath: "/custom-jobs",
 		})
 	}
-	if pvcName != nil {
+	if cr.Spec.Volume != nil {
+		volumeSource := corev1.VolumeSource{}
+		if pvcName != nil {
+			volumeSource.PersistentVolumeClaim = &corev1.PersistentVolumeClaimVolumeSource{
+				ClaimName: *pvcName,
+			}
+		}
 		volumes = append(volumes, corev1.Volume{
-			Name: "data",
-			VolumeSource: corev1.VolumeSource{
-				PersistentVolumeClaim: &corev1.PersistentVolumeClaimVolumeSource{
-					ClaimName: *pvcName,
-				},
-			},
+			Name: "data", VolumeSource: volumeSource,
 		})
 		volumeMounts = append(volumeMounts, corev1.VolumeMount{
 			Name: "data", MountPath: "/data",

@@ -20,15 +20,13 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// FioSpec defines the desired state of Fio
-type FioSpec struct {
-	// Image defines the fio docker image used for the benchmark
-	Image ImageSpec `json:"image"`
-
+// FioVolumeSpec contains the configuration for the volume that the fio job
+// should run on
+type FioVolumeSpec struct {
 	// PersistentVolumeClaimName is the name of the existing persistence volume
 	// claim that will be used by the benchmark pod. If undefined, you can either
 	// use PersistentVolumeClaim to create and use a PVC, or nothing to run the
-	// benchmark inside the pod.
+	// benchmark on an empty dir.
 	// +optional
 	PersistentVolumeClaimName *string `json:"persistentVolumeClaimName,omitempty"`
 
@@ -37,6 +35,12 @@ type FioSpec struct {
 	// is given, in that case the pod will use the PVC by that given name.
 	// +optional
 	PersistentVolumeClaim *PersistentVolumeClaimSpec `json:"persistentVolumeClaim,omitempty"`
+}
+
+// FioSpec defines the desired state of Fio
+type FioSpec struct {
+	// Image defines the fio docker image used for the benchmark
+	Image ImageSpec `json:"image"`
 
 	// BuiltinJobFiles contains a list of fio job files that are already present
 	// in the docker image
@@ -58,6 +62,11 @@ type FioSpec struct {
 	// pod labels and scheduling policies (affinity, toleration, node selector...)
 	// +optional
 	PodConfig PodConfigurationSpec `json:"podConfig,omitempty"`
+
+	// Volume contains the configuration for the volume that the fio job should
+	// run on. If missing, no volume will attached to the job and Docker's layered
+	// fs performance will be measured
+	Volume *FioVolumeSpec `json:"volume,omitempty"`
 }
 
 // FioStatus describes the current state of the benchmark

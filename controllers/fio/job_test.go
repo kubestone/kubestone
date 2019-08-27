@@ -122,6 +122,7 @@ var _ = Describe("fio job", func() {
 		var job *batchv1.Job
 
 		BeforeEach(func() {
+			pvcName = "test-pvc"
 			cr = perfv1alpha1.Fio{
 				Spec: perfv1alpha1.FioSpec{
 					Image: perfv1alpha1.ImageSpec{
@@ -129,12 +130,14 @@ var _ = Describe("fio job", func() {
 						PullPolicy: "IfNotPresent",
 					},
 					BuiltinJobFiles: []string{"/jobs/rand-read.fio"},
+					Volume: &perfv1alpha1.FioVolumeSpec{
+						PersistentVolumeClaimName: &pvcName,
+					},
 				},
 			}
 			configMap := corev1.ConfigMap{
 				ObjectMeta: metav1.ObjectMeta{Name: "cm"},
 			}
-			pvcName = "test-pvc"
 			job = NewJob(&cr, &configMap, &pvcName)
 		})
 
@@ -169,6 +172,31 @@ var _ = Describe("fio job", func() {
 					Expect(job.Spec.Template.ObjectMeta.Labels).To(
 						HaveKeyWithValue(key, value))
 				}
+			})
+		})
+	})
+
+	Describe("cr with volume without pvc", func() {
+		var cr perfv1alpha1.Fio
+		var job *batchv1.Job
+
+		BeforeEach(func() {
+			cr = perfv1alpha1.Fio{
+				Spec: perfv1alpha1.FioSpec{
+					Image: perfv1alpha1.ImageSpec{
+						Name:       "xridge/fio:test",
+						PullPolicy: "IfNotPresent",
+					},
+					Volume: &perfv1alpha1.FioVolumeSpec{},
+				},
+			}
+			job = NewJob(&cr, nil, nil)
+		})
+
+		Context("with Volume withohout pvc", func() {
+			It("should create an emptydir", func() {
+				Expect(job.Spec.Template.Spec.Volumes[0].PersistentVolumeClaim).To(
+					BeNil())
 			})
 		})
 	})

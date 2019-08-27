@@ -3,7 +3,8 @@ kind: Fio
 metadata:
   name: fio-sample
 spec:
-  persistentVolumeClaim:
-    accessModes:
-    - ReadWriteOnce
-    size: 1Gi
+  volume:
+    persistentVolumeClaim:
+      accessModes:
+      - ReadWriteOnce
+      size: 1Gi

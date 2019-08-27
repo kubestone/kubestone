@@ -1,4 +1,4 @@
-![](https://raw.githubusercontent.com/xridge/kubestone/master/docs/source/images/kubestone-logo.png)
+![](https://raw.githubusercontent.com/xridge/kubestone/master/docs/images/kubestone-logo.png)
 
 
 [![CircleCI](https://circleci.com/gh/xridge/kubestone/tree/master.svg?style=shield)](https://circleci.com/gh/xridge/kubestone/tree/master)

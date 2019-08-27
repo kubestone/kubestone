@@ -14,7 +14,7 @@ This guide will walk you through on the one the installation process and will sh
 
 - [Kubernetes](https://kubernetes.io/) v1.14 (or newer)
 
-- [Kustomize](https://kustomize.io/) v3.10
+- [Kustomize v3.1.0](https://kustomize.io/)
 
 - Cluster admin privileges
 

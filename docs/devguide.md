@@ -24,7 +24,7 @@ The following software are required to build and run Kubestone:
 - [GoLang](https://golang.org/dl/) v1.11 or greater 
 - make
 - [kubectl](https://kubernetes.io/docs/reference/kubectl/overview/)
-- [kustomize 3.10](https://kustomize.io/)
+- [Kustomize v3.1.0](https://kustomize.io/)
 
 Kubestone uses the Module feature of Go 1.11. You need to make sure that you enable it for your environment:
 ```bash
@@ -49,7 +49,7 @@ If not, you can use [KinD (Kubernetes in Docker)](https://github.com/kubernetes-
 
 #### Git Repo Clone
 
-You need to clone the repository to your local machine. This can be done using [xridge's repo](https://k3s.io/) or your own fork. If you would like to send a PR it is required that you fork the repository.
+You need to clone the repository to your local machine. This can be done using [xridge's repo](https://github.com/xridge/kubestone) or your own fork. If you would like to send a PR it is required that you fork the repository.
 
 ```bash
 $ git clone https://github.com/xridge/kubestone

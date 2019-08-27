@@ -43,6 +43,11 @@ deploy: manifests
 	kubectl apply -f config/crd/bases
 	kustomize build config/default | kubectl apply -f -
 
+# Deploy end-to-end controller in the configured Kubernetes cluster in ~/.kube/config
+deploy-e2e: manifests
+	kubectl apply -f config/crd/bases
+	kustomize build config/e2e | kubectl apply -f -
+
 # Generate manifests: CRD, ApiDocs, RBAC, etc.
 manifests: manifests-code apidocs
 

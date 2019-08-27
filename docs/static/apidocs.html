@@ -144,6 +144,7 @@ PodConfigurationSpec
 </em>
 </td>
 <td>
+<em>(Optional)</em>
 <p>PodConfig contains the configuration for the benchmark pod, including
 pod labels and scheduling policies (affinity, toleration, node selector&hellip;)</p>
 </td>
@@ -276,6 +277,7 @@ PodConfigurationSpec
 </em>
 </td>
 <td>
+<em>(Optional)</em>
 <p>PodConfig contains the configuration for the benchmark pod, including
 pod labels and scheduling policies (affinity, toleration, node selector&hellip;)</p>
 </td>
@@ -328,7 +330,8 @@ bool
 <p>
 (<em>Appears on:</em>
 <a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>, 
-<a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3Spec">Iperf3Spec</a>)
+<a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3Spec">Iperf3Spec</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.SysbenchSpec">SysbenchSpec</a>)
 </p>
 <p>
 <p>ImageSpec defines parameters for docker image executed on Kubernetes</p>
@@ -803,7 +806,8 @@ This is a beta feature.</p>
 <p>
 (<em>Appears on:</em>
 <a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>, 
-<a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3ConfigurationSpec">Iperf3ConfigurationSpec</a>)
+<a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3ConfigurationSpec">Iperf3ConfigurationSpec</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.SysbenchSpec">SysbenchSpec</a>)
 </p>
 <p>
 <p>PodConfigurationSpec contains the configuration for the benchmark pods</p>
@@ -932,8 +936,257 @@ requirements.</p>
 <p>PullPolicy controls how the docker images are downloaded
 Defaults to Always if :latest tag is specified, or IfNotPresent otherwise.</p>
 </p>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.Sysbench">Sysbench
+</h3>
+<p>
+<p>Sysbench is the Schema for the sysbenches API</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>metadata</code></br>
+<em>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#objectmeta-v1-meta">
+Kubernetes meta/v1.ObjectMeta
+</a>
+</em>
+</td>
+<td>
+Refer to the Kubernetes API documentation for the fields of the
+<code>metadata</code> field.
+</td>
+</tr>
+<tr>
+<td>
+<code>spec</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.SysbenchSpec">
+SysbenchSpec
+</a>
+</em>
+</td>
+<td>
+<br/>
+<br/>
+<table>
+<tr>
+<td>
+<code>image</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.ImageSpec">
+ImageSpec
+</a>
+</em>
+</td>
+<td>
+<p>Image defines the sysbench docker image used for the benchmark</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>PodConfigurationSpec</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PodConfigurationSpec">
+PodConfigurationSpec
+</a>
+</em>
+</td>
+<td>
+<p>
+(Members of <code>PodConfigurationSpec</code> are embedded into this type.)
+</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>options</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Options is a list of zero or more command line options starting with &lsquo;&ndash;&rsquo;.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>testName</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<p>TestName is the name of a built-in test (e.g. <code>fileio</code>, <code>memory</code>, <code>cpu</code>, etc.), or a name of one of the bundled
+Lua scripts (e.g. <code>oltp_read_only</code>), or a path to a custom Lua script.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>command</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Command is an optional argument that will be passed by sysbench to the built-in test or script specified with
+TestName. Command defines the action that must be performed by the test. The list of available commands depends
+on a particular test. Some tests also implement their own custom commands.</p>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<code>status</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.SysbenchStatus">
+SysbenchStatus
+</a>
+</em>
+</td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.SysbenchSpec">SysbenchSpec
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.Sysbench">Sysbench</a>)
+</p>
+<p>
+<p>SysbenchSpec defines the desired state of Sysbench</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>image</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.ImageSpec">
+ImageSpec
+</a>
+</em>
+</td>
+<td>
+<p>Image defines the sysbench docker image used for the benchmark</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>PodConfigurationSpec</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PodConfigurationSpec">
+PodConfigurationSpec
+</a>
+</em>
+</td>
+<td>
+<p>
+(Members of <code>PodConfigurationSpec</code> are embedded into this type.)
+</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>options</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Options is a list of zero or more command line options starting with &lsquo;&ndash;&rsquo;.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>testName</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<p>TestName is the name of a built-in test (e.g. <code>fileio</code>, <code>memory</code>, <code>cpu</code>, etc.), or a name of one of the bundled
+Lua scripts (e.g. <code>oltp_read_only</code>), or a path to a custom Lua script.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>command</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Command is an optional argument that will be passed by sysbench to the built-in test or script specified with
+TestName. Command defines the action that must be performed by the test. The list of available commands depends
+on a particular test. Some tests also implement their own custom commands.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.SysbenchStatus">SysbenchStatus
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.Sysbench">Sysbench</a>)
+</p>
+<p>
+<p>SysbenchStatus describes the current state of the benchmark</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>running</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+<p>Running shows the state of execution</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>completed</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+<p>Completed shows the state of completion</p>
+</td>
+</tr>
+</tbody>
+</table>
 <hr/>
 <p><em>
 Generated with <code>gen-crd-api-reference-docs</code>
-on git commit <code>05e36f0</code>.
+.
 </em></p>

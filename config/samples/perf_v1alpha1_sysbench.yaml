@@ -4,7 +4,7 @@ metadata:
   name: sysbench-sample
 spec:
   image:
-    name: xridge/sysbench:latest
+    name: xridge/sysbench:1.0.17
     # pullPolicy: IfNotPresent
     # pullSecret: null
   options: --threads=1 --time=10

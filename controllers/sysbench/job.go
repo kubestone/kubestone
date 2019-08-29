@@ -65,6 +65,7 @@ func NewJob(cr *perfv1alpha1.Sysbench) *batchv1.Job {
 							Name: cr.Spec.Image.PullSecret,
 						},
 					},
+					// TODO: add more options here eg. resource requests/limits
 					RestartPolicy: corev1.RestartPolicyNever,
 					Affinity:      &cr.Spec.PodScheduling.Affinity,
 					Tolerations:   cr.Spec.PodScheduling.Tolerations,

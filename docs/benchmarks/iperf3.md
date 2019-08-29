@@ -33,7 +33,7 @@ You can find [configuration example](https://github.com/xridge/kubestone/blob/ma
 
 ## Sample benchmark
 ```bash
-kubectl create --namespace kubestone -f https://github.com/xridge/kubestone/blob/master/config/samples/perf_v1alpha1_iperf3.yaml
+$ kubectl create --namespace kubestone -f https://raw.githubusercontent.com/xridge/kubestone/master/config/samples/perf_v1alpha1_iperf3.yaml
 ```
 
 

@@ -32,11 +32,6 @@ import (
 	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
 )
 
-const (
-	e2eNamespaceIperf3   = "kubestone-e2e-iperf3"
-	e2eNamespaceSysbench = "kubestone-e2e-sysbench"
-)
-
 var restClientConfig = ctrl.GetConfigOrDie()
 var client ctrlclient.Client
 var ctx = context.Background()

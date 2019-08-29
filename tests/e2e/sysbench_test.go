@@ -25,7 +25,8 @@ import (
 )
 
 const (
-	sysbenchSampleCR = "../../config/samples/perf_v1alpha1_sysbench.yaml"
+	sysbenchSampleCR     = "../../config/samples/perf_v1alpha1_sysbench.yaml"
+	e2eNamespaceSysbench = "kubestone-e2e-sysbench"
 )
 
 var _ = Describe("end to end test", func() {

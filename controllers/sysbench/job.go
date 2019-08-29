@@ -57,7 +57,6 @@ func NewJob(cr *perfv1alpha1.Sysbench) *batchv1.Job {
 							Name:            "sysbench",
 							Image:           cr.Spec.Image.Name,
 							ImagePullPolicy: corev1.PullPolicy(cr.Spec.Image.PullPolicy),
-							Command:         []string{"/usr/local/bin/sysbench"},
 							Args:            sysbenchCmdLineArgs,
 						},
 					},

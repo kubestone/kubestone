@@ -68,7 +68,7 @@ var _ = Describe("end to end test", func() {
 					Name:      "sysbench-sample",
 				}
 				Expect(client.Get(ctx, namespacedName, pod)).To(Succeed())
-				Expect(pod.Status.Succeeded).To(BeNumerically("==", 1))
+				Expect(pod.Status.Succeeded).To(Equal(1))
 			})
 		})
 	})

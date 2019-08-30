@@ -14,8 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// Note: This file is required by gen-crd-api-reference-docs
+package sysbench
 
-// Package v1alpha1 is the v1alpha1 version of the API.
-// +groupName=perf.kubestone.xridge.io
-package v1alpha1
+import (
+	"testing"
+
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
+)
+
+func TestSysbenchController(t *testing.T) {
+	RegisterFailHandler(Fail)
+	RunSpecs(t, "Sysbench Controller Suite")
+}

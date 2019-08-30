@@ -34,6 +34,7 @@ import (
 	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
 	"github.com/xridge/kubestone/controllers/fio"
 	"github.com/xridge/kubestone/controllers/iperf3"
+	"github.com/xridge/kubestone/controllers/sysbench"
 	"github.com/xridge/kubestone/pkg/k8s"
 	// +kubebuilder:scaffold:imports
 )
@@ -94,7 +95,7 @@ func main() {
 
 	if err = (&iperf3.Reconciler{
 		K8S: k8sAccess,
-		Log: ctrl.Log.WithName("controllers").WithName("iperf3"),
+		Log: ctrl.Log.WithName("controllers").WithName("Iperf3"),
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "Iperf3")
 		os.Exit(1)
@@ -104,6 +105,13 @@ func main() {
 		Log: ctrl.Log.WithName("controllers").WithName("Fio"),
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "Fio")
+		os.Exit(1)
+	}
+	if err = (&sysbench.Reconciler{
+		K8S: k8sAccess,
+		Log: ctrl.Log.WithName("controllers").WithName("Sysbench"),
+	}).SetupWithManager(mgr); err != nil {
+		setupLog.Error(err, "unable to create controller", "controller", "Sysbench")
 		os.Exit(1)
 	}
 	// +kubebuilder:scaffold:builder

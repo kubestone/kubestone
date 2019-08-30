@@ -1,0 +1,12 @@
+apiVersion: perf.kubestone.xridge.io/v1alpha1
+kind: Sysbench
+metadata:
+  name: sysbench-sample
+spec:
+  image:
+    name: xridge/sysbench:1.0.17-1
+    # pullPolicy: IfNotPresent
+    # pullSecret: null
+  options: --threads=1 --time=10
+  testName: cpu
+  command: run

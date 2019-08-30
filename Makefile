@@ -43,8 +43,13 @@ deploy: manifests
 	kubectl apply -f config/crd/bases
 	kustomize build config/default | kubectl apply -f -
 
-# Generate manifests: CRD, ApiDocs, RBAC, etc.
-manifests: manifests-code apidocs
+# Deployment used for end-to-end test
+deploy-e2e: manifests
+	kubectl apply -f config/crd/bases
+	kustomize build config/e2e | kubectl apply -f -
+
+# Generate manifests: CRD, RBAC, etc.
+manifests: manifests-code
 
 manifests-code: controller-gen
 	$(CONTROLLER_GEN) $(CRD_OPTIONS) rbac:roleName=manager-role webhook paths="./..." output:crd:artifacts:config=config/crd/bases
@@ -101,7 +106,7 @@ docker-push:
 # download controller-gen if necessary
 controller-gen:
 ifeq (, $(shell which controller-gen))
-	go get sigs.k8s.io/controller-tools/cmd/controller-gen@v0.2.0-beta.4
+	go get sigs.k8s.io/controller-tools/cmd/controller-gen@v0.2.0
 CONTROLLER_GEN=$(GOBIN)/controller-gen
 else
 CONTROLLER_GEN=$(shell which controller-gen)

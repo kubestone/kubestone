@@ -16,8 +16,7 @@
 
 set -eEuo pipefail
 
-# TODO: end-to-end test should use it's own tag
-DOCKER_IMAGE="xridge/kubestone:latest"
+DOCKER_IMAGE="xridge/kubestone:e2e"
 KUBESTONE_ROOT=$(dirname $0)/../../../
 
 build_kubestone() {
@@ -32,7 +31,7 @@ upload_kubestone_to_kind() {
 
 deploy_kubestone() {
     pushd ${KUBESTONE_ROOT}
-    make deploy
+    make deploy-e2e
     popd
 }
 

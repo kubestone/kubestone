@@ -1,4 +1,4 @@
-# SysBench - Scriptable database and system performance benchmark 
+# Sysbench - Scriptable database and system performance benchmark 
 
 !!! quote
     sysbench is a scriptable multi-threaded benchmark tool based on LuaJIT. It is most frequently used for database benchmarks, but can also be used to create arbitrarily complex workloads that do not involve a database server. 
@@ -9,24 +9,32 @@ With the [sysbench](https://github.com/akopytov/sysbench) benchmark you can meas
 
 ## Mode of operation
 
-TBD
+Kubestone generates a Kubernetes Job from each Sysbench CR that will run a single pod with the defined job. Sysbench's input parameters can be specified in the CR with their respective names:
+`sysbench [options]... [testname] [command]`
+
 
 
 ## Example configuration
-TBD
+
+You can find [configuration example](https://github.com/xridge/kubestone/blob/master/config/samples/perf_v1alpha1_sysbench.yaml) in the GitHub repository.
+
+
 
 
 ## Sample benchmark
-TBD
-
-Please refer to the [quickstart guide](../quickstart.md) for further details.
-
-
+```bash
+kubectl create --namespace kubestone -f https://raw.githubusercontent.com/xridge/kubestone/master/config/samples/perf_v1alpha1_sysbench.yaml
+```
 
 
-## SysBench Configuration
+Please refer to the [quickstart guide](../quickstart.md) for details on generic principles and setup of Kubestone.
 
-TBD
+
+
+
+## Sysbench Configuration
+
+The complete documentation of sysbench CR can be found in the [API Docs](../apidocs.md#perf.kubestone.xridge.io/v1alpha1.SysbenchSpec).
 
 
 

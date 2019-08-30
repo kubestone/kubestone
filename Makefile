@@ -48,8 +48,8 @@ deploy-e2e: manifests
 	kubectl apply -f config/crd/bases
 	kustomize build config/e2e | kubectl apply -f -
 
-# Generate manifests: CRD, ApiDocs, RBAC, etc.
-manifests: manifests-code apidocs
+# Generate manifests: CRD, RBAC, etc.
+manifests: manifests-code
 
 manifests-code: controller-gen
 	$(CONTROLLER_GEN) $(CRD_OPTIONS) rbac:roleName=manager-role webhook paths="./..." output:crd:artifacts:config=config/crd/bases

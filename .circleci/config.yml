@@ -55,7 +55,7 @@ jobs:
             export PATH=$PATH:$GOPATH/bin
             make e2e-test
 
-  run_doc_tests:
+  check_generated_content:
     docker:
       - image: circleci/golang:1.12.5
         environment:
@@ -67,12 +67,17 @@ jobs:
       - run:
           name: Check docs diff
           command: |
-            commit=$(cat docs/static/apidocs.html | grep "on git commit")
-            sed -i -e "s|{{ with \.gitCommit }} on git commit <code>{{ \. }}<\/code>{{end}}\.|$commit|g" ./docs/apidocs/template/pkg.tpl
-            make manifests
             make generate
-            sed -i -e "s|$commit|{{ with \.gitCommit }} on git commit <code>{{ \. }}<\/code>{{end}}\.|g" ./docs/apidocs/template/pkg.tpl
-            git diff -U0 --exit-code
+            make manifests
+            # TODO: `make apidocs` generates the commit hash of the last commit.
+            # When creating a new pull request the commit id will change and we
+            # do not know it in advance!
+            commit="$(grep 'on git commit' ./docs/static/apidocs.html)"
+            sed -i -e "s|.*on git commit.*|$commit|g" ./docs/apidocs/template/pkg.tpl
+            make apidocs
+            git restore ./docs/apidocs/template/pkg.tpl
+            # Print generated file names which are different
+            git diff --name-only --exit-code
 
 workflows:
   version: 2
@@ -80,4 +85,4 @@ workflows:
     jobs:
       - run_unit_tests
       - run_e2e_tests
-      - run_doc_tests
+      - check_generated_content

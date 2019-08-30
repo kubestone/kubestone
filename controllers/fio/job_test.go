@@ -20,7 +20,6 @@ import (
 	. "github.com/onsi/gomega"
 	batchv1 "k8s.io/api/batch/v1"
 	corev1 "k8s.io/api/core/v1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	ksapi "github.com/xridge/kubestone/api/v1alpha1"
 	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
@@ -64,10 +63,7 @@ var _ = Describe("fio job", func() {
 					},
 				},
 			}
-			configMap := corev1.ConfigMap{
-				ObjectMeta: metav1.ObjectMeta{Name: "cm"},
-			}
-			job = NewJob(&cr, &configMap, nil)
+			job = NewJob(&cr)
 		})
 
 		Context("with Image details specified", func() {
@@ -131,14 +127,15 @@ var _ = Describe("fio job", func() {
 					},
 					BuiltinJobFiles: []string{"/jobs/rand-read.fio"},
 					Volume: &perfv1alpha1.FioVolumeSpec{
-						PersistentVolumeClaimName: &pvcName,
+						VolumeSource: corev1.VolumeSource{
+							PersistentVolumeClaim: &corev1.PersistentVolumeClaimVolumeSource{
+								ClaimName: pvcName,
+							},
+						},
 					},
 				},
 			}
-			configMap := corev1.ConfigMap{
-				ObjectMeta: metav1.ObjectMeta{Name: "cm"},
-			}
-			job = NewJob(&cr, &configMap, &pvcName)
+			job = NewJob(&cr)
 		})
 
 		Context("with Image details specified", func() {
@@ -190,7 +187,7 @@ var _ = Describe("fio job", func() {
 					Volume: &perfv1alpha1.FioVolumeSpec{},
 				},
 			}
-			job = NewJob(&cr, nil, nil)
+			job = NewJob(&cr)
 		})
 
 		Context("with Volume withohout pvc", func() {

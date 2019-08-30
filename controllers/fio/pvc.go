@@ -26,10 +26,6 @@ import (
 
 // NewPersistentVolumeClaim creates a PVC
 func NewPersistentVolumeClaim(cr *perfv1alpha1.Fio) (*corev1.PersistentVolumeClaim, error) {
-	if cr.Spec.Volume == nil || cr.Spec.Volume.PersistentVolumeClaim == nil {
-		return nil, nil
-	}
-
 	accessModes := make([]corev1.PersistentVolumeAccessMode, len(cr.Spec.Volume.PersistentVolumeClaim.AccessModes))
 	for i, accessMode := range cr.Spec.Volume.PersistentVolumeClaim.AccessModes {
 		accessModes[i] = corev1.PersistentVolumeAccessMode(accessMode)

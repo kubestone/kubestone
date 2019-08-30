@@ -17,22 +17,20 @@ limitations under the License.
 package v1alpha1
 
 import (
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 // FioVolumeSpec contains the configuration for the volume that the fio job
 // should run on
 type FioVolumeSpec struct {
-	// PersistentVolumeClaimName is the name of the existing persistence volume
-	// claim that will be used by the benchmark pod. If undefined, you can either
-	// use PersistentVolumeClaim to create and use a PVC, or nothing to run the
-	// benchmark on an empty dir.
-	// +optional
-	PersistentVolumeClaimName *string `json:"persistentVolumeClaimName,omitempty"`
+	// VolumeSource represents the source of the volume, e.g. an existing
+	// PVC, host path, git repo, etc.
+	VolumeSource corev1.VolumeSource `json:"volumeSource,omitempty"`
 
 	// PersistentVolumeClaim describes the persistent volume claim that will be
-	// created and used by the pod. This field is ignored if PersistentVolumeClaimName
-	// is given, in that case the pod will use the PVC by that given name.
+	// created and used by the pod. This field *overrides* the VolumeSource to
+	// point to the created PVC
 	// +optional
 	PersistentVolumeClaim *PersistentVolumeClaimSpec `json:"persistentVolumeClaim,omitempty"`
 }

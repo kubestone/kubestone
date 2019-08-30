@@ -313,17 +313,16 @@ should run on</p>
 <tbody>
 <tr>
 <td>
-<code>persistentVolumeClaimName</code></br>
+<code>volumeSource</code></br>
 <em>
-string
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#volumesource-v1-core">
+Kubernetes core/v1.VolumeSource
+</a>
 </em>
 </td>
 <td>
-<em>(Optional)</em>
-<p>PersistentVolumeClaimName is the name of the existing persistence volume
-claim that will be used by the benchmark pod. If undefined, you can either
-use PersistentVolumeClaim to create and use a PVC, or nothing to run the
-benchmark on an empty dir.</p>
+<p>VolumeSource represents the source of the volume, e.g. an existing
+PVC, host path, git repo, etc.</p>
 </td>
 </tr>
 <tr>
@@ -338,8 +337,8 @@ PersistentVolumeClaimSpec
 <td>
 <em>(Optional)</em>
 <p>PersistentVolumeClaim describes the persistent volume claim that will be
-created and used by the pod. This field is ignored if PersistentVolumeClaimName
-is given, in that case the pod will use the PVC by that given name.</p>
+created and used by the pod. This field <em>overrides</em> the VolumeSource to
+point to the created PVC</p>
 </td>
 </tr>
 </tbody>
@@ -348,8 +347,8 @@ is given, in that case the pod will use the PVC by that given name.</p>
 </h3>
 <p>
 (<em>Appears on:</em>
-<a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>,
-<a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3Spec">Iperf3Spec</a>,
+<a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3Spec">Iperf3Spec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.SysbenchSpec">SysbenchSpec</a>)
 </p>
 <p>
@@ -824,8 +823,8 @@ This is a beta feature.</p>
 </h3>
 <p>
 (<em>Appears on:</em>
-<a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>,
-<a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3ConfigurationSpec">Iperf3ConfigurationSpec</a>,
+<a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3ConfigurationSpec">Iperf3ConfigurationSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.SysbenchSpec">SysbenchSpec</a>)
 </p>
 <p>
@@ -1207,5 +1206,5 @@ bool
 <hr/>
 <p><em>
 Generated with <code>gen-crd-api-reference-docs</code>
-on git commit <code>fedcd6c</code>.
+on git commit <code>adcc2db</code>.
 </em></p>

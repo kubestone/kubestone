@@ -75,7 +75,7 @@ jobs:
             commit="$(grep 'on git commit' ./docs/static/apidocs.html)"
             sed -i -e "s|.*on git commit.*|$commit|g" ./docs/apidocs/template/pkg.tpl
             make apidocs
-            git restore ./docs/apidocs/template/pkg.tpl
+            git checkout -- ./docs/apidocs/template/pkg.tpl
             # Print generated file names which are different
             git diff --name-only --exit-code
 

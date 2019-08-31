@@ -17,26 +17,28 @@ limitations under the License.
 package v1alpha1
 
 import (
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
+
+// FioVolumeSpec contains the configuration for the volume that the fio job
+// will use for benchmarking
+type FioVolumeSpec struct {
+	// VolumeSource represents the source of the volume, e.g. an existing
+	// PVC, host path, git repo, etc.
+	VolumeSource corev1.VolumeSource `json:"volumeSource,omitempty"`
+
+	// PersistentVolumeClaim describes the persistent volume claim that will be
+	// created and used by the pod. This field *overrides* the VolumeSource to
+	// point to the created PVC
+	// +optional
+	PersistentVolumeClaim *PersistentVolumeClaimSpec `json:"persistentVolumeClaim,omitempty"`
+}
 
 // FioSpec defines the desired state of Fio
 type FioSpec struct {
 	// Image defines the fio docker image used for the benchmark
 	Image ImageSpec `json:"image"`
-
-	// PersistentVolumeClaimName is the name of the existing persistence volume
-	// claim that will be used by the benchmark pod. If undefined, you can either
-	// use PersistentVolumeClaim to create and use a PVC, or nothing to run the
-	// benchmark inside the pod.
-	// +optional
-	PersistentVolumeClaimName *string `json:"persistentVolumeClaimName,omitempty"`
-
-	// PersistentVolumeClaim describes the persistent volume claim that will be
-	// created and used by the pod. This field is ignored if PersistentVolumeClaimName
-	// is given, in that case the pod will use the PVC by that given name.
-	// +optional
-	PersistentVolumeClaim *PersistentVolumeClaimSpec `json:"persistentVolumeClaim,omitempty"`
 
 	// BuiltinJobFiles contains a list of fio job files that are already present
 	// in the docker image
@@ -58,6 +60,12 @@ type FioSpec struct {
 	// pod labels and scheduling policies (affinity, toleration, node selector...)
 	// +optional
 	PodConfig PodConfigurationSpec `json:"podConfig,omitempty"`
+
+	// Volume contains the configuration for the volume that the fio job should
+	// run on. If missing, no volume will attached to the job and Docker's layered
+	// fs performance will be measured
+	// +optional
+	Volume *FioVolumeSpec `json:"volume,omitempty"`
 }
 
 // FioStatus describes the current state of the benchmark

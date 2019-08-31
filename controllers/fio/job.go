@@ -26,7 +26,7 @@ import (
 )
 
 // NewJob creates a fio benchmark job
-func NewJob(cr *perfv1alpha1.Fio, configMap *corev1.ConfigMap, pvcName *string) *batchv1.Job {
+func NewJob(cr *perfv1alpha1.Fio) *batchv1.Job {
 	labels := map[string]string{
 		"app":               "fio",
 		"kubestone-cr-name": cr.Name,
@@ -53,7 +53,7 @@ func NewJob(cr *perfv1alpha1.Fio, configMap *corev1.ConfigMap, pvcName *string) 
 			VolumeSource: corev1.VolumeSource{
 				ConfigMap: &corev1.ConfigMapVolumeSource{
 					LocalObjectReference: corev1.LocalObjectReference{
-						Name: configMap.Name,
+						Name: cr.Name,
 					},
 				},
 			},
@@ -62,14 +62,18 @@ func NewJob(cr *perfv1alpha1.Fio, configMap *corev1.ConfigMap, pvcName *string) 
 			Name: "custom-jobs", MountPath: "/custom-jobs",
 		})
 	}
-	if pvcName != nil {
-		volumes = append(volumes, corev1.Volume{
-			Name: "data",
-			VolumeSource: corev1.VolumeSource{
+	if cr.Spec.Volume != nil {
+		volumeSource := cr.Spec.Volume.VolumeSource
+		if cr.Spec.Volume.PersistentVolumeClaim != nil {
+			// If a PVC was constructed, use that instead of the given volume source
+			volumeSource = corev1.VolumeSource{
 				PersistentVolumeClaim: &corev1.PersistentVolumeClaimVolumeSource{
-					ClaimName: *pvcName,
+					ClaimName: cr.Name,
 				},
-			},
+			}
+		}
+		volumes = append(volumes, corev1.Volume{
+			Name: "data", VolumeSource: volumeSource,
 		})
 		volumeMounts = append(volumeMounts, corev1.VolumeMount{
 			Name: "data", MountPath: "/data",

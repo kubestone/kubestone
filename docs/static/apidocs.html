@@ -65,37 +65,6 @@ ImageSpec
 </tr>
 <tr>
 <td>
-<code>persistentVolumeClaimName</code></br>
-<em>
-string
-</em>
-</td>
-<td>
-<em>(Optional)</em>
-<p>PersistentVolumeClaimName is the name of the existing persistence volume
-claim that will be used by the benchmark pod. If undefined, you can either
-use PersistentVolumeClaim to create and use a PVC, or nothing to run the
-benchmark inside the pod.</p>
-</td>
-</tr>
-<tr>
-<td>
-<code>persistentVolumeClaim</code></br>
-<em>
-<a href="#perf.kubestone.xridge.io/v1alpha1.PersistentVolumeClaimSpec">
-PersistentVolumeClaimSpec
-</a>
-</em>
-</td>
-<td>
-<em>(Optional)</em>
-<p>PersistentVolumeClaim describes the persistent volume claim that will be
-created and used by the pod. This field is ignored if PersistentVolumeClaimName
-is given, in that case the pod will use the PVC by that given name.</p>
-</td>
-</tr>
-<tr>
-<td>
 <code>builtinJobFiles</code></br>
 <em>
 []string
@@ -147,6 +116,22 @@ PodConfigurationSpec
 <em>(Optional)</em>
 <p>PodConfig contains the configuration for the benchmark pod, including
 pod labels and scheduling policies (affinity, toleration, node selector&hellip;)</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>volume</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.FioVolumeSpec">
+FioVolumeSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Volume contains the configuration for the volume that the fio job should
+run on. If missing, no volume will attached to the job and Docker&rsquo;s layered
+fs performance will be measured</p>
 </td>
 </tr>
 </table>
@@ -198,37 +183,6 @@ ImageSpec
 </tr>
 <tr>
 <td>
-<code>persistentVolumeClaimName</code></br>
-<em>
-string
-</em>
-</td>
-<td>
-<em>(Optional)</em>
-<p>PersistentVolumeClaimName is the name of the existing persistence volume
-claim that will be used by the benchmark pod. If undefined, you can either
-use PersistentVolumeClaim to create and use a PVC, or nothing to run the
-benchmark inside the pod.</p>
-</td>
-</tr>
-<tr>
-<td>
-<code>persistentVolumeClaim</code></br>
-<em>
-<a href="#perf.kubestone.xridge.io/v1alpha1.PersistentVolumeClaimSpec">
-PersistentVolumeClaimSpec
-</a>
-</em>
-</td>
-<td>
-<em>(Optional)</em>
-<p>PersistentVolumeClaim describes the persistent volume claim that will be
-created and used by the pod. This field is ignored if PersistentVolumeClaimName
-is given, in that case the pod will use the PVC by that given name.</p>
-</td>
-</tr>
-<tr>
-<td>
 <code>builtinJobFiles</code></br>
 <em>
 []string
@@ -282,6 +236,22 @@ PodConfigurationSpec
 pod labels and scheduling policies (affinity, toleration, node selector&hellip;)</p>
 </td>
 </tr>
+<tr>
+<td>
+<code>volume</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.FioVolumeSpec">
+FioVolumeSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Volume contains the configuration for the volume that the fio job should
+run on. If missing, no volume will attached to the job and Docker&rsquo;s layered
+fs performance will be measured</p>
+</td>
+</tr>
 </tbody>
 </table>
 <h3 id="perf.kubestone.xridge.io/v1alpha1.FioStatus">FioStatus
@@ -321,6 +291,56 @@ bool
 </td>
 <td>
 <p>Completed shows the state of completion</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.FioVolumeSpec">FioVolumeSpec
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>)
+</p>
+<p>
+<p>FioVolumeSpec contains the configuration for the volume that the fio job
+will use for benchmarking</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>volumeSource</code></br>
+<em>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#volumesource-v1-core">
+Kubernetes core/v1.VolumeSource
+</a>
+</em>
+</td>
+<td>
+<p>VolumeSource represents the source of the volume, e.g. an existing
+PVC, host path, git repo, etc.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>persistentVolumeClaim</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PersistentVolumeClaimSpec">
+PersistentVolumeClaimSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>PersistentVolumeClaim describes the persistent volume claim that will be
+created and used by the pod. This field <em>overrides</em> the VolumeSource to
+point to the created PVC</p>
 </td>
 </tr>
 </tbody>
@@ -684,7 +704,7 @@ bool
 </h3>
 <p>
 (<em>Appears on:</em>
-<a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>)
+<a href="#perf.kubestone.xridge.io/v1alpha1.FioVolumeSpec">FioVolumeSpec</a>)
 </p>
 <p>
 <p>PersistentVolumeClaimSpec describes the common attributes of storage devices
@@ -1191,5 +1211,5 @@ bool
 <hr/>
 <p><em>
 Generated with <code>gen-crd-api-reference-docs</code>
-on git commit <code>245b32b</code>.
+on git commit <code>a25bf4b</code>.
 </em></p>

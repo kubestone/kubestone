@@ -26,17 +26,13 @@ import (
 
 // NewPersistentVolumeClaim creates a PVC
 func NewPersistentVolumeClaim(cr *perfv1alpha1.Fio) (*corev1.PersistentVolumeClaim, error) {
-	if cr.Spec.PersistentVolumeClaim == nil {
-		return nil, nil
-	}
-
-	accessModes := make([]corev1.PersistentVolumeAccessMode, len(cr.Spec.PersistentVolumeClaim.AccessModes))
-	for i, accessMode := range cr.Spec.PersistentVolumeClaim.AccessModes {
+	accessModes := make([]corev1.PersistentVolumeAccessMode, len(cr.Spec.Volume.PersistentVolumeClaim.AccessModes))
+	for i, accessMode := range cr.Spec.Volume.PersistentVolumeClaim.AccessModes {
 		accessModes[i] = corev1.PersistentVolumeAccessMode(accessMode)
 	}
 
 	requests := make(corev1.ResourceList, 1)
-	quantity, err := resource.ParseQuantity(string(cr.Spec.PersistentVolumeClaim.Size))
+	quantity, err := resource.ParseQuantity(string(cr.Spec.Volume.PersistentVolumeClaim.Size))
 	if err != nil {
 		return nil, err
 	}
@@ -49,17 +45,17 @@ func NewPersistentVolumeClaim(cr *perfv1alpha1.Fio) (*corev1.PersistentVolumeCla
 		},
 		Spec: corev1.PersistentVolumeClaimSpec{
 			AccessModes:      accessModes,
-			Selector:         cr.Spec.PersistentVolumeClaim.Selector,
-			VolumeName:       cr.Spec.PersistentVolumeClaim.VolumeName,
-			StorageClassName: cr.Spec.PersistentVolumeClaim.StorageClassName,
+			Selector:         cr.Spec.Volume.PersistentVolumeClaim.Selector,
+			VolumeName:       cr.Spec.Volume.PersistentVolumeClaim.VolumeName,
+			StorageClassName: cr.Spec.Volume.PersistentVolumeClaim.StorageClassName,
 			Resources: corev1.ResourceRequirements{
 				Requests: requests,
 			},
 		},
 	}
 
-	if cr.Spec.PersistentVolumeClaim.VolumeMode != nil {
-		volumeMode := corev1.PersistentVolumeMode(*cr.Spec.PersistentVolumeClaim.VolumeMode)
+	if cr.Spec.Volume.PersistentVolumeClaim.VolumeMode != nil {
+		volumeMode := corev1.PersistentVolumeMode(*cr.Spec.Volume.PersistentVolumeClaim.VolumeMode)
 		pvc.Spec.VolumeMode = &volumeMode
 	}
 

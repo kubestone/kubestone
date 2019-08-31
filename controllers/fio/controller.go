@@ -63,21 +63,17 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 		return ctrl.Result{}, err
 	}
 
-	pvcName := cr.Spec.PersistentVolumeClaimName
-	if pvcName == nil {
+	if cr.Spec.Volume != nil && cr.Spec.Volume.PersistentVolumeClaim != nil {
 		pvc, err := NewPersistentVolumeClaim(&cr)
 		if err != nil {
 			return ctrl.Result{}, err
 		}
-		if pvc != nil {
-			if err := r.K8S.CreateWithReference(ctx, pvc, &cr); err != nil {
-				return ctrl.Result{}, err
-			}
-			pvcName = &pvc.Name
+		if err := r.K8S.CreateWithReference(ctx, pvc, &cr); err != nil {
+			return ctrl.Result{}, err
 		}
 	}
 
-	job := NewJob(&cr, configMap, pvcName)
+	job := NewJob(&cr)
 	if err := r.K8S.CreateWithReference(ctx, job, &cr); err != nil {
 		return ctrl.Result{}, err
 	}

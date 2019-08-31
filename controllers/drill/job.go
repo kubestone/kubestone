@@ -55,7 +55,8 @@ func NewJob(cr *perfv1alpha1.Drill, configMap *corev1.ConfigMap) *batchv1.Job {
 	}
 	volumeMounts := []corev1.VolumeMount{
 		corev1.VolumeMount{
-			Name: configMap.Name, MountPath: "/benchmarks",
+			Name:      "benchmarks",
+			MountPath: "/benchmarks",
 		},
 	}
 

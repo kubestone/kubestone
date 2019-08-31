@@ -75,10 +75,11 @@ spec:
   cmdLineArgs: --name=randwrite --iodepth=1 --rw=randwrite --bs=4m --size=256M
   image:
     name: xridge/fio:3.13
-  persistentVolumeClaim:
-    accessModes:
-    - ReadWriteOnce
-    size: 5G
+  volume:
+    persistentVolumeClaim:
+      accessModes:
+      - ReadWriteOnce
+      size: 5G
 ```
 
 
@@ -88,7 +89,7 @@ When we create this resource in Kubernetes, the operator interprets it and creat
 - `metadata.name`: Identifies the Custom Resource. Later, this can be used to query or delete the benchmark in the cluster.
 - `cmdLineArgs`: Arguments passed to the benchmark. In this case we are providing the arguments to fio (a filesystem benchmark). It instructs the benchmark to execute a random write test with 4Mb of block size with an overall transfer size of 256 MB.
 - `image.name`: Describes the Docker Image of the benchmark. In case of [Fio](https://fio.readthedocs.io/) we are using [xridge's fio Docker Image](https://cloud.docker.com/u/xridge/repository/docker/xridge/fio), which is built from [this repository](https://github.com/xridge/fio-docker/).
-- `persistentVolumeClaim`: Given that Fio is a disk benchmark we can set a PersistentVolumeClaim for the benchmark to be executed. The above setup instructs Kubernetes to take 5GB of space from the default StorageClass and use it for the benchmark.
+- `volume.persistentVolumeClaim`: Given that Fio is a disk benchmark we can set a PersistentVolumeClaim for the benchmark to be executed. The above setup instructs Kubernetes to take 5GB of space from the default StorageClass and use it for the benchmark.
 
 
 

@@ -1,0 +1,4 @@
+todo:
+  # Our CRDs include K8S core objects which has TO-DOs in their comments
+  # We must exclude to get relevant hits by the bot
+  exclude: "config/crd/bases"

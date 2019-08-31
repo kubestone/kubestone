@@ -13,7 +13,7 @@ Kubestone generates a Kubernetes Job from each fio CR that will run a single pod
 
 When `customJobFiles` are specified in the CR a ConfigMap will be created to hold the content of the job files. The entries in the ConfigMap named using the following pattern: `customJobN`, where N is the item in the customJobFiles list.
 
-If `Volume` is specified in the CR, a volume will be mounted to the pod and the fio job will run inside that volume. If inside `Volume` `PersistentVolumeClaimName` is provided, the respective PVC will be used. If `PersistentVolumeClaim` is provided with a complete PVC definition (size, storage class, etc.), the described PVC will be created and used by the benchmark.
+If `Volume` is specified in the CR, a volume will be mounted to the pod and the fio job will use that volume. If `Volume.VolumeSource` is provided, the respective volume source will be used. If `Volume.PersistentVolumeClaim` is provided with a complete PVC definition (size, storage class, etc.), the described PVC will be created and used by the benchmark, overriding a possibly `Volume.VolumeSource` definition.
 
 !!! warning
     If the `Volume` is not specified, Docker's layered fs performance will be measured

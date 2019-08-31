@@ -22,7 +22,7 @@ import (
 )
 
 // FioVolumeSpec contains the configuration for the volume that the fio job
-// should run on
+// should use for benchmarking
 type FioVolumeSpec struct {
 	// VolumeSource represents the source of the volume, e.g. an existing
 	// PVC, host path, git repo, etc.
@@ -64,6 +64,7 @@ type FioSpec struct {
 	// Volume contains the configuration for the volume that the fio job should
 	// run on. If missing, no volume will attached to the job and Docker's layered
 	// fs performance will be measured
+	// +optional
 	Volume *FioVolumeSpec `json:"volume,omitempty"`
 }
 

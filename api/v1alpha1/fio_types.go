@@ -22,7 +22,7 @@ import (
 )
 
 // FioVolumeSpec contains the configuration for the volume that the fio job
-// should use for benchmarking
+// will use for benchmarking
 type FioVolumeSpec struct {
 	// VolumeSource represents the source of the volume, e.g. an existing
 	// PVC, host path, git repo, etc.

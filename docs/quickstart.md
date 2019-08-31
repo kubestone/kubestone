@@ -18,7 +18,7 @@ This guide will walk you through on the one the installation process and will sh
 
 - Cluster admin privileges
 
-  
+
 
 Deploy Kubestone to `kubestone-system` namespace with the following command:
 
@@ -34,7 +34,7 @@ Once deployed, Kubestone will listen for Custom Resources created with the `kube
 
 ## Benchmarking
 
-Benchmarks can be executed via Kubestone by creating Custom Resources in your cluster. 
+Benchmarks can be executed via Kubestone by creating Custom Resources in your cluster.
 
 ### Namespace
 
@@ -44,9 +44,9 @@ It is recommended to create a dedicated namespace for benchmarking.
 $ kubectl create namespace kubestone
 ```
 
-After the namespace is created you can use it to post a benchmark request to the cluster. 
+After the namespace is created you can use it to post a benchmark request to the cluster.
 
-The resulting benchmark executions will reside in this namespace. 
+The resulting benchmark executions will reside in this namespace.
 
 
 
@@ -54,7 +54,7 @@ The resulting benchmark executions will reside in this namespace.
 
 We will be using [kustomize](https://kustomize.io/) to render the Custom Resource from the [github repository](https://github.com/xridge/kubestone/tree/master/config/samples/fio/).
 
-Kustomize takes a [base yaml](https://github.com/xridge/kubestone/blob/master/config/samples/fio/base/fio_cr.yaml) and patches with an [overlay file](https://github.com/xridge/kubestone/blob/master/config/samples/fio/overlays/pvc/patch.yaml) to render the final yaml file, which describes the benchmark. 
+Kustomize takes a [base yaml](https://github.com/xridge/kubestone/blob/master/config/samples/fio/base/fio_cr.yaml) and patches with an [overlay file](https://github.com/xridge/kubestone/blob/master/config/samples/fio/overlays/pvc/patch.yaml) to render the final yaml file, which describes the benchmark.
 
 ```bash
 $ kustomize build github.com/xridge/kubestone/config/samples/fio/overlays/pvc
@@ -79,7 +79,7 @@ spec:
     persistentVolumeClaim:
       accessModes:
       - ReadWriteOnce
-      size: 5G
+      size: 1Gi
 ```
 
 
@@ -89,7 +89,7 @@ When we create this resource in Kubernetes, the operator interprets it and creat
 - `metadata.name`: Identifies the Custom Resource. Later, this can be used to query or delete the benchmark in the cluster.
 - `cmdLineArgs`: Arguments passed to the benchmark. In this case we are providing the arguments to fio (a filesystem benchmark). It instructs the benchmark to execute a random write test with 4Mb of block size with an overall transfer size of 256 MB.
 - `image.name`: Describes the Docker Image of the benchmark. In case of [Fio](https://fio.readthedocs.io/) we are using [xridge's fio Docker Image](https://cloud.docker.com/u/xridge/repository/docker/xridge/fio), which is built from [this repository](https://github.com/xridge/fio-docker/).
-- `volume.persistentVolumeClaim`: Given that Fio is a disk benchmark we can set a PersistentVolumeClaim for the benchmark to be executed. The above setup instructs Kubernetes to take 5GB of space from the default StorageClass and use it for the benchmark.
+- `volume.persistentVolumeClaim`: Given that Fio is a disk benchmark we can set a PersistentVolumeClaim for the benchmark to be executed. The above setup instructs Kubernetes to take 1GB of space from the default StorageClass and use it for the benchmark.
 
 
 
@@ -103,7 +103,7 @@ Now, as we understand the definition of the benchmark we can try to execute it.
 $ kustomize build github.com/xridge/kubestone/config/samples/fio/overlays/pvc | kubectl create --namespace kubestone -f -
 ```
 
-Since we pipe the output of the `kustomize build` command into `kubectl create`, it will create the object in our Kubernetes cluster. 
+Since we pipe the output of the `kustomize build` command into `kubectl create`, it will create the object in our Kubernetes cluster.
 
 
 
@@ -216,7 +216,7 @@ fios.perf.kubestone.xridge.io           2019-08-24T18:12:34Z
 iperf3s.perf.kubestone.xridge.io        2019-08-24T18:12:34Z
 ```
 
-Using the CRD names above, we can list the executed benchmarks in the system. 
+Using the CRD names above, we can list the executed benchmarks in the system.
 
 Kubernetes provides a convenience feature regarding CRDs: one can use the shortened name of the CRD, which is the singular part of the fully qualified CRD name. In our case, `fios.perf.kubestone.xridge.io` can be shortened to `fio`. Hence, we can list the executed fio benchmark using the following command:
 
@@ -230,7 +230,7 @@ fio-sample   false     true
 
 ### Cleaning up
 
-After a successful benchmark run the resulting objects are stored in the Kubernetes cluster. 
+After a successful benchmark run the resulting objects are stored in the Kubernetes cluster.
 Given that Kubernetes can hold a limited number of pods in the system it is advised that the user cleans up the benchmark runs time to time. This can be achieved by deleting the Custom Resource, which initiated the benchmark:
 
 ```bash
@@ -253,7 +253,6 @@ If you are interested in other benchmarks, please refer to our [benchmark suite]
 
 ## Tips
 
-In the commands executed above, we needed to specify the namespace. 
+In the commands executed above, we needed to specify the namespace.
 
 This step can be avoided if the namespace is specified in your kubernetes config file. One convenient tool to do so is `kubens`, which is part of the [kubectx program suite](https://kubectx.dev).
-

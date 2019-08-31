@@ -26,7 +26,7 @@ import (
 )
 
 const (
-	iperf3SampleCR     = "../../config/samples/perf_v1alpha1_iperf3.yaml"
+	iperf3SampleCR     = samplesDir + "/perf_v1alpha1_iperf3.yaml"
 	e2eNamespaceIperf3 = "kubestone-e2e-iperf3"
 )
 

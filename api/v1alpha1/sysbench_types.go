@@ -20,7 +20,10 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// SysbenchSpec defines the desired state of Sysbench
+// SysbenchSpec contains the configuration parameters
+// with scheduling options for the sysbench benchmark.
+// The options, testName and command parameters are passed
+// to the sysbench benchmarking application.
 type SysbenchSpec struct {
 	// Image defines the sysbench docker image used for the benchmark
 	Image ImageSpec `json:"image"`

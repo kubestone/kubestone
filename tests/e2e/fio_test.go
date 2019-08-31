@@ -17,8 +17,8 @@ limitations under the License.
 package e2e
 
 import (
-	"fmt"
 	"io/ioutil"
+	"strings"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -52,8 +52,10 @@ var _ = Describe("end to end test", func() {
 	}
 
 	Describe("creating fio job from multiple CRs", func() {
-		for i, fioCrDir := range fioCrDirs {
-			crName := fmt.Sprintf("fio-sample-%d", i)
+		for _, fioCrDir := range fioCrDirs {
+			splits := strings.Split(fioCrDir, "/")
+			dirName := splits[len(splits)-1]
+			crName := "fio-" + dirName
 
 			Context("when creating from cr", func() {
 				_, _, err := run(`bash -c "` +

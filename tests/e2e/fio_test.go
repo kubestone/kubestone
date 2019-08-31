@@ -41,12 +41,14 @@ var _ = Describe("end to end test", func() {
 	})
 
 	fioCrDirs := []string{fioCrBaseDir + "/base"}
-	fioOverlayDirs, err := ioutil.ReadDir(fioCrBaseDir + "/overlays")
+	fioOverlayContents, err := ioutil.ReadDir(fioCrBaseDir + "/overlays")
 	if err != nil {
 		Fail("Didn't find any fio CRs under " + fioCrBaseDir)
 	}
-	for _, fioOverlayDir := range fioOverlayDirs {
-		fioCrDirs = append(fioCrDirs, fioCrBaseDir+"/overlays/"+fioOverlayDir.Name())
+	for _, fioOverlayContent := range fioOverlayContents {
+		if fioOverlayContent.IsDir() {
+			fioCrDirs = append(fioCrDirs, fioCrBaseDir+"/overlays/"+fioOverlayContent.Name())
+		}
 	}
 
 	Describe("creating fio job from multiple CRs", func() {
@@ -56,7 +58,7 @@ var _ = Describe("end to end test", func() {
 			Context("when creating from cr", func() {
 				_, _, err := run(`bash -c "` +
 					"kustomize build " + fioCrDir + " | " +
-					"sed 's/fio-sample/" + crName + "/' | " +
+					"sed 's/name: fio-sample/name: " + crName + "/' | " +
 					"kubectl create -n " + e2eNamespaceFio + ` -f -"`)
 				It("should create fio-sample cr", func() {
 					Expect(err).To(BeNil())

@@ -62,13 +62,13 @@ var _ = Describe("end to end test", func() {
 				}, timeout).Should(BeTrue())
 			})
 			It("Should leave a successful job", func() {
-				pod := &batchv1.Job{}
+				job := &batchv1.Job{}
 				namespacedName := types.NamespacedName{
 					Namespace: e2eNamespaceSysbench,
 					Name:      "sysbench-sample",
 				}
-				Expect(client.Get(ctx, namespacedName, pod)).To(Succeed())
-				Expect(pod.Status.Succeeded).To(Equal(int32(1)))
+				Expect(client.Get(ctx, namespacedName, job)).To(Succeed())
+				Expect(job.Status.Succeeded).To(Equal(int32(1)))
 			})
 		})
 	})

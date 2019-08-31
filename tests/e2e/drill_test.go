@@ -20,7 +20,7 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/xridge/kubestone/api/v1alpha1"
-	corev1 "k8s.io/api/core/v1"
+	batchv1 "k8s.io/api/batch/v1"
 	"k8s.io/apimachinery/pkg/types"
 )
 
@@ -61,14 +61,14 @@ var _ = Describe("end to end test", func() {
 					return (cr.Status.Running == false) && (cr.Status.Completed)
 				}, timeout).Should(BeTrue())
 			})
-			It("Should leave one successful pod", func() {
-				pod := &corev1.Pod{}
+			It("Should leave one successful job", func() {
+				job := &batchv1.Job{}
 				namespacedName := types.NamespacedName{
 					Namespace: e2eNamespaceDrill,
 					Name:      "drill-sample",
 				}
-				Expect(client.Get(ctx, namespacedName, pod)).To(Succeed())
-				Expect(pod.Status.Phase).To(Equal(corev1.PodSucceeded))
+				Expect(client.Get(ctx, namespacedName, job)).To(Succeed())
+				Expect(job.Status.Succeeded).To(Equal(int32(1)))
 			})
 		})
 	})

@@ -1,4 +1,4 @@
 todo:
   # The CRDs are generated files whose TO-DO comments should be excluded
   # as they will be already reported through the source files
-  exclude: "config/crd/bases"
+  exclude: ".*config.*"

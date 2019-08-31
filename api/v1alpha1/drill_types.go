@@ -25,9 +25,17 @@ type DrillSpec struct {
 	// Image defines the drill docker image used for the benchmark
 	Image ImageSpec `json:"image"`
 
-	// CmdLineArgs are appended to the predefined drill parameters
+	// BenchmarksVolume contains the files describing the benchmarks.
+	// A ConfigMap is created from this map, where the keys will be used
+	// as filenames and values will represent the contents of the files.
+	BenchmarksVolume map[string]string `json:"benchmarksVolume"`
+
+	// BenchmarkFile is the top level file (entry point) specified to drill.
+	BenchmarkFile string `json:"benchmarkFile"`
+
+	// Options are appended to the predefined drill parameters
 	// +optional
-	CmdLineArgs string `json:"cmdLineArgs,omitempty"`
+	Options string `json:"options,omitempty"`
 
 	// PodConfig contains the configuration for the benchmark pod, including
 	// pod labels and scheduling policies (affinity, toleration, node selector...)

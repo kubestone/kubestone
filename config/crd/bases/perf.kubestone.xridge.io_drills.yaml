@@ -39,9 +39,17 @@ spec:
         spec:
           description: DrillSpec defines a benchmark run for drill load tester
           properties:
-            cmdLineArgs:
-              description: CmdLineArgs are appended to the predefined drill parameters
+            benchmarkFile:
+              description: BenchmarkFile is the top level file (entry point) specified
+                to drill.
               type: string
+            benchmarksVolume:
+              additionalProperties:
+                type: string
+              description: BenchmarksVolume contains the files describing the benchmarks.
+                A ConfigMap is created from this map, where the keys will be used
+                as filenames and values will represent the contents of the files.
+              type: object
             image:
               description: Image defines the drill docker image used for the benchmark
               properties:
@@ -64,6 +72,9 @@ spec:
               required:
               - name
               type: object
+            options:
+              description: Options are appended to the predefined drill parameters
+              type: string
             podConfig:
               description: PodConfig contains the configuration for the benchmark
                 pod, including pod labels and scheduling policies (affinity, toleration,
@@ -763,6 +774,8 @@ spec:
                   type: object
               type: object
           required:
+          - benchmarkFile
+          - benchmarksVolume
           - image
           type: object
         status:

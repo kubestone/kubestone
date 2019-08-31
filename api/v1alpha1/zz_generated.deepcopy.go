@@ -89,6 +89,13 @@ func (in *DrillList) DeepCopyObject() runtime.Object {
 func (in *DrillSpec) DeepCopyInto(out *DrillSpec) {
 	*out = *in
 	out.Image = in.Image
+	if in.BenchmarksVolume != nil {
+		in, out := &in.BenchmarksVolume, &out.BenchmarksVolume
+		*out = make(map[string]string, len(*in))
+		for key, val := range *in {
+			(*out)[key] = val
+		}
+	}
 	in.PodConfig.DeepCopyInto(&out.PodConfig)
 }
 

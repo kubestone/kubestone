@@ -116,8 +116,8 @@ func main() {
 		os.Exit(1)
 	}
 	if err = (&drill.Reconciler{
-		Client: mgr.GetClient(),
-		Log:    ctrl.Log.WithName("controllers").WithName("Drill"),
+		K8S: k8sAccess,
+		Log: ctrl.Log.WithName("controllers").WithName("Drill"),
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "Drill")
 		os.Exit(1)

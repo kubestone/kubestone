@@ -4,10 +4,7 @@ metadata:
   name: fio-sample
 spec:
   volume:
-    # persistentVolumeClaim:
-    #   accessModes:
-    #   - ReadWriteOnce
-    #   size: 1Gi
-    volumeSource:
-      hostPath:
-        path: /tmp/cica
+    persistentVolumeClaim:
+      accessModes:
+      - ReadWriteOnce
+      size: 1Gi

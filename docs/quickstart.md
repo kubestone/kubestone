@@ -12,7 +12,7 @@ This guide will walk you through on the one the installation process and will sh
 
 **Requirements**
 
-- [Kubernetes](https://kubernetes.io/) v1.14 (or newer)
+- [Kubernetes](https://kubernetes.io/) v1.13 (or newer)
 
 - [Kustomize v3.1.0](https://kustomize.io/)
 

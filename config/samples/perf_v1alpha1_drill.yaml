@@ -17,7 +17,7 @@ spec:
 
       plan:
         - name: Include other file
-          include: /benchmarks/other.yml
+          include: other.yml
 
         - name: Fetch kubernetes.io
           request:
@@ -29,6 +29,6 @@ spec:
         request:
           url: /docs
 
-  benchmarkFile: /benchmarks/benchmark.yml
+  benchmarkFile: benchmark.yml
 
   options: --stats

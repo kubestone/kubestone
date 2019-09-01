@@ -18,13 +18,18 @@ package drill
 
 import (
 	"errors"
+	"fmt"
 
 	batchv1 "k8s.io/api/batch/v1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	"github.com/firepear/qsplit"
 	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
+)
+
+const (
+	benchmarksDir = "/benchmarks"
+	drill         = "drill"
 )
 
 // NewJob creates a fio benchmark job
@@ -37,9 +42,8 @@ func NewJob(cr *perfv1alpha1.Drill, configMap *corev1.ConfigMap) *batchv1.Job {
 		labels[key] = value
 	}
 
-	cmdLineArgs := []string{}
-	cmdLineArgs = append(cmdLineArgs, qsplit.ToStrings([]byte(cr.Spec.Options))...)
-	cmdLineArgs = append(cmdLineArgs, "--benchmark", cr.Spec.BenchmarkFile)
+	cmdLineArgs := fmt.Sprintf("%s --benchmark %s", cr.Spec.Options, cr.Spec.BenchmarkFile)
+	command := fmt.Sprintf("cd %s && %s %s", benchmarksDir, drill, cmdLineArgs)
 
 	backoffLimit := int32(0)
 
@@ -58,7 +62,7 @@ func NewJob(cr *perfv1alpha1.Drill, configMap *corev1.ConfigMap) *batchv1.Job {
 	volumeMounts := []corev1.VolumeMount{
 		corev1.VolumeMount{
 			Name:      "benchmarks",
-			MountPath: "/benchmarks",
+			MountPath: benchmarksDir,
 		},
 	}
 
@@ -78,7 +82,8 @@ func NewJob(cr *perfv1alpha1.Drill, configMap *corev1.ConfigMap) *batchv1.Job {
 							Name:            "drill",
 							Image:           cr.Spec.Image.Name,
 							ImagePullPolicy: corev1.PullPolicy(cr.Spec.Image.PullPolicy),
-							Args:            cmdLineArgs,
+							Command:         []string{"/bin/sh", "-xc"},
+							Args:            command,
 							VolumeMounts:    volumeMounts,
 						},
 					},

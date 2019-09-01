@@ -17,6 +17,8 @@ limitations under the License.
 package drill
 
 import (
+	"errors"
+
 	batchv1 "k8s.io/api/batch/v1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -98,4 +100,12 @@ func NewJob(cr *perfv1alpha1.Drill, configMap *corev1.ConfigMap) *batchv1.Job {
 	}
 
 	return &job
+}
+
+func isCrValid(cr *perfv1alpha1.Drill) (valid bool, err error) {
+	if _, ok := cr.Spec.BenchmarksVolume[cr.Spec.BenchmarkFile]; !ok {
+		return false, errors.New("BenchmarkFile does not exists in BenchmarksVolume")
+	}
+
+	return true, nil
 }

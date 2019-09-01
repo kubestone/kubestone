@@ -23,6 +23,8 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	ctrl "sigs.k8s.io/controller-runtime"
 
+	corev1 "k8s.io/api/core/v1"
+
 	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
 	"github.com/xridge/kubestone/pkg/k8s"
 )
@@ -48,6 +50,17 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 	// Run to one completion
 	if cr.Status.Completed {
 		return ctrl.Result{}, nil
+	}
+
+	// Validate on first entry
+	if !cr.Status.Completed && !cr.Status.Running {
+		if valid, err := isCrValid(&cr); !valid {
+			_ = r.K8S.RecordEventf(&cr, corev1.EventTypeWarning, k8s.CreateFailed,
+				"CR validation failed: %v", err)
+
+			// Do not requeue invalid CRs
+			return ctrl.Result{}, nil
+		}
 	}
 
 	cr.Status.Running = true

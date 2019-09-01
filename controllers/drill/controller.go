@@ -54,7 +54,7 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 
 	// Validate on first entry
 	if !cr.Status.Completed && !cr.Status.Running {
-		if valid, err := isCrValid(&cr); !valid {
+		if valid, err := IsCrValid(&cr); !valid {
 			_ = r.K8S.RecordEventf(&cr, corev1.EventTypeWarning, k8s.CreateFailed,
 				"CR validation failed: %v", err)
 

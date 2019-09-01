@@ -44,7 +44,7 @@ var _ = Describe("drill job", func() {
 						"the-benchmark.yml": "benchmark content",
 						"included-file.yml": "included content",
 					},
-					BenchmarkFile: "/benchmarks/the-benchmark.yml",
+					BenchmarkFile: "the-benchmark.yml",
 					Options:       "--no-check-certificate --stats",
 					PodConfig: ksapi.PodConfigurationSpec{
 						PodLabels: map[string]string{"labels": "are", "still": "useful"},
@@ -101,6 +101,29 @@ var _ = Describe("drill job", func() {
 					ContainElement("--benchmark"))
 				Expect(job.Spec.Template.Spec.Containers[0].Args).To(
 					ContainElement(cr.Spec.BenchmarkFile))
+			})
+		})
+
+		Context("when existent benchmarkFile is referred", func() {
+			It("CR Validation should succeed", func() {
+				Expect(IsCrValid(&cr)).To(BeTrue())
+			})
+		})
+		Context("when non-existent benchmarkFile is referred", func() {
+			invalidCr := perfv1alpha1.Drill{
+				Spec: perfv1alpha1.DrillSpec{
+					Image: perfv1alpha1.ImageSpec{
+						Name: "xridge/drill:test",
+					},
+					BenchmarksVolume: map[string]string{
+						"the-benchmark.yml": "benchmark content",
+					},
+					BenchmarkFile: "non-existent-benchmark.yml",
+				},
+			}
+
+			It("CR Validation should fail", func() {
+				Expect(IsCrValid(&invalidCr)).To(BeFalse())
 			})
 		})
 

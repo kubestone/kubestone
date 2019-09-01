@@ -17,6 +17,7 @@ limitations under the License.
 package iperf3
 
 import (
+	"fmt"
 	"strconv"
 
 	appsv1 "k8s.io/api/apps/v1"
@@ -65,6 +66,12 @@ func NewServerDeployment(cr *perfv1alpha1.Iperf3) *appsv1.Deployment {
 	iperfCmdLineArgs = append(iperfCmdLineArgs,
 		qsplit.ToStrings([]byte(cr.Spec.ClientConfiguration.CmdLineArgs))...)
 
+	// Iperf3 Server does not like if probe connections are made to the port,
+	// therefore we are checking if the port if open or not via shell script
+	// the solution does not assume to have netstat installed in the container
+	readinessCmd := fmt.Sprintf("cat /proc/net/tcp* | awk ' { print toupper($2) } ' | grep -E ':%X$'",
+		Iperf3ServerPort)
+
 	deployment := appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      serverDeploymentName(cr),
@@ -99,18 +106,20 @@ func NewServerDeployment(cr *perfv1alpha1.Iperf3) *appsv1.Deployment {
 									Protocol:      protocol,
 								},
 							},
-							/* -- Causing iperf3 server to exit with 'too many errors'
 							ReadinessProbe: &corev1.Probe{
 								Handler: corev1.Handler{
-									TCPSocket: &corev1.TCPSocketAction{
-										Port: intstr.FromInt(Iperf3ServerPort),
+									Exec: &corev1.ExecAction{
+										Command: []string{
+											"/bin/sh",
+											"-xc",
+											readinessCmd,
+										},
 									},
 								},
 								InitialDelaySeconds: 5,
-								TimeoutSeconds:      5,
-								PeriodSeconds:       5,
+								TimeoutSeconds:      2,
+								PeriodSeconds:       2,
 							},
-							*/
 						},
 					},
 					Affinity:     &cr.Spec.ServerConfiguration.PodScheduling.Affinity,

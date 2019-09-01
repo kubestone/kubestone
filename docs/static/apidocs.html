@@ -598,9 +598,9 @@ point to the created PVC</p>
 </h3>
 <p>
 (<em>Appears on:</em>
-<a href="#perf.kubestone.xridge.io/v1alpha1.DrillSpec">DrillSpec</a>, 
-<a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>, 
-<a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3Spec">Iperf3Spec</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.DrillSpec">DrillSpec</a>,
+<a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>,
+<a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3Spec">Iperf3Spec</a>,
 <a href="#perf.kubestone.xridge.io/v1alpha1.SysbenchSpec">SysbenchSpec</a>)
 </p>
 <p>
@@ -1075,9 +1075,9 @@ This is a beta feature.</p>
 </h3>
 <p>
 (<em>Appears on:</em>
-<a href="#perf.kubestone.xridge.io/v1alpha1.DrillSpec">DrillSpec</a>, 
-<a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>, 
-<a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3ConfigurationSpec">Iperf3ConfigurationSpec</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.DrillSpec">DrillSpec</a>,
+<a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>,
+<a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3ConfigurationSpec">Iperf3ConfigurationSpec</a>,
 <a href="#perf.kubestone.xridge.io/v1alpha1.SysbenchSpec">SysbenchSpec</a>)
 </p>
 <p>
@@ -1262,7 +1262,7 @@ ImageSpec
 </tr>
 <tr>
 <td>
-<code>PodConfigurationSpec</code></br>
+<code>podConfig</code></br>
 <em>
 <a href="#perf.kubestone.xridge.io/v1alpha1.PodConfigurationSpec">
 PodConfigurationSpec
@@ -1271,8 +1271,11 @@ PodConfigurationSpec
 </td>
 <td>
 <p>
-(Members of <code>PodConfigurationSpec</code> are embedded into this type.)
+(Members of <code>podConfig</code> are embedded into this type.)
 </p>
+<em>(Optional)</em>
+<p>PodConfig contains the configuration for the benchmark pod, including
+pod labels and scheduling policies (affinity, toleration, node selector&hellip;)</p>
 </td>
 </tr>
 <tr>
@@ -1365,7 +1368,7 @@ ImageSpec
 </tr>
 <tr>
 <td>
-<code>PodConfigurationSpec</code></br>
+<code>podConfig</code></br>
 <em>
 <a href="#perf.kubestone.xridge.io/v1alpha1.PodConfigurationSpec">
 PodConfigurationSpec
@@ -1374,8 +1377,11 @@ PodConfigurationSpec
 </td>
 <td>
 <p>
-(Members of <code>PodConfigurationSpec</code> are embedded into this type.)
+(Members of <code>podConfig</code> are embedded into this type.)
 </p>
+<em>(Optional)</em>
+<p>PodConfig contains the configuration for the benchmark pod, including
+pod labels and scheduling policies (affinity, toleration, node selector&hellip;)</p>
 </td>
 </tr>
 <tr>
@@ -1462,5 +1468,5 @@ bool
 <hr/>
 <p><em>
 Generated with <code>gen-crd-api-reference-docs</code>
-on git commit <code>94fbeb2</code>.
+on git commit <code>d2f9100</code>.
 </em></p>

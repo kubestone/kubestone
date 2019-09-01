@@ -25,7 +25,7 @@ import (
 )
 
 const (
-	sysbenchSampleCR     = "../../config/samples/perf_v1alpha1_sysbench.yaml"
+	sysbenchSampleCR     = samplesDir + "/perf_v1alpha1_sysbench.yaml"
 	e2eNamespaceSysbench = "kubestone-e2e-sysbench"
 )
 

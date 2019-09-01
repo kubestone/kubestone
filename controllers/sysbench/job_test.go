@@ -41,7 +41,7 @@ var _ = Describe("sysbench job", func() {
 					Options:  "--threads=2 --time=20",
 					TestName: "cpu",
 					Command:  "run",
-					PodConfigurationSpec: perfv1alpha1.PodConfigurationSpec{
+					PodConfig: perfv1alpha1.PodConfigurationSpec{
 						PodLabels: map[string]string{"labels": "are", "still": "useful"},
 						PodScheduling: ksapi.PodSchedulingSpec{
 							Affinity: corev1.Affinity{
@@ -103,25 +103,25 @@ var _ = Describe("sysbench job", func() {
 		Context("with podAffinity specified", func() {
 			It("should match with Affinity", func() {
 				Expect(job.Spec.Template.Spec.Affinity).To(
-					Equal(&cr.Spec.PodScheduling.Affinity))
+					Equal(&cr.Spec.PodConfig.PodScheduling.Affinity))
 			})
 			It("should match with Tolerations", func() {
 				Expect(job.Spec.Template.Spec.Tolerations).To(
-					Equal(cr.Spec.PodScheduling.Tolerations))
+					Equal(cr.Spec.PodConfig.PodScheduling.Tolerations))
 			})
 			It("should match with NodeSelector", func() {
 				Expect(job.Spec.Template.Spec.NodeSelector).To(
-					Equal(cr.Spec.PodScheduling.NodeSelector))
+					Equal(cr.Spec.PodConfig.PodScheduling.NodeSelector))
 			})
 			It("should match with NodeName", func() {
 				Expect(job.Spec.Template.Spec.NodeName).To(
-					Equal(cr.Spec.PodScheduling.NodeName))
+					Equal(cr.Spec.PodConfig.PodScheduling.NodeName))
 			})
 		})
 
 		Context("with podLabels specified", func() {
 			It("should contain all podLabels", func() {
-				for key, value := range cr.Spec.PodLabels {
+				for key, value := range cr.Spec.PodConfig.PodLabels {
 					Expect(job.Spec.Template.ObjectMeta.Labels).To(
 						HaveKeyWithValue(key, value))
 				}

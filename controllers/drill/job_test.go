@@ -106,7 +106,9 @@ var _ = Describe("drill job", func() {
 
 		Context("when existent benchmarkFile is referred", func() {
 			It("CR Validation should succeed", func() {
-				Expect(IsCrValid(&cr)).To(BeTrue())
+				valid, err := IsCrValid(&cr)
+				Expect(valid).To(BeTrue())
+				Expect(err).To(BeNil())
 			})
 		})
 		Context("when non-existent benchmarkFile is referred", func() {
@@ -123,7 +125,9 @@ var _ = Describe("drill job", func() {
 			}
 
 			It("CR Validation should fail", func() {
-				Expect(IsCrValid(&invalidCr)).To(BeFalse())
+				valid, err := IsCrValid(&invalidCr)
+				Expect(valid).To(BeFalse())
+				Expect(err).NotTo(BeNil())
 			})
 		})
 

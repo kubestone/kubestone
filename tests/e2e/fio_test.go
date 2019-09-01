@@ -55,7 +55,7 @@ var _ = Describe("end to end test", func() {
 		for _, fioCrDir := range fioCrDirs {
 			splits := strings.Split(fioCrDir, "/")
 			dirName := splits[len(splits)-1]
-			crName := "fio-" + dirName
+			crName := "fio-" + strings.ReplaceAll(dirName, "_", "-")
 
 			Context("when creating from cr", func() {
 				_, _, err := run(`bash -c "` +
@@ -69,7 +69,7 @@ var _ = Describe("end to end test", func() {
 
 			Context("the created job", func() {
 				It("should finish in a pre-defined time", func() {
-					timeout := 120
+					timeout := 60
 					cr := &v1alpha1.Fio{}
 					// TODO: find the respective objects via the CR owner reference
 					namespacedName := types.NamespacedName{

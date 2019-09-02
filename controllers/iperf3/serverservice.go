@@ -28,7 +28,7 @@ func serverServiceName(cr *perfv1alpha1.Iperf3) string {
 	return cr.Name
 }
 
-// NewServerService creates k8s service (which targets the server deployment)
+// NewServerService creates k8s headless service (which targets the server deployment)
 // from the Iperf3 Benchmark Definition
 func NewServerService(cr *perfv1alpha1.Iperf3) *corev1.Service {
 	labels := map[string]string{
@@ -52,7 +52,8 @@ func NewServerService(cr *perfv1alpha1.Iperf3) *corev1.Service {
 					Port:     Iperf3ServerPort,
 				},
 			},
-			Selector: labels,
+			Selector:  labels,
+			ClusterIP: "None", // Headless service!
 		},
 	}
 

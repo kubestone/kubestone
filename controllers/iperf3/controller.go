@@ -72,12 +72,14 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 		return ctrl.Result{}, err
 	}
 
-	serverReady, err := r.serverDeploymentReady(&cr)
+	endpointReady, err := r.K8S.IsEndpointReady(types.NamespacedName{
+		Namespace: cr.Namespace,
+		Name:      cr.Name})
 	if err != nil {
 		return ctrl.Result{}, err
 	}
-	if !serverReady {
-		// Wait for deployment to be ready
+	if !endpointReady {
+		// Wait for deployment to be connected to the service endpoint
 		return ctrl.Result{Requeue: true}, nil
 	}
 

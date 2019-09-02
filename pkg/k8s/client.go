@@ -137,6 +137,8 @@ func (a *Access) IsJobFinished(namespacedName types.NamespacedName) (finished bo
 	return finished, nil
 }
 
+// +kubebuilder:rbac:groups="",resources=endpoints,verbs=get;list
+
 // IsEndpointReady returns true if the given endpoint is fully connected to at least one pod
 func (a *Access) IsEndpointReady(namespacedName types.NamespacedName) (finished bool, err error) {
 	// The Endpoint connection between the Service and the Pod is the final step before

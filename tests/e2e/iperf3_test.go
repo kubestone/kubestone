@@ -21,6 +21,7 @@ import (
 	. "github.com/onsi/gomega"
 	"github.com/xridge/kubestone/api/v1alpha1"
 	appsv1 "k8s.io/api/apps/v1"
+	batchv1 "k8s.io/api/batch/v1"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/types"
 )
@@ -62,14 +63,14 @@ var _ = Describe("end to end test", func() {
 					return (cr.Status.Running == false) && (cr.Status.Completed)
 				}, timeout).Should(BeTrue())
 			})
-			It("Should leave one successful pod", func() {
-				pod := &corev1.Pod{}
+			It("Should leave a successful job", func() {
+				pod := &batchv1.Job{}
 				namespacedName := types.NamespacedName{
-					Namespace: e2eNamespaceIperf3,
+					Namespace: e2eNamespaceSysbench,
 					Name:      "iperf3-sample-client",
 				}
 				Expect(client.Get(ctx, namespacedName, pod)).To(Succeed())
-				Expect(pod.Status.Phase).To(Equal(corev1.PodSucceeded))
+				Expect(pod.Status.Succeeded).To(Equal(int32(1)))
 			})
 			It("Should not leave deployment", func() {
 				deployment := &appsv1.Deployment{}

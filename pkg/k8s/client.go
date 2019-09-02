@@ -164,3 +164,17 @@ func (a *Access) IsEndpointReady(namespacedName types.NamespacedName) (finished 
 
 	return ready, nil
 }
+
+// IsDeploymentReady returns true if the given deployment's ready replicas matching with the desired replicas
+func (a *Access) IsDeploymentReady(namespacedName types.NamespacedName) (ready bool, err error) {
+	ready, err = false, nil
+	deployment, err := a.Clientset.AppsV1().Deployments(namespacedName.Namespace).Get(
+		namespacedName.Name, metav1.GetOptions{})
+	if err != nil {
+		return ready, err
+	}
+
+	ready = deployment.Status.ReadyReplicas == *deployment.Spec.Replicas
+
+	return ready, err
+}

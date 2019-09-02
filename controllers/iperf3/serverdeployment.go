@@ -134,16 +134,3 @@ func NewServerDeployment(cr *perfv1alpha1.Iperf3) *appsv1.Deployment {
 
 	return &deployment
 }
-
-func (r *Reconciler) serverDeploymentReady(cr *perfv1alpha1.Iperf3) (ready bool, err error) {
-	// TODO: Move this to k8s.client
-	ready, err = false, nil
-	deployment, err := r.K8S.Clientset.AppsV1().Deployments(cr.Namespace).Get(cr.Name, metav1.GetOptions{})
-	if err != nil {
-		return ready, err
-	}
-
-	ready = deployment.Status.ReadyReplicas == *deployment.Spec.Replicas
-
-	return ready, err
-}

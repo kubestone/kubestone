@@ -66,7 +66,7 @@ var _ = Describe("end to end test", func() {
 			It("Should leave a successful job", func() {
 				pod := &batchv1.Job{}
 				namespacedName := types.NamespacedName{
-					Namespace: e2eNamespaceSysbench,
+					Namespace: e2eNamespaceIperf3,
 					Name:      "iperf3-sample-client",
 				}
 				Expect(client.Get(ctx, namespacedName, pod)).To(Succeed())

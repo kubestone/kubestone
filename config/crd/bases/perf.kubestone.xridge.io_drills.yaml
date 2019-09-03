@@ -37,18 +37,21 @@ spec:
         metadata:
           type: object
         spec:
-          description: DrillSpec defines a benchmark run for drill load tester
+          description: 'DrillSpec defines benchmark run for drill load tester The
+            benchmarkFile, and options is passed to drill as follows: drill [OPTIONS]
+            --benchmark <benchmarkFile>'
           properties:
             benchmarkFile:
-              description: BenchmarkFile is the top level file (entry point) specified
-                to drill.
+              description: BenchmarkFile is the entry point file (passed to --benchmark)
+                specified to drill.
               type: string
             benchmarksVolume:
               additionalProperties:
                 type: string
-              description: BenchmarksVolume contains the files describing the benchmarks.
-                A ConfigMap is created from this map, where the keys will be used
-                as filenames and values will represent the contents of the files.
+              description: BenchmarksVolume holds the content of benchmark files.
+                The key of the map specifies the filename and the value is the content
+                of the file. ConfigMap is created from the map which is mounted as
+                benchmarks directory to the benchmark pod.
               type: object
             image:
               description: Image defines the drill docker image used for the benchmark
@@ -73,7 +76,7 @@ spec:
               - name
               type: object
             options:
-              description: Options are appended to the predefined drill parameters
+              description: Options are appended to the options parameter set of drill
               type: string
             podConfig:
               description: PodConfig contains the configuration for the benchmark

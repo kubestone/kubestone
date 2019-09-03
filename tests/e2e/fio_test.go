@@ -69,7 +69,7 @@ var _ = Describe("end to end test", func() {
 
 			Context("the created job", func() {
 				It("should finish in a pre-defined time", func() {
-					timeout := 60
+					timeout := 90
 					cr := &v1alpha1.Fio{}
 					// TODO: find the respective objects via the CR owner reference
 					namespacedName := types.NamespacedName{

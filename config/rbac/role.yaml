@@ -15,6 +15,13 @@ rules:
 - apiGroups:
   - ""
   resources:
+  - endpoints
+  verbs:
+  - get
+  - list
+- apiGroups:
+  - ""
+  resources:
   - events
   verbs:
   - create
@@ -62,6 +69,26 @@ rules:
   - delete
   - get
   - list
+- apiGroups:
+  - perf.kubestone.xridge.io
+  resources:
+  - drills
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - perf.kubestone.xridge.io
+  resources:
+  - drills/status
+  verbs:
+  - get
+  - patch
+  - update
 - apiGroups:
   - perf.kubestone.xridge.io
   resources:

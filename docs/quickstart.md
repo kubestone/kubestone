@@ -23,7 +23,7 @@ This guide will walk you through on the one the installation process and will sh
 Deploy Kubestone to `kubestone-system` namespace with the following command:
 
 ```bash
-$ kustomize build github.com/xridge/kubestone/config/default | kubectl apply -f -
+$ kustomize build github.com/xridge/kubestone/config/default | kubectl create -f -
 ```
 
 

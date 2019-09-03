@@ -19,6 +19,7 @@ package iperf3
 import (
 	"strconv"
 
+	batchv1 "k8s.io/api/batch/v1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
@@ -28,7 +29,7 @@ import (
 
 // +kubebuilder:rbac:groups="",resources=pods,verbs=get;list;create;delete
 
-func clientPodName(cr *perfv1alpha1.Iperf3) string {
+func clientJobName(cr *perfv1alpha1.Iperf3) string {
 	// Should not match with service name as the pod's
 	// hostname is set to it's name. If the two matches
 	// the destination ip will resolve to 127.0.0.1 and
@@ -36,10 +37,10 @@ func clientPodName(cr *perfv1alpha1.Iperf3) string {
 	return serverServiceName(cr) + "-client"
 }
 
-// NewClientPod creates an Iperf3 Client Pod (targeting the
+// NewClientJob creates an Iperf3 Client Job (targeting the
 // Server Deployment via the Server Service) from the provided
 // IPerf3 Benchmark Definition.
-func NewClientPod(cr *perfv1alpha1.Iperf3) *corev1.Pod {
+func NewClientJob(cr *perfv1alpha1.Iperf3) *batchv1.Job {
 	serverAddress := serverServiceName(cr)
 	iperfCmdLineArgs := []string{
 		"--client", serverAddress,
@@ -53,47 +54,41 @@ func NewClientPod(cr *perfv1alpha1.Iperf3) *corev1.Pod {
 	iperfCmdLineArgs = append(iperfCmdLineArgs,
 		qsplit.ToStrings([]byte(cr.Spec.ClientConfiguration.CmdLineArgs))...)
 
-	pod := corev1.Pod{
+	job := batchv1.Job{
 		ObjectMeta: metav1.ObjectMeta{
-			Labels:    cr.Spec.ClientConfiguration.PodLabels,
-			Name:      clientPodName(cr),
+			Name:      clientJobName(cr),
 			Namespace: cr.Namespace,
 		},
-		Spec: corev1.PodSpec{
-			RestartPolicy: corev1.RestartPolicyNever,
-			ImagePullSecrets: []corev1.LocalObjectReference{
-				{
-					Name: cr.Spec.Image.PullSecret,
+		Spec: batchv1.JobSpec{
+			Template: corev1.PodTemplateSpec{
+				ObjectMeta: metav1.ObjectMeta{
+					Labels: cr.Spec.ClientConfiguration.PodLabels,
+				},
+				Spec: corev1.PodSpec{
+					Containers: []corev1.Container{
+						{
+							Name:            "client",
+							Image:           cr.Spec.Image.Name,
+							ImagePullPolicy: corev1.PullPolicy(cr.Spec.Image.PullPolicy),
+							Command:         []string{"iperf3"},
+							Args:            iperfCmdLineArgs,
+						},
+					},
+					ImagePullSecrets: []corev1.LocalObjectReference{
+						{
+							Name: cr.Spec.Image.PullSecret,
+						},
+					},
+					RestartPolicy: corev1.RestartPolicyNever,
+					Affinity:      &cr.Spec.ClientConfiguration.PodScheduling.Affinity,
+					Tolerations:   cr.Spec.ClientConfiguration.PodScheduling.Tolerations,
+					NodeSelector:  cr.Spec.ClientConfiguration.PodScheduling.NodeSelector,
+					NodeName:      cr.Spec.ClientConfiguration.PodScheduling.NodeName,
+					HostNetwork:   cr.Spec.ClientConfiguration.HostNetwork,
 				},
 			},
-			Containers: []corev1.Container{
-				{
-					Name:            "client",
-					Image:           cr.Spec.Image.Name,
-					ImagePullPolicy: corev1.PullPolicy(cr.Spec.Image.PullPolicy),
-					Command:         []string{"iperf3"},
-					Args:            iperfCmdLineArgs,
-				},
-			},
-			Affinity:     &cr.Spec.ClientConfiguration.PodScheduling.Affinity,
-			Tolerations:  cr.Spec.ClientConfiguration.PodScheduling.Tolerations,
-			NodeSelector: cr.Spec.ClientConfiguration.PodScheduling.NodeSelector,
-			NodeName:     cr.Spec.ClientConfiguration.PodScheduling.NodeName,
-			HostNetwork:  cr.Spec.ClientConfiguration.HostNetwork,
 		},
 	}
 
-	return &pod
-}
-
-func (r *Reconciler) clientPodFinished(cr *perfv1alpha1.Iperf3) (finished bool, err error) {
-	// TODO: Move this to k8s.client
-	pod, err := r.K8S.Clientset.CoreV1().Pods(cr.Namespace).Get(clientPodName(cr), metav1.GetOptions{})
-	if err != nil {
-		return false, err
-	}
-
-	finished = pod.Status.Phase == corev1.PodSucceeded || pod.Status.Phase == corev1.PodFailed
-
-	return finished, nil
+	return &job
 }

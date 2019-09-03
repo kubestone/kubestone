@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package iperf3
 
 import (
@@ -21,6 +22,7 @@ import (
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	batchv1 "k8s.io/api/batch/v1"
 	corev1 "k8s.io/api/core/v1"
 
 	ksapi "github.com/xridge/kubestone/api/v1alpha1"
@@ -29,7 +31,7 @@ import (
 var _ = Describe("Client Pod", func() {
 	Describe("created from CR", func() {
 		var cr ksapi.Iperf3
-		var pod *corev1.Pod
+		var job *batchv1.Job
 
 		BeforeEach(func() {
 			tolerationSeconds := int64(17)
@@ -82,46 +84,46 @@ var _ = Describe("Client Pod", func() {
 					},
 				},
 			}
-			pod = NewClientPod(&cr)
+			job = NewClientJob(&cr)
 		})
 
 		Context("with Image details specified", func() {
 			It("should match on Image.Name", func() {
-				Expect(pod.Spec.Containers[0].Image).To(
+				Expect(job.Spec.Template.Spec.Containers[0].Image).To(
 					Equal(cr.Spec.Image.Name))
 			})
 			It("should match on Image.PullPolicy", func() {
-				Expect(pod.Spec.Containers[0].ImagePullPolicy).To(
+				Expect(job.Spec.Template.Spec.Containers[0].ImagePullPolicy).To(
 					Equal(corev1.PullPolicy(cr.Spec.Image.PullPolicy)))
 			})
 			It("should match on Image.PullSecret", func() {
-				Expect(pod.Spec.ImagePullSecrets[0].Name).To(
+				Expect(job.Spec.Template.Spec.ImagePullSecrets[0].Name).To(
 					Equal(cr.Spec.Image.PullSecret))
 			})
 		})
 
 		Context("with default settings", func() {
 			It("--client mode is enabled", func() {
-				Expect(pod.Spec.Containers[0].Args).To(
+				Expect(job.Spec.Template.Spec.Containers[0].Args).To(
 					ContainElement("--client"))
 			})
 			It("port value is correctly specified", func() {
 				service := NewServerService(&cr)
 				servicePort := strconv.Itoa(int(service.Spec.Ports[0].Port))
-				Expect(strings.Join(pod.Spec.Containers[0].Args, " ")).To(
+				Expect(strings.Join(job.Spec.Template.Spec.Containers[0].Args, " ")).To(
 					ContainSubstring("--port " + servicePort))
 			})
 			It("should not contain --udp flag", func() {
-				Expect(pod.Spec.Containers[0].Args).NotTo(
+				Expect(job.Spec.Template.Spec.Containers[0].Args).NotTo(
 					ContainElement("--udp"))
 			})
 		})
 
 		Context("with UDP mode specified", func() {
 			cr.Spec.UDP = true
-			pod := NewClientPod(&cr)
+			job := NewClientJob(&cr)
 			It("should contain --udp flag in iperf args", func() {
-				Expect(pod.Spec.Containers[0].Args).To(
+				Expect(job.Spec.Template.Spec.Containers[0].Args).To(
 					ContainElement("--udp"))
 			})
 		})
@@ -129,7 +131,7 @@ var _ = Describe("Client Pod", func() {
 		Context("with podLabels specified", func() {
 			It("should contain all podLabels", func() {
 				for k, v := range cr.Spec.ClientConfiguration.PodLabels {
-					Expect(pod.ObjectMeta.Labels).To(
+					Expect(job.Spec.Template.ObjectMeta.Labels).To(
 						HaveKeyWithValue(k, v))
 				}
 			})
@@ -137,26 +139,26 @@ var _ = Describe("Client Pod", func() {
 
 		Context("with podAffinity specified", func() {
 			It("should match with Affinity", func() {
-				Expect(pod.Spec.Affinity).To(
+				Expect(job.Spec.Template.Spec.Affinity).To(
 					Equal(&cr.Spec.ClientConfiguration.PodScheduling.Affinity))
 			})
 			It("should match with Tolerations", func() {
-				Expect(pod.Spec.Tolerations).To(
+				Expect(job.Spec.Template.Spec.Tolerations).To(
 					Equal(cr.Spec.ClientConfiguration.PodScheduling.Tolerations))
 			})
 			It("should match with NodeSelector", func() {
-				Expect(pod.Spec.NodeSelector).To(
+				Expect(job.Spec.Template.Spec.NodeSelector).To(
 					Equal(cr.Spec.ClientConfiguration.PodScheduling.NodeSelector))
 			})
 			It("should match with NodeName", func() {
-				Expect(pod.Spec.NodeName).To(
+				Expect(job.Spec.Template.Spec.NodeName).To(
 					Equal(cr.Spec.ClientConfiguration.PodScheduling.NodeName))
 			})
 		})
 
 		Context("with HostNetwork specified", func() {
 			It("should match with HostNetwork", func() {
-				Expect(pod.Spec.HostNetwork).To(
+				Expect(job.Spec.Template.Spec.HostNetwork).To(
 					Equal(cr.Spec.ClientConfiguration.HostNetwork))
 			})
 		})
@@ -164,12 +166,12 @@ var _ = Describe("Client Pod", func() {
 		Context("with connectivity to service", func() {
 			It("should not match service name", func() {
 				service := NewServerService(&cr)
-				Expect(pod.ObjectMeta.Name).NotTo(
+				Expect(job.ObjectMeta.Name).NotTo(
 					Equal(service.ObjectMeta.Name))
 			})
 			It("should target the server service", func() {
 				service := NewServerService(&cr)
-				Expect(strings.Join(pod.Spec.Containers[0].Args, " ")).To(
+				Expect(strings.Join(job.Spec.Template.Spec.Containers[0].Args, " ")).To(
 					ContainSubstring("--client " + service.ObjectMeta.Name))
 			})
 		})

@@ -24,8 +24,8 @@ import (
 	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
 )
 
-// NewBaseJob creates a new kubernetes job with the given arguments
-func NewBaseJob(objectMeta metav1.ObjectMeta, app string, imageSpec perfv1alpha1.ImageSpec,
+// NewPerfJob creates a new kubernetes job with the given arguments
+func NewPerfJob(objectMeta metav1.ObjectMeta, app string, imageSpec perfv1alpha1.ImageSpec,
 	podConfig perfv1alpha1.PodConfigurationSpec) *batchv1.Job {
 
 	backoffLimit := int32(0)

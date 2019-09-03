@@ -76,7 +76,7 @@ func NewJob(cr *perfv1alpha1.Fio) *batchv1.Job {
 		})
 	}
 
-	job := common.NewBaseJob(objectMeta, "fio", cr.Spec.Image, cr.Spec.PodConfig)
+	job := common.NewPerfJob(objectMeta, "fio", cr.Spec.Image, cr.Spec.PodConfig)
 	job.Spec.Template.Spec.Volumes = volumes
 	job.Spec.Template.Spec.Containers[0].Args = fioCmdLineArgs
 	job.Spec.Template.Spec.Containers[0].VolumeMounts = volumeMounts

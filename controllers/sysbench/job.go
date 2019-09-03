@@ -36,7 +36,7 @@ func NewJob(cr *perfv1alpha1.Sysbench) *batchv1.Job {
 	sysbenchCmdLineArgs = append(sysbenchCmdLineArgs, qsplit.ToStrings([]byte(cr.Spec.Options))...)
 	sysbenchCmdLineArgs = append(sysbenchCmdLineArgs, cr.Spec.TestName, cr.Spec.Command)
 
-	job := common.NewBaseJob(objectMeta, "sysbench", cr.Spec.Image, cr.Spec.PodConfig)
+	job := common.NewPerfJob(objectMeta, "sysbench", cr.Spec.Image, cr.Spec.PodConfig)
 	job.Spec.Template.Spec.Containers[0].Args = sysbenchCmdLineArgs
 	return job
 }

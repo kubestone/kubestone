@@ -136,3 +136,47 @@ func (a *Access) IsJobFinished(namespacedName types.NamespacedName) (finished bo
 	finished = job.Status.CompletionTime != nil
 	return finished, nil
 }
+
+// +kubebuilder:rbac:groups="",resources=endpoints,verbs=get;list
+
+// IsEndpointReady returns true if the given endpoint is fully connected to at least one pod
+func (a *Access) IsEndpointReady(namespacedName types.NamespacedName) (finished bool, err error) {
+	// The Endpoint connection between the Service and the Pod is the final step before
+	// a service becomes reachable in Kubernetes. When the endpoint is bound, your
+	// service becomes connectable on vanilla k8s and azure, but not on GKE.
+	// For details see #96: https://github.com/xridge/kubestone/issues/96
+	//
+	// Even though it is not enough to wait for the endpoints in certain cloud providers,
+	// it is still the closest we can get between service creation and connectibility.
+	endpoint, err := a.Clientset.CoreV1().Endpoints(namespacedName.Namespace).Get(
+		namespacedName.Name, metav1.GetOptions{})
+	if err != nil {
+		return false, err
+	}
+
+	readyAddresses := 0
+	for _, subset := range endpoint.Subsets {
+		if len(subset.NotReadyAddresses) > 0 {
+			return false, nil
+		}
+		readyAddresses += len(subset.Addresses)
+	}
+
+	ready := readyAddresses > 0
+
+	return ready, nil
+}
+
+// IsDeploymentReady returns true if the given deployment's ready replicas matching with the desired replicas
+func (a *Access) IsDeploymentReady(namespacedName types.NamespacedName) (ready bool, err error) {
+	ready, err = false, nil
+	deployment, err := a.Clientset.AppsV1().Deployments(namespacedName.Namespace).Get(
+		namespacedName.Name, metav1.GetOptions{})
+	if err != nil {
+		return ready, err
+	}
+
+	ready = deployment.Status.ReadyReplicas == *deployment.Spec.Replicas
+
+	return ready, err
+}

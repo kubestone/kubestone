@@ -20,6 +20,7 @@ import (
 	"context"
 
 	"github.com/go-logr/logr"
+	"k8s.io/apimachinery/pkg/types"
 	ctrl "sigs.k8s.io/controller-runtime"
 
 	"github.com/xridge/kubestone/pkg/k8s"
@@ -71,25 +72,30 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 		return ctrl.Result{}, err
 	}
 
-	serverReady, err := r.serverDeploymentReady(&cr)
+	endpointReady, err := r.K8S.IsEndpointReady(types.NamespacedName{
+		Namespace: cr.Namespace,
+		Name:      cr.Name})
 	if err != nil {
 		return ctrl.Result{}, err
 	}
-	if !serverReady {
-		// Wait for deployment to be ready
+	if !endpointReady {
+		// Wait for deployment to be connected to the service endpoint
 		return ctrl.Result{Requeue: true}, nil
 	}
 
-	if err := r.K8S.CreateWithReference(ctx, NewClientPod(&cr), &cr); err != nil {
+	if err := r.K8S.CreateWithReference(ctx, NewClientJob(&cr), &cr); err != nil {
 		return ctrl.Result{}, err
 	}
 
-	clientPodFinished, err := r.clientPodFinished(&cr)
+	jobFinished, err := r.K8S.IsJobFinished(types.NamespacedName{
+		Namespace: cr.Namespace,
+		Name:      clientJobName(&cr),
+	})
 	if err != nil {
 		return ctrl.Result{}, err
 	}
-	if !clientPodFinished {
-		// Wait for the client pod to be completed
+	if !jobFinished {
+		// Wait for the job to be completed
 		return ctrl.Result{Requeue: true}, nil
 	}
 

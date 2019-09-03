@@ -1,0 +1,34 @@
+apiVersion: perf.kubestone.xridge.io/v1alpha1
+kind: Drill
+metadata:
+  name: drill-sample
+spec:
+  image:
+    name: xridge/drill:0.5.0
+    # pullPolicy: IfNotPresent
+    # pullSecret: null
+  benchmarksVolume:
+    benchmark.yml: |
+      ---
+      threads: 1
+      base: 'https://kubernetes.io'
+      iterations: 2
+      rampup: 2
+
+      plan:
+        - name: Include other file
+          include: other.yml
+
+        - name: Fetch kubernetes.io
+          request:
+            url: /
+
+    other.yml: |
+      ---
+      - name: Fetch docs
+        request:
+          url: /docs
+
+  benchmarkFile: benchmark.yml
+
+  options: --stats

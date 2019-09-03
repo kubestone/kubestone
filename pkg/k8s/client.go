@@ -41,6 +41,24 @@ type Access struct {
 	EventRecorder record.EventRecorder
 }
 
+// RecordEventf is a convenience function to create an event (via Access.EventRecorder)
+// for the given object.
+func (a *Access) RecordEventf(object metav1.Object, eventtype, reason, messageFmt string, args ...interface{}) error {
+	runtimeObject, ok := object.(runtime.Object)
+	if !ok {
+		return fmt.Errorf("object (%T) is not a runtime.Object", object)
+	}
+
+	objectRef, err := reference.GetReference(a.Scheme, runtimeObject)
+	if err != nil {
+		return fmt.Errorf("Unable to get reference to owner")
+	}
+
+	a.EventRecorder.Eventf(objectRef, eventtype, reason, messageFmt, args...)
+
+	return nil
+}
+
 // CreateWithReference method creates a kubernetes resource and
 // sets the owner reference to a given object. It provides basic
 // idempotency (by ignoring Already Exists errors).
@@ -52,27 +70,17 @@ func (a *Access) CreateWithReference(ctx context.Context, object, owner metav1.O
 		return fmt.Errorf("object (%T) is not a runtime.Object", object)
 	}
 
-	runtimeOwner, ok := owner.(runtime.Object)
-	if !ok {
-		return fmt.Errorf("owner (%T) is not a runtime.Object", object)
-	}
-
-	ownerRef, err := reference.GetReference(a.Scheme, runtimeOwner)
-	if err != nil {
-		return fmt.Errorf("Unable to get reference to owner")
-	}
-
 	if err := controllerutil.SetControllerReference(owner, object, a.Scheme); err != nil {
 		return err
 	}
 
-	err = a.Client.Create(ctx, runtimeObject)
+	err := a.Client.Create(ctx, runtimeObject)
 	if IgnoreAlreadyExists(err) != nil {
 		return err
 	}
 
 	if !errors.IsAlreadyExists(err) {
-		a.EventRecorder.Eventf(ownerRef, corev1.EventTypeNormal, CreateSucceeded,
+		_ = a.RecordEventf(owner, corev1.EventTypeNormal, CreateSucceeded,
 			"Created %v", object.GetSelfLink())
 	}
 
@@ -89,23 +97,13 @@ func (a *Access) DeleteObject(ctx context.Context, object, owner metav1.Object) 
 		return fmt.Errorf("object (%T) is not a runtime.Object", object)
 	}
 
-	runtimeOwner, ok := owner.(runtime.Object)
-	if !ok {
-		return fmt.Errorf("owner (%T) is not a runtime.Object", object)
-	}
-
-	ownerRef, err := reference.GetReference(a.Scheme, runtimeOwner)
-	if err != nil {
-		return fmt.Errorf("Unable to get reference to owner")
-	}
-
 	// Need to get the object first so that the object.GetSelfLink()
 	// works during Event Recording
 	namespacedName := types.NamespacedName{
 		Namespace: object.GetNamespace(),
 		Name:      object.GetName(),
 	}
-	err = a.Client.Get(ctx, namespacedName, runtimeObject)
+	err := a.Client.Get(ctx, namespacedName, runtimeObject)
 	if IgnoreNotFound(err) != nil {
 		return err
 	} else if errors.IsNotFound(err) {
@@ -118,7 +116,7 @@ func (a *Access) DeleteObject(ctx context.Context, object, owner metav1.Object) 
 	}
 
 	if !errors.IsNotFound(err) {
-		a.EventRecorder.Eventf(ownerRef, corev1.EventTypeNormal, DeleteSucceeded,
+		_ = a.RecordEventf(owner, corev1.EventTypeNormal, DeleteSucceeded,
 			"Deleted %v", object.GetSelfLink())
 	}
 

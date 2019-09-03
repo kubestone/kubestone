@@ -72,6 +72,26 @@ rules:
 - apiGroups:
   - perf.kubestone.xridge.io
   resources:
+  - drills
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - perf.kubestone.xridge.io
+  resources:
+  - drills/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - perf.kubestone.xridge.io
+  resources:
   - fios
   verbs:
   - create

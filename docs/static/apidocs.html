@@ -10,6 +10,255 @@
 </p>
 Resource Types:
 <ul></ul>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.Drill">Drill
+</h3>
+<p>
+<p>Drill is the Schema for the drills API</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>metadata</code></br>
+<em>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#objectmeta-v1-meta">
+Kubernetes meta/v1.ObjectMeta
+</a>
+</em>
+</td>
+<td>
+Refer to the Kubernetes API documentation for the fields of the
+<code>metadata</code> field.
+</td>
+</tr>
+<tr>
+<td>
+<code>spec</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.DrillSpec">
+DrillSpec
+</a>
+</em>
+</td>
+<td>
+<br/>
+<br/>
+<table>
+<tr>
+<td>
+<code>image</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.ImageSpec">
+ImageSpec
+</a>
+</em>
+</td>
+<td>
+<p>Image defines the drill docker image used for the benchmark</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>benchmarksVolume</code></br>
+<em>
+map[string]string
+</em>
+</td>
+<td>
+<p>BenchmarksVolume holds the content of benchmark files.
+The key of the map specifies the filename and the value is the content
+of the file. ConfigMap is created from the map which is mounted as
+benchmarks directory to the benchmark pod.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>benchmarkFile</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<p>BenchmarkFile is the entry point file (passed to &ndash;benchmark) specified to drill.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>options</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Options are appended to the options parameter set of drill</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>podConfig</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PodConfigurationSpec">
+PodConfigurationSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>PodConfig contains the configuration for the benchmark pod, including
+pod labels and scheduling policies (affinity, toleration, node selector&hellip;)</p>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<code>status</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.DrillStatus">
+DrillStatus
+</a>
+</em>
+</td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.DrillSpec">DrillSpec
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.Drill">Drill</a>)
+</p>
+<p>
+<p>DrillSpec defines benchmark run for drill load tester
+The benchmarkFile, and options is passed to drill as follows:
+drill [OPTIONS] &ndash;benchmark <benchmarkFile></p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>image</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.ImageSpec">
+ImageSpec
+</a>
+</em>
+</td>
+<td>
+<p>Image defines the drill docker image used for the benchmark</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>benchmarksVolume</code></br>
+<em>
+map[string]string
+</em>
+</td>
+<td>
+<p>BenchmarksVolume holds the content of benchmark files.
+The key of the map specifies the filename and the value is the content
+of the file. ConfigMap is created from the map which is mounted as
+benchmarks directory to the benchmark pod.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>benchmarkFile</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<p>BenchmarkFile is the entry point file (passed to &ndash;benchmark) specified to drill.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>options</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Options are appended to the options parameter set of drill</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>podConfig</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PodConfigurationSpec">
+PodConfigurationSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>PodConfig contains the configuration for the benchmark pod, including
+pod labels and scheduling policies (affinity, toleration, node selector&hellip;)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.DrillStatus">DrillStatus
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.Drill">Drill</a>)
+</p>
+<p>
+<p>DrillStatus describes the current state of the benchmark</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>running</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+<p>Running shows the state of execution</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>completed</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+<p>Completed shows the state of completion</p>
+</td>
+</tr>
+</tbody>
+</table>
 <h3 id="perf.kubestone.xridge.io/v1alpha1.Fio">Fio
 </h3>
 <p>
@@ -349,6 +598,7 @@ point to the created PVC</p>
 </h3>
 <p>
 (<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.DrillSpec">DrillSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3Spec">Iperf3Spec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.SysbenchSpec">SysbenchSpec</a>)
@@ -825,6 +1075,7 @@ This is a beta feature.</p>
 </h3>
 <p>
 (<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.DrillSpec">DrillSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3ConfigurationSpec">Iperf3ConfigurationSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.SysbenchSpec">SysbenchSpec</a>)
@@ -1211,5 +1462,5 @@ bool
 <hr/>
 <p><em>
 Generated with <code>gen-crd-api-reference-docs</code>
-on git commit <code>a25bf4b</code>.
+on git commit <code>94fbeb2</code>.
 </em></p>

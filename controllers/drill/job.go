@@ -108,6 +108,8 @@ func NewJob(cr *perfv1alpha1.Drill, configMap *corev1.ConfigMap) *batchv1.Job {
 	return &job
 }
 
+// IsCrValid validates the given CR and raises error if semantic errors detected
+// For drill it checks that the BenchmarkFile exists in the BenchmarksVolume map
 func IsCrValid(cr *perfv1alpha1.Drill) (valid bool, err error) {
 	if _, ok := cr.Spec.BenchmarksVolume[cr.Spec.BenchmarkFile]; !ok {
 		return false, errors.New("BenchmarkFile does not exists in BenchmarksVolume")

@@ -20,20 +20,23 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// DrillSpec defines a benchmark run for drill load tester
+// DrillSpec defines benchmark run for drill load tester
+// The benchmarkFile, and options is passed to drill as follows:
+// drill [OPTIONS] --benchmark <benchmarkFile>
 type DrillSpec struct {
 	// Image defines the drill docker image used for the benchmark
 	Image ImageSpec `json:"image"`
 
-	// BenchmarksVolume contains the files describing the benchmarks.
-	// A ConfigMap is created from this map, where the keys will be used
-	// as filenames and values will represent the contents of the files.
+	// BenchmarksVolume holds the content of benchmark files.
+	// The key of the map specifies the filename and the value is the content
+	// of the file. ConfigMap is created from the map which is mounted as
+	// benchmarks directory to the benchmark pod.
 	BenchmarksVolume map[string]string `json:"benchmarksVolume"`
 
-	// BenchmarkFile is the top level file (entry point) specified to drill.
+	// BenchmarkFile is the entry point file (passed to --benchmark) specified to drill.
 	BenchmarkFile string `json:"benchmarkFile"`
 
-	// Options are appended to the predefined drill parameters
+	// Options are appended to the options parameter set of drill
 	// +optional
 	Options string `json:"options,omitempty"`
 

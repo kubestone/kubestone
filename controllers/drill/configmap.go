@@ -23,7 +23,8 @@ import (
 	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
 )
 
-// NewConfigMap creates a new configmap for the drill benchmark job
+// NewConfigMap creates a new configmap containing the BenchmarksVolume
+// for the drill benchmark job
 func NewConfigMap(cr *perfv1alpha1.Drill) *corev1.ConfigMap {
 	configMap := corev1.ConfigMap{
 		ObjectMeta: metav1.ObjectMeta{

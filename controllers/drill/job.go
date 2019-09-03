@@ -26,6 +26,7 @@ import (
 
 	"github.com/firepear/qsplit"
 	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
+	"github.com/xridge/kubestone/controllers/common"
 )
 
 const (
@@ -35,18 +36,13 @@ const (
 
 // NewJob creates a fio benchmark job
 func NewJob(cr *perfv1alpha1.Drill, configMap *corev1.ConfigMap) *batchv1.Job {
-	labels := map[string]string{
-		"app":               "fio",
-		"kubestone-cr-name": cr.Name,
-	}
-	for key, value := range cr.Spec.PodConfig.PodLabels {
-		labels[key] = value
+	objectMeta := metav1.ObjectMeta{
+		Name:      cr.Name,
+		Namespace: cr.Namespace,
 	}
 
 	cmdLineArgs := fmt.Sprintf("%s --benchmark %s", cr.Spec.Options, cr.Spec.BenchmarkFile)
 	command := fmt.Sprintf("cd %s && %s %s", benchmarksDir, drill, cmdLineArgs)
-
-	backoffLimit := int32(0)
 
 	volumes := []corev1.Volume{
 		corev1.Volume{
@@ -67,45 +63,12 @@ func NewJob(cr *perfv1alpha1.Drill, configMap *corev1.ConfigMap) *batchv1.Job {
 		},
 	}
 
-	job := batchv1.Job{
-		ObjectMeta: metav1.ObjectMeta{
-			Name:      cr.Name,
-			Namespace: cr.Namespace,
-		},
-		Spec: batchv1.JobSpec{
-			Template: corev1.PodTemplateSpec{
-				ObjectMeta: metav1.ObjectMeta{
-					Labels: labels,
-				},
-				Spec: corev1.PodSpec{
-					Containers: []corev1.Container{
-						{
-							Name:            "drill",
-							Image:           cr.Spec.Image.Name,
-							ImagePullPolicy: corev1.PullPolicy(cr.Spec.Image.PullPolicy),
-							Command:         []string{"/bin/sh", "-xc"},
-							Args:            qsplit.ToStrings([]byte(command)),
-							VolumeMounts:    volumeMounts,
-						},
-					},
-					ImagePullSecrets: []corev1.LocalObjectReference{
-						{
-							Name: cr.Spec.Image.PullSecret,
-						},
-					},
-					RestartPolicy: corev1.RestartPolicyNever,
-					Volumes:       volumes,
-					Affinity:      &cr.Spec.PodConfig.PodScheduling.Affinity,
-					Tolerations:   cr.Spec.PodConfig.PodScheduling.Tolerations,
-					NodeSelector:  cr.Spec.PodConfig.PodScheduling.NodeSelector,
-					NodeName:      cr.Spec.PodConfig.PodScheduling.NodeName,
-				},
-			},
-			BackoffLimit: &backoffLimit,
-		},
-	}
-
-	return &job
+	job := common.NewPerfJob(objectMeta, "fio", cr.Spec.Image, cr.Spec.PodConfig)
+	job.Spec.Template.Spec.Volumes = volumes
+	job.Spec.Template.Spec.Containers[0].Command = []string{"/bin/sh", "-xc"}
+	job.Spec.Template.Spec.Containers[0].Args = qsplit.ToStrings([]byte(command))
+	job.Spec.Template.Spec.Containers[0].VolumeMounts = volumeMounts
+	return job
 }
 
 // IsCrValid validates the given CR and raises error if semantic errors detected

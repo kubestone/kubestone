@@ -1,4 +1,7 @@
 todo:
+  keyword: ['@todo', 'TODO:']
+  bodyKeyword: ['@body','BODY:']
+  caseSensitive: true
   # The CRDs are generated files whose TO-DO comments should be excluded
   # as they will be already reported through the source files
   exclude: "config/crd/bases"

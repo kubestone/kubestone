@@ -17,6 +17,8 @@ limitations under the License.
 package pgbench
 
 import (
+	"fmt"
+
 	batchv1 "k8s.io/api/batch/v1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -35,6 +37,7 @@ func NewJob(cr *perfv1alpha1.Pgbench) *batchv1.Job {
 
 	env := []corev1.EnvVar{
 		{Name: "PGHOST", Value: cr.Spec.Postgres.Host},
+		{Name: "PGPORT", Value: fmt.Sprintf("%d", cr.Spec.Postgres.Port)},
 		{Name: "PGUSER", Value: cr.Spec.Postgres.User},
 		{Name: "PGPASSWORD", Value: cr.Spec.Postgres.Password},
 		{Name: "PGDATABASE", Value: cr.Spec.Postgres.Database},

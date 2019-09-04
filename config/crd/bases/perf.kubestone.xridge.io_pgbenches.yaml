@@ -781,6 +781,9 @@ spec:
                   description: Password is to be used if the server demands password
                     authentication
                   type: string
+                port:
+                  description: Port number to connect to at the server host
+                  type: integer
                 user:
                   description: User is the PostgreSQL user name to connect as
                   type: string
@@ -788,6 +791,7 @@ spec:
               - database
               - host
               - password
+              - port
               - user
               type: object
           required:

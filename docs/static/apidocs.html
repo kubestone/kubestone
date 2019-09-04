@@ -598,9 +598,9 @@ point to the created PVC</p>
 </h3>
 <p>
 (<em>Appears on:</em>
-<a href="#perf.kubestone.xridge.io/v1alpha1.DrillSpec">DrillSpec</a>, 
-<a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>, 
-<a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3Spec">Iperf3Spec</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.DrillSpec">DrillSpec</a>,
+<a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>,
+<a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3Spec">Iperf3Spec</a>,
 <a href="#perf.kubestone.xridge.io/v1alpha1.SysbenchSpec">SysbenchSpec</a>)
 </p>
 <p>
@@ -1071,13 +1071,88 @@ This is a beta feature.</p>
 <p>
 <p>PersistentVolumeSize defines the size of the PV</p>
 </p>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.Pgbench">Pgbench
+</h3>
+<p>
+<p>Pgbench is the Schema for the pgbenches API</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>metadata</code></br>
+<em>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#objectmeta-v1-meta">
+Kubernetes meta/v1.ObjectMeta
+</a>
+</em>
+</td>
+<td>
+Refer to the Kubernetes API documentation for the fields of the
+<code>metadata</code> field.
+</td>
+</tr>
+<tr>
+<td>
+<code>spec</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PgbenchSpec">
+PgbenchSpec
+</a>
+</em>
+</td>
+<td>
+<br/>
+<br/>
+<table>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<code>status</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PgbenchStatus">
+PgbenchStatus
+</a>
+</em>
+</td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.PgbenchSpec">PgbenchSpec
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.Pgbench">Pgbench</a>)
+</p>
+<p>
+<p>PgbenchSpec defines the desired state of Pgbench</p>
+</p>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.PgbenchStatus">PgbenchStatus
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.Pgbench">Pgbench</a>)
+</p>
+<p>
+<p>PgbenchStatus defines the observed state of Pgbench</p>
+</p>
 <h3 id="perf.kubestone.xridge.io/v1alpha1.PodConfigurationSpec">PodConfigurationSpec
 </h3>
 <p>
 (<em>Appears on:</em>
-<a href="#perf.kubestone.xridge.io/v1alpha1.DrillSpec">DrillSpec</a>, 
-<a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>, 
-<a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3ConfigurationSpec">Iperf3ConfigurationSpec</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.DrillSpec">DrillSpec</a>,
+<a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>,
+<a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3ConfigurationSpec">Iperf3ConfigurationSpec</a>,
 <a href="#perf.kubestone.xridge.io/v1alpha1.SysbenchSpec">SysbenchSpec</a>)
 </p>
 <p>

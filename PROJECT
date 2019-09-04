@@ -14,3 +14,6 @@ resources:
 - group: perf
   version: v1alpha1
   kind: Drill
+- group: perf
+  version: v1alpha1
+  kind: Pgbench

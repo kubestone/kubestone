@@ -29,6 +29,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
 	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
+	"github.com/xridge/kubestone/controllers"
 	"github.com/xridge/kubestone/controllers/drill"
 	"github.com/xridge/kubestone/controllers/fio"
 	"github.com/xridge/kubestone/controllers/iperf3"
@@ -107,6 +108,13 @@ func main() {
 		Log: ctrl.Log.WithName("controllers").WithName("Drill"),
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "Drill")
+		os.Exit(1)
+	}
+	if err = (&controllers.PgbenchReconciler{
+		Client: mgr.GetClient(),
+		Log:    ctrl.Log.WithName("controllers").WithName("Pgbench"),
+	}).SetupWithManager(mgr); err != nil {
+		setupLog.Error(err, "unable to create controller", "controller", "Pgbench")
 		os.Exit(1)
 	}
 	// +kubebuilder:scaffold:builder

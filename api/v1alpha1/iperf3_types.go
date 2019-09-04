@@ -57,14 +57,6 @@ type Iperf3Spec struct {
 	UDP bool `json:"udp,omitempty"`
 }
 
-// Iperf3Status describes the current state of the benchmark
-type Iperf3Status struct {
-	// Running shows the state of execution
-	Running bool `json:"running"`
-	// Completed shows the state of completion
-	Completed bool `json:"completed"`
-}
-
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 // +kubebuilder:printcolumn:name="Running",type="boolean",JSONPath=".status.running"
@@ -75,8 +67,8 @@ type Iperf3 struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   Iperf3Spec   `json:"spec,omitempty"`
-	Status Iperf3Status `json:"status,omitempty"`
+	Spec   Iperf3Spec      `json:"spec,omitempty"`
+	Status BenchmarkStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true

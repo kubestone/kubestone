@@ -20,13 +20,42 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
-// NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
+// PostgresSpec contains the configuration parameters for the PostreSQL database
+type PostgresSpec struct {
+	// Host is the name of host to connect to
+	Host string `json:"host"`
+
+	// User is the PostgreSQL user name to connect as
+	User string `json:"user"`
+
+	// Password is to be used if the server demands password authentication
+	Password string `json:"password"`
+
+	// Database is name of the database
+	Database string `json:"database"`
+}
 
 // PgbenchSpec defines the desired state of Pgbench
 type PgbenchSpec struct {
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
+	// Image defines the sysbench docker image used for the benchmark
+	Image ImageSpec `json:"image"`
+
+	// Postgres contains the confiugraton parameters for the PostgreSQL database
+	// that will run the benchmark
+	Postgres PostgresSpec `json:"postgres"`
+
+	// InitArgs contains the command line arguments passed to the init container
+	// +optional
+	InitArgs string `json:"initArgs,omitempty"`
+
+	// Args contains the command line arguments passed to the main pgbench container
+	// +optional
+	Args string `json:"args,omitempty"`
+
+	// PodConfig contains the configuration for the benchmark pod, including
+	// pod labels and scheduling policies (affinity, toleration, node selector...)
+	// +optional
+	PodConfig PodConfigurationSpec `json:"podConfig,omitempty"`
 }
 
 // PgbenchStatus defines the observed state of Pgbench
@@ -36,14 +65,17 @@ type PgbenchStatus struct {
 }
 
 // +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
+// +kubebuilder:printcolumn:name="Running",type="boolean",JSONPath=".status.running"
+// +kubebuilder:printcolumn:name="Completed",type="boolean",JSONPath=".status.completed"
 
 // Pgbench is the Schema for the pgbenches API
 type Pgbench struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   PgbenchSpec   `json:"spec,omitempty"`
-	Status PgbenchStatus `json:"status,omitempty"`
+	Spec   PgbenchSpec     `json:"spec,omitempty"`
+	Status BenchmarkStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true

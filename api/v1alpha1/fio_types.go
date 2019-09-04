@@ -68,14 +68,6 @@ type FioSpec struct {
 	Volume *FioVolumeSpec `json:"volume,omitempty"`
 }
 
-// FioStatus describes the current state of the benchmark
-type FioStatus struct {
-	// Running shows the state of execution
-	Running bool `json:"running"`
-	// Completed shows the state of completion
-	Completed bool `json:"completed"`
-}
-
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 // +kubebuilder:printcolumn:name="Running",type="boolean",JSONPath=".status.running"
@@ -86,8 +78,8 @@ type Fio struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   FioSpec   `json:"spec,omitempty"`
-	Status FioStatus `json:"status,omitempty"`
+	Spec   FioSpec         `json:"spec,omitempty"`
+	Status BenchmarkStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true

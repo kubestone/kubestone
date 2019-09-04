@@ -46,14 +46,6 @@ type DrillSpec struct {
 	PodConfig PodConfigurationSpec `json:"podConfig,omitempty"`
 }
 
-// DrillStatus describes the current state of the benchmark
-type DrillStatus struct {
-	// Running shows the state of execution
-	Running bool `json:"running"`
-	// Completed shows the state of completion
-	Completed bool `json:"completed"`
-}
-
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 // +kubebuilder:printcolumn:name="Running",type="boolean",JSONPath=".status.running"
@@ -64,8 +56,8 @@ type Drill struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   DrillSpec   `json:"spec,omitempty"`
-	Status DrillStatus `json:"status,omitempty"`
+	Spec   DrillSpec       `json:"spec,omitempty"`
+	Status BenchmarkStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true

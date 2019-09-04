@@ -31,7 +31,7 @@ Please refer to the [quickstart guide](../quickstart.md) for details on generic 
 
 
 
-## IPerf3 Configuration
+## Drill Configuration
 
 The complete documentation of drill CR can be found in the [API Docs](../apidocs.md#perf.kubestone.xridge.io/v1alpha1.DrillSpec).
 
@@ -45,4 +45,4 @@ The complete documentation of drill CR can be found in the [API Docs](../apidocs
 
 ## Legal
 
-Iperf3 is licensed as GPLv3. 
+Drill is licensed as GPLv3. 

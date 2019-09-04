@@ -14,10 +14,10 @@ Resource Types:
 </h3>
 <p>
 (<em>Appears on:</em>
-<a href="#perf.kubestone.xridge.io/v1alpha1.Drill">Drill</a>, 
-<a href="#perf.kubestone.xridge.io/v1alpha1.Fio">Fio</a>, 
-<a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3">Iperf3</a>, 
-<a href="#perf.kubestone.xridge.io/v1alpha1.Pgbench">Pgbench</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.Drill">Drill</a>,
+<a href="#perf.kubestone.xridge.io/v1alpha1.Fio">Fio</a>,
+<a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3">Iperf3</a>,
+<a href="#perf.kubestone.xridge.io/v1alpha1.Pgbench">Pgbench</a>,
 <a href="#perf.kubestone.xridge.io/v1alpha1.Sysbench">Sysbench</a>)
 </p>
 <p>
@@ -566,10 +566,10 @@ point to the created PVC</p>
 <a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>,
 <a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3Spec">Iperf3Spec</a>,
 =======
-<a href="#perf.kubestone.xridge.io/v1alpha1.DrillSpec">DrillSpec</a>, 
-<a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>, 
-<a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3Spec">Iperf3Spec</a>, 
-<a href="#perf.kubestone.xridge.io/v1alpha1.PgbenchSpec">PgbenchSpec</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.DrillSpec">DrillSpec</a>,
+<a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>,
+<a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3Spec">Iperf3Spec</a>,
+<a href="#perf.kubestone.xridge.io/v1alpha1.PgbenchSpec">PgbenchSpec</a>,
 >>>>>>> Added pgbench spec + refactored benchmark status
 <a href="#perf.kubestone.xridge.io/v1alpha1.SysbenchSpec">SysbenchSpec</a>)
 </p>
@@ -1222,10 +1222,10 @@ pod labels and scheduling policies (affinity, toleration, node selector&hellip;)
 <a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>,
 <a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3ConfigurationSpec">Iperf3ConfigurationSpec</a>,
 =======
-<a href="#perf.kubestone.xridge.io/v1alpha1.DrillSpec">DrillSpec</a>, 
-<a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>, 
-<a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3ConfigurationSpec">Iperf3ConfigurationSpec</a>, 
-<a href="#perf.kubestone.xridge.io/v1alpha1.PgbenchSpec">PgbenchSpec</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.DrillSpec">DrillSpec</a>,
+<a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>,
+<a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3ConfigurationSpec">Iperf3ConfigurationSpec</a>,
+<a href="#perf.kubestone.xridge.io/v1alpha1.PgbenchSpec">PgbenchSpec</a>,
 >>>>>>> Added pgbench spec + refactored benchmark status
 <a href="#perf.kubestone.xridge.io/v1alpha1.SysbenchSpec">SysbenchSpec</a>)
 </p>
@@ -1387,6 +1387,17 @@ string
 </td>
 <td>
 <p>Host is the name of host to connect to</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>port</code></br>
+<em>
+int
+</em>
+</td>
+<td>
+<p>Port number to connect to at the server host</p>
 </td>
 </tr>
 <tr>
@@ -1654,9 +1665,5 @@ on a particular test. Some tests also implement their own custom commands.</p>
 <hr/>
 <p><em>
 Generated with <code>gen-crd-api-reference-docs</code>
-<<<<<<< HEAD
-on git commit <code>d423768</code>.
-=======
-on git commit <code>f698c6d</code>.
->>>>>>> Added pgbench spec + refactored benchmark status
+on git commit <code>d295491</code>.
 </em></p>

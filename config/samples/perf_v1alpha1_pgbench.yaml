@@ -3,5 +3,11 @@ kind: Pgbench
 metadata:
   name: pgbench-sample
 spec:
-  # Add fields here
-  foo: bar
+  image:
+    name: postgres:11.5-alpine
+  postgres:
+    host: postgres
+    port: 5432
+    user: admin
+    password: admin
+    database: benchdb

@@ -25,6 +25,9 @@ type PostgresSpec struct {
 	// Host is the name of host to connect to
 	Host string `json:"host"`
 
+	// Port number to connect to at the server host
+	//Port string `json:"port"`
+
 	// User is the PostgreSQL user name to connect as
 	User string `json:"user"`
 

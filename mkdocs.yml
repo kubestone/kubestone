@@ -7,6 +7,7 @@ nav:
       - 'Fio': benchmarks/fio.md
       - 'Iperf3': benchmarks/iperf3.md
       - 'Sysbench': benchmarks/sysbench.md
+      - 'Drill': benchmarks/drill.md
   - CRD API docs: apidocs.md
   - Development guide: devguide.md
 

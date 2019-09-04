@@ -23,7 +23,6 @@ import (
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	ksapi "github.com/xridge/kubestone/api/v1alpha1"
 	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
 )
 
@@ -46,28 +45,6 @@ var _ = Describe("drill job", func() {
 					},
 					BenchmarkFile: "the-benchmark.yml",
 					Options:       "--no-check-certificate --stats",
-					PodConfig: ksapi.PodConfigurationSpec{
-						PodLabels: map[string]string{"labels": "are", "still": "useful"},
-						PodScheduling: ksapi.PodSchedulingSpec{
-							Affinity: corev1.Affinity{
-								NodeAffinity: &corev1.NodeAffinity{
-									RequiredDuringSchedulingIgnoredDuringExecution: &corev1.NodeSelector{
-										NodeSelectorTerms: []corev1.NodeSelectorTerm{
-											{
-												MatchExpressions: []corev1.NodeSelectorRequirement{
-													{
-														Key:      "mutated",
-														Operator: corev1.NodeSelectorOperator(corev1.NodeSelectorOpIn),
-														Values:   []string{"nano-virus"},
-													},
-												},
-											},
-										},
-									},
-								},
-							},
-						},
-					},
 				},
 			}
 			configMap := corev1.ConfigMap{
@@ -75,22 +52,6 @@ var _ = Describe("drill job", func() {
 			}
 			job = NewJob(&cr, &configMap)
 		})
-
-		Context("with Image details specified", func() {
-			It("should match on Image.Name", func() {
-				Expect(job.Spec.Template.Spec.Containers[0].Image).To(
-					Equal(cr.Spec.Image.Name))
-			})
-			It("should match on Image.PullPolicy", func() {
-				Expect(job.Spec.Template.Spec.Containers[0].ImagePullPolicy).To(
-					Equal(corev1.PullPolicy(cr.Spec.Image.PullPolicy)))
-			})
-			It("should match on Image.PullSecret", func() {
-				Expect(job.Spec.Template.Spec.ImagePullSecrets[0].Name).To(
-					Equal(cr.Spec.Image.PullSecret))
-			})
-		})
-
 		Context("with command line args specified", func() {
 			It("should have the same args", func() {
 				Expect(job.Spec.Template.Spec.Containers[0].Args).To(
@@ -128,25 +89,6 @@ var _ = Describe("drill job", func() {
 				valid, err := IsCrValid(&invalidCr)
 				Expect(valid).To(BeFalse())
 				Expect(err).NotTo(BeNil())
-			})
-		})
-
-		Context("with podAffinity specified", func() {
-			It("should match with Affinity", func() {
-				Expect(job.Spec.Template.Spec.Affinity).To(
-					Equal(&cr.Spec.PodConfig.PodScheduling.Affinity))
-			})
-			It("should match with Tolerations", func() {
-				Expect(job.Spec.Template.Spec.Tolerations).To(
-					Equal(cr.Spec.PodConfig.PodScheduling.Tolerations))
-			})
-			It("should match with NodeSelector", func() {
-				Expect(job.Spec.Template.Spec.NodeSelector).To(
-					Equal(cr.Spec.PodConfig.PodScheduling.NodeSelector))
-			})
-			It("should match with NodeName", func() {
-				Expect(job.Spec.Template.Spec.NodeName).To(
-					Equal(cr.Spec.PodConfig.PodScheduling.NodeName))
 			})
 		})
 	})

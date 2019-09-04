@@ -23,7 +23,6 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	batchv1 "k8s.io/api/batch/v1"
-	corev1 "k8s.io/api/core/v1"
 
 	ksapi "github.com/xridge/kubestone/api/v1alpha1"
 )
@@ -34,72 +33,18 @@ var _ = Describe("Client Pod", func() {
 		var job *batchv1.Job
 
 		BeforeEach(func() {
-			tolerationSeconds := int64(17)
 			cr = ksapi.Iperf3{
 				Spec: ksapi.Iperf3Spec{
 					Image: ksapi.ImageSpec{
-						Name:       "foo",
-						PullPolicy: "Always",
-						PullSecret: "pull-secret",
+						Name: "foo",
 					},
-
 					ClientConfiguration: ksapi.Iperf3ConfigurationSpec{
 						CmdLineArgs: "--testing --things",
 						HostNetwork: true,
-						PodConfigurationSpec: ksapi.PodConfigurationSpec{
-							PodLabels: map[string]string{"labels": "are", "really": "useful"},
-							PodScheduling: ksapi.PodSchedulingSpec{
-								Affinity: corev1.Affinity{
-									NodeAffinity: &corev1.NodeAffinity{
-										RequiredDuringSchedulingIgnoredDuringExecution: &corev1.NodeSelector{
-											NodeSelectorTerms: []corev1.NodeSelectorTerm{
-												{
-													MatchExpressions: []corev1.NodeSelectorRequirement{
-														{
-															Key:      "mutated",
-															Operator: corev1.NodeSelectorOperator(corev1.NodeSelectorOpIn),
-															Values:   []string{"nano-virus"},
-														},
-													},
-												},
-											},
-										},
-									},
-								},
-								Tolerations: []corev1.Toleration{
-									{
-										Key:               "genetic-code",
-										Operator:          corev1.TolerationOperator(corev1.TolerationOpExists),
-										Value:             "distressed",
-										Effect:            corev1.TaintEffect(corev1.TaintEffectNoExecute),
-										TolerationSeconds: &tolerationSeconds,
-									},
-								},
-								NodeSelector: map[string]string{
-									"atomized": "spiral",
-								},
-								NodeName: "energy-spike-07",
-							},
-						},
 					},
 				},
 			}
 			job = NewClientJob(&cr)
-		})
-
-		Context("with Image details specified", func() {
-			It("should match on Image.Name", func() {
-				Expect(job.Spec.Template.Spec.Containers[0].Image).To(
-					Equal(cr.Spec.Image.Name))
-			})
-			It("should match on Image.PullPolicy", func() {
-				Expect(job.Spec.Template.Spec.Containers[0].ImagePullPolicy).To(
-					Equal(corev1.PullPolicy(cr.Spec.Image.PullPolicy)))
-			})
-			It("should match on Image.PullSecret", func() {
-				Expect(job.Spec.Template.Spec.ImagePullSecrets[0].Name).To(
-					Equal(cr.Spec.Image.PullSecret))
-			})
 		})
 
 		Context("with default settings", func() {
@@ -128,34 +73,6 @@ var _ = Describe("Client Pod", func() {
 			})
 		})
 
-		Context("with podLabels specified", func() {
-			It("should contain all podLabels", func() {
-				for k, v := range cr.Spec.ClientConfiguration.PodLabels {
-					Expect(job.Spec.Template.ObjectMeta.Labels).To(
-						HaveKeyWithValue(k, v))
-				}
-			})
-		})
-
-		Context("with podAffinity specified", func() {
-			It("should match with Affinity", func() {
-				Expect(job.Spec.Template.Spec.Affinity).To(
-					Equal(&cr.Spec.ClientConfiguration.PodScheduling.Affinity))
-			})
-			It("should match with Tolerations", func() {
-				Expect(job.Spec.Template.Spec.Tolerations).To(
-					Equal(cr.Spec.ClientConfiguration.PodScheduling.Tolerations))
-			})
-			It("should match with NodeSelector", func() {
-				Expect(job.Spec.Template.Spec.NodeSelector).To(
-					Equal(cr.Spec.ClientConfiguration.PodScheduling.NodeSelector))
-			})
-			It("should match with NodeName", func() {
-				Expect(job.Spec.Template.Spec.NodeName).To(
-					Equal(cr.Spec.ClientConfiguration.PodScheduling.NodeName))
-			})
-		})
-
 		Context("with HostNetwork specified", func() {
 			It("should match with HostNetwork", func() {
 				Expect(job.Spec.Template.Spec.HostNetwork).To(
@@ -173,6 +90,14 @@ var _ = Describe("Client Pod", func() {
 				service := NewServerService(&cr)
 				Expect(strings.Join(job.Spec.Template.Spec.Containers[0].Args, " ")).To(
 					ContainSubstring("--client " + service.ObjectMeta.Name))
+			})
+		})
+
+		Context("by default", func() {
+			defaultBackoffLimit := int32(6)
+			It("should retry 6 times", func() {
+				Expect(job.Spec.BackoffLimit).To(
+					Equal(&defaultBackoffLimit))
 			})
 		})
 	})

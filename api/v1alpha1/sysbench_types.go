@@ -28,7 +28,10 @@ type SysbenchSpec struct {
 	// Image defines the sysbench docker image used for the benchmark
 	Image ImageSpec `json:"image"`
 
-	PodConfigurationSpec `json:",inline"`
+	// PodConfig contains the configuration for the benchmark pod, including
+	// pod labels and scheduling policies (affinity, toleration, node selector...)
+	// +optional
+	PodConfig PodConfigurationSpec `json:"podConfig,inline"`
 
 	// Options is a list of zero or more command line options starting with '--'.
 	// +optional

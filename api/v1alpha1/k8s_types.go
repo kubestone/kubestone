@@ -45,7 +45,7 @@ type ImageSpec struct {
 type PodSchedulingSpec struct {
 	// Affinity is a group of affinity scheduling rules.
 	// +optional
-	Affinity corev1.Affinity `json:"affinity,omitempty"`
+	Affinity *corev1.Affinity `json:"affinity,omitempty"`
 
 	// If specified, the pod's tolerations.
 	// +optional
@@ -113,4 +113,9 @@ type PodConfigurationSpec struct {
 	// node the pod should be scheduled on
 	// +optional
 	PodScheduling PodSchedulingSpec `json:"podScheduling,omitempty"`
+
+	// Resources required by the benchmark pod container
+	// More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+	// +optional
+	Resources corev1.ResourceRequirements `json:"resources,omitempty"`
 }

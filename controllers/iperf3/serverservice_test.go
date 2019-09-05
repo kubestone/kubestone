@@ -29,53 +29,10 @@ var _ = Describe("Server Service", func() {
 		var service *corev1.Service
 
 		BeforeEach(func() {
-			tolerationSeconds := int64(17)
 			cr = ksapi.Iperf3{
 				Spec: ksapi.Iperf3Spec{
 					Image: ksapi.ImageSpec{
-						Name:       "foo",
-						PullPolicy: "Always",
-						PullSecret: "pull-secret",
-					},
-
-					ServerConfiguration: ksapi.Iperf3ConfigurationSpec{
-						CmdLineArgs: "--testing --things",
-						HostNetwork: true,
-						PodConfigurationSpec: ksapi.PodConfigurationSpec{
-							PodLabels: map[string]string{"labels": "are", "really": "useful"},
-							PodScheduling: ksapi.PodSchedulingSpec{
-								Affinity: corev1.Affinity{
-									NodeAffinity: &corev1.NodeAffinity{
-										RequiredDuringSchedulingIgnoredDuringExecution: &corev1.NodeSelector{
-											NodeSelectorTerms: []corev1.NodeSelectorTerm{
-												{
-													MatchExpressions: []corev1.NodeSelectorRequirement{
-														{
-															Key:      "mutated",
-															Operator: corev1.NodeSelectorOperator(corev1.NodeSelectorOpIn),
-															Values:   []string{"nano-virus"},
-														},
-													},
-												},
-											},
-										},
-									},
-								},
-								Tolerations: []corev1.Toleration{
-									{
-										Key:               "genetic-code",
-										Operator:          corev1.TolerationOperator(corev1.TolerationOpExists),
-										Value:             "distressed",
-										Effect:            corev1.TaintEffect(corev1.TaintEffectNoExecute),
-										TolerationSeconds: &tolerationSeconds,
-									},
-								},
-								NodeSelector: map[string]string{
-									"atomized": "spiral",
-								},
-								NodeName: "energy-spike-07",
-							},
-						},
+						Name: "foo",
 					},
 				},
 			}

@@ -19,7 +19,10 @@ package common
 import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+
+	batchv1 "k8s.io/api/batch/v1"
 	corev1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
@@ -30,6 +33,7 @@ var _ = Describe("perf job", func() {
 	var objectMeta metav1.ObjectMeta
 	var imageSpec perfv1alpha1.ImageSpec
 	var podConfig perfv1alpha1.PodConfigurationSpec
+	var job *batchv1.Job
 
 	BeforeEach(func() {
 		objectMeta = metav1.ObjectMeta{
@@ -45,7 +49,7 @@ var _ = Describe("perf job", func() {
 		podConfig = perfv1alpha1.PodConfigurationSpec{
 			PodLabels: map[string]string{"this is": "an awesome test"},
 			PodScheduling: perfv1alpha1.PodSchedulingSpec{
-				Affinity: corev1.Affinity{
+				Affinity: &corev1.Affinity{
 					NodeAffinity: &corev1.NodeAffinity{
 						RequiredDuringSchedulingIgnoredDuringExecution: &corev1.NodeSelector{
 							NodeSelectorTerms: []corev1.NodeSelectorTerm{
@@ -76,32 +80,47 @@ var _ = Describe("perf job", func() {
 				},
 				NodeName: "energy-spike-07",
 			},
+			Resources: corev1.ResourceRequirements{
+				Requests: corev1.ResourceList{
+					corev1.ResourceCPU:    resource.MustParse("500m"),
+					corev1.ResourceMemory: resource.MustParse("5Gi"),
+				},
+				Limits: corev1.ResourceList{
+					corev1.ResourceCPU:    resource.MustParse("1G"),
+					corev1.ResourceMemory: resource.MustParse("10Gi"),
+				},
+			},
 		}
+
+		job = NewPerfJob(objectMeta, "test-app", imageSpec, podConfig)
 	})
 
 	Describe("NewPerfJob", func() {
-		job := NewPerfJob(objectMeta, "test-app", imageSpec, podConfig)
 
-		It("should match on ObjectMeta.Name", func() {
-			Expect(job.ObjectMeta.Name).To(
-				Equal(objectMeta.Name))
-		})
-		It("should match on ObjectMeta.Namespace", func() {
-			Expect(job.ObjectMeta.Namespace).To(
-				Equal(objectMeta.Namespace))
+		Context("ObjectMeta", func() {
+			It("should match on Name", func() {
+				Expect(job.ObjectMeta.Name).To(
+					Equal(objectMeta.Name))
+			})
+			It("should match on Namespace", func() {
+				Expect(job.ObjectMeta.Namespace).To(
+					Equal(objectMeta.Namespace))
+			})
 		})
 
-		It("should match on Image.Name", func() {
-			Expect(job.Spec.Template.Spec.Containers[0].Image).To(
-				Equal(imageSpec.Name))
-		})
-		It("should match on Image.PullPolicy", func() {
-			Expect(job.Spec.Template.Spec.Containers[0].ImagePullPolicy).To(
-				Equal(corev1.PullPolicy(imageSpec.PullPolicy)))
-		})
-		It("should match on Image.PullSecret", func() {
-			Expect(job.Spec.Template.Spec.ImagePullSecrets[0].Name).To(
-				Equal(imageSpec.PullSecret))
+		Context("Image", func() {
+			It("should match on Name", func() {
+				Expect(job.Spec.Template.Spec.Containers[0].Image).To(
+					Equal(imageSpec.Name))
+			})
+			It("should match on PullPolicy", func() {
+				Expect(job.Spec.Template.Spec.Containers[0].ImagePullPolicy).To(
+					Equal(corev1.PullPolicy(imageSpec.PullPolicy)))
+			})
+			It("should match on PullSecret", func() {
+				Expect(job.Spec.Template.Spec.ImagePullSecrets[0].Name).To(
+					Equal(imageSpec.PullSecret))
+			})
 		})
 
 		It("should contain all podLabels", func() {
@@ -126,6 +145,25 @@ var _ = Describe("perf job", func() {
 		It("should match with NodeName", func() {
 			Expect(job.Spec.Template.Spec.NodeName).To(
 				Equal(podConfig.PodScheduling.NodeName))
+		})
+
+		Context("Resources", func() {
+			It("should request the given CPU", func() {
+				Expect(job.Spec.Template.Spec.Containers[0].Resources.Requests.Cpu()).To(
+					BeEquivalentTo(podConfig.Resources.Requests.Cpu()))
+			})
+			It("should request the given memory", func() {
+				Expect(job.Spec.Template.Spec.Containers[0].Resources.Requests.Memory()).To(
+					BeEquivalentTo(podConfig.Resources.Requests.Memory()))
+			})
+			It("should limit to the given CPU", func() {
+				Expect(job.Spec.Template.Spec.Containers[0].Resources.Limits.Cpu()).To(
+					BeEquivalentTo(podConfig.Resources.Limits.Cpu()))
+			})
+			It("should limit to the given memory", func() {
+				Expect(job.Spec.Template.Spec.Containers[0].Resources.Limits.Memory()).To(
+					BeEquivalentTo(podConfig.Resources.Limits.Memory()))
+			})
 		})
 	})
 })

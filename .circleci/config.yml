@@ -69,15 +69,8 @@ jobs:
           command: |
             make generate
             make manifests
-            # TODO: `make apidocs` generates the commit hash of the last commit.
-            # When creating a new pull request the commit id will change and we
-            # do not know it in advance!
-            commit="$(grep 'on git commit' ./docs/static/apidocs.html)"
-            sed -i -e "s|.*on git commit.*|$commit|g" ./docs/apidocs/template/pkg.tpl
             make apidocs
-            git checkout -- ./docs/apidocs/template/pkg.tpl
-            # Print generated file names which are different
-            echo "Non up-to-date files:"
+            echo "Non up-to-date generated files:"
             git diff --name-only --exit-code
             echo "--bai--"
 

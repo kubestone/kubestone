@@ -17,3 +17,6 @@ resources:
 - group: perf
   version: v1alpha1
   kind: Pgbench
+- group: perf
+  version: v1alpha1
+  kind: Ioping

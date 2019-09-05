@@ -185,8 +185,8 @@ var _ = Describe("Server Deployment", func() {
 					BeEquivalentTo(cr.Spec.ServerConfiguration.Resources.Limits.Cpu()))
 			})
 			It("should limit to the given memory", func() {
-				Expect(deployment.Spec.Template.Spec.Containers[0].Resources.Limits.Cpu()).To(
-					BeEquivalentTo(cr.Spec.ServerConfiguration.Resources.Limits.Cpu()))
+				Expect(deployment.Spec.Template.Spec.Containers[0].Resources.Limits.Memory()).To(
+					BeEquivalentTo(cr.Spec.ServerConfiguration.Resources.Limits.Memory()))
 			})
 		})
 	})

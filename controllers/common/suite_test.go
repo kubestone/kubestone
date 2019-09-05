@@ -25,5 +25,5 @@ import (
 
 func TestCommonController(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "Fio Common Suite")
+	RunSpecs(t, "Common Suite")
 }

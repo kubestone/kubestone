@@ -161,8 +161,8 @@ var _ = Describe("perf job", func() {
 					BeEquivalentTo(podConfig.Resources.Limits.Cpu()))
 			})
 			It("should limit to the given memory", func() {
-				Expect(job.Spec.Template.Spec.Containers[0].Resources.Limits.Cpu()).To(
-					BeEquivalentTo(podConfig.Resources.Limits.Cpu()))
+				Expect(job.Spec.Template.Spec.Containers[0].Resources.Limits.Memory()).To(
+					BeEquivalentTo(podConfig.Resources.Limits.Memory()))
 			})
 		})
 	})

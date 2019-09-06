@@ -28,18 +28,10 @@ import (
 )
 
 const (
-	fioCrBaseDir    = samplesDir + "/fio"
-	e2eNamespaceFio = "kubestone-e2e-fio"
+	fioCrBaseDir = samplesDir + "/fio"
 )
 
 var _ = Describe("end to end test", func() {
-	Context("preparing namespace", func() {
-		_, _, err := run("kubectl create namespace " + e2eNamespaceFio)
-		It("should succeed", func() {
-			Expect(err).To(BeNil())
-		})
-	})
-
 	fioCrDirs := []string{fioCrBaseDir + "/base"}
 	fioOverlayContents, err := ioutil.ReadDir(fioCrBaseDir + "/overlays")
 	if err != nil {
@@ -58,11 +50,11 @@ var _ = Describe("end to end test", func() {
 			crName := "fio-" + strings.ReplaceAll(dirName, "_", "-")
 
 			Context("when creating from cr", func() {
-				_, _, err := run(`bash -c "` +
-					"kustomize build " + fioCrDir + " | " +
-					"sed 's/name: fio-sample/name: " + crName + "/' | " +
-					"kubectl create -n " + e2eNamespaceFio + ` -f -"`)
 				It("should create fio-sample cr", func() {
+					_, _, err := run(`bash -c "` +
+						"kustomize build " + fioCrDir + " | " +
+						"sed 's/name: fio-sample/name: " + crName + "/' | " +
+						"kubectl create -n " + e2eNamespaceFio + ` -f -"`)
 					Expect(err).To(BeNil())
 				})
 			})

@@ -48,14 +48,6 @@ type SysbenchSpec struct {
 	Command string `json:"command,omitempty"`
 }
 
-// SysbenchStatus describes the current state of the benchmark
-type SysbenchStatus struct {
-	// Running shows the state of execution
-	Running bool `json:"running"`
-	// Completed shows the state of completion
-	Completed bool `json:"completed"`
-}
-
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 // +kubebuilder:printcolumn:name="Running",type="boolean",JSONPath=".status.running"
@@ -66,8 +58,8 @@ type Sysbench struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   SysbenchSpec   `json:"spec,omitempty"`
-	Status SysbenchStatus `json:"status,omitempty"`
+	Spec   SysbenchSpec    `json:"spec,omitempty"`
+	Status BenchmarkStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true

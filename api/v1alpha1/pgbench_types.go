@@ -20,25 +20,40 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// DrillSpec defines benchmark run for drill load tester
-// The benchmarkFile, and options is passed to drill as follows:
-// drill [OPTIONS] --benchmark <benchmarkFile>
-type DrillSpec struct {
-	// Image defines the drill docker image used for the benchmark
+// PostgresSpec contains the configuration parameters for the PostreSQL database
+type PostgresSpec struct {
+	// Host is the name of host to connect to
+	Host string `json:"host"`
+
+	// Port number to connect to at the server host
+	Port int `json:"port"`
+
+	// User is the PostgreSQL user name to connect as
+	User string `json:"user"`
+
+	// Password is to be used if the server demands password authentication
+	Password string `json:"password"`
+
+	// Database is name of the database
+	Database string `json:"database"`
+}
+
+// PgbenchSpec describes a pgbench benchmark job
+type PgbenchSpec struct {
+	// Image defines the docker image used for the benchmark
 	Image ImageSpec `json:"image"`
 
-	// BenchmarksVolume holds the content of benchmark files.
-	// The key of the map specifies the filename and the value is the content
-	// of the file. ConfigMap is created from the map which is mounted as
-	// benchmarks directory to the benchmark pod.
-	BenchmarksVolume map[string]string `json:"benchmarksVolume"`
+	// Postgres contains the configuration parameters for the PostgreSQL database
+	// that will run the benchmark
+	Postgres PostgresSpec `json:"postgres"`
 
-	// BenchmarkFile is the entry point file (passed to --benchmark) specified to drill.
-	BenchmarkFile string `json:"benchmarkFile"`
-
-	// Options are appended to the options parameter set of drill
+	// InitArgs contains the command line arguments passed to the init container
 	// +optional
-	Options string `json:"options,omitempty"`
+	InitArgs string `json:"initArgs,omitempty"`
+
+	// Args contains the command line arguments passed to the main pgbench container
+	// +optional
+	Args string `json:"args,omitempty"`
 
 	// PodConfig contains the configuration for the benchmark pod, including
 	// pod labels and scheduling policies (affinity, toleration, node selector...)
@@ -51,24 +66,24 @@ type DrillSpec struct {
 // +kubebuilder:printcolumn:name="Running",type="boolean",JSONPath=".status.running"
 // +kubebuilder:printcolumn:name="Completed",type="boolean",JSONPath=".status.completed"
 
-// Drill is the Schema for the drills API
-type Drill struct {
+// Pgbench is the Schema for the pgbenches API
+type Pgbench struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   DrillSpec       `json:"spec,omitempty"`
+	Spec   PgbenchSpec     `json:"spec,omitempty"`
 	Status BenchmarkStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 
-// DrillList contains a list of Drill
-type DrillList struct {
+// PgbenchList contains a list of Pgbench
+type PgbenchList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []Drill `json:"items"`
+	Items           []Pgbench `json:"items"`
 }
 
 func init() {
-	SchemeBuilder.Register(&Drill{}, &DrillList{})
+	SchemeBuilder.Register(&Pgbench{}, &PgbenchList{})
 }

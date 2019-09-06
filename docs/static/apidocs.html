@@ -10,6 +10,51 @@
 </p>
 Resource Types:
 <ul></ul>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.BenchmarkStatus">BenchmarkStatus
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.Drill">Drill</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.Fio">Fio</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3">Iperf3</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.Pgbench">Pgbench</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.Sysbench">Sysbench</a>)
+</p>
+<p>
+<p>BenchmarkStatus describes the current state of the benchmark</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>running</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+<p>Running shows the state of execution</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>completed</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+<p>Completed shows the state of completion</p>
+</td>
+</tr>
+</tbody>
+</table>
 <h3 id="perf.kubestone.xridge.io/v1alpha1.Drill">Drill
 </h3>
 <p>
@@ -122,8 +167,8 @@ pod labels and scheduling policies (affinity, toleration, node selector&hellip;)
 <td>
 <code>status</code></br>
 <em>
-<a href="#perf.kubestone.xridge.io/v1alpha1.DrillStatus">
-DrillStatus
+<a href="#perf.kubestone.xridge.io/v1alpha1.BenchmarkStatus">
+BenchmarkStatus
 </a>
 </em>
 </td>
@@ -214,47 +259,6 @@ PodConfigurationSpec
 <em>(Optional)</em>
 <p>PodConfig contains the configuration for the benchmark pod, including
 pod labels and scheduling policies (affinity, toleration, node selector&hellip;)</p>
-</td>
-</tr>
-</tbody>
-</table>
-<h3 id="perf.kubestone.xridge.io/v1alpha1.DrillStatus">DrillStatus
-</h3>
-<p>
-(<em>Appears on:</em>
-<a href="#perf.kubestone.xridge.io/v1alpha1.Drill">Drill</a>)
-</p>
-<p>
-<p>DrillStatus describes the current state of the benchmark</p>
-</p>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<code>running</code></br>
-<em>
-bool
-</em>
-</td>
-<td>
-<p>Running shows the state of execution</p>
-</td>
-</tr>
-<tr>
-<td>
-<code>completed</code></br>
-<em>
-bool
-</em>
-</td>
-<td>
-<p>Completed shows the state of completion</p>
 </td>
 </tr>
 </tbody>
@@ -390,8 +394,8 @@ fs performance will be measured</p>
 <td>
 <code>status</code></br>
 <em>
-<a href="#perf.kubestone.xridge.io/v1alpha1.FioStatus">
-FioStatus
+<a href="#perf.kubestone.xridge.io/v1alpha1.BenchmarkStatus">
+BenchmarkStatus
 </a>
 </em>
 </td>
@@ -503,47 +507,6 @@ fs performance will be measured</p>
 </tr>
 </tbody>
 </table>
-<h3 id="perf.kubestone.xridge.io/v1alpha1.FioStatus">FioStatus
-</h3>
-<p>
-(<em>Appears on:</em>
-<a href="#perf.kubestone.xridge.io/v1alpha1.Fio">Fio</a>)
-</p>
-<p>
-<p>FioStatus describes the current state of the benchmark</p>
-</p>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<code>running</code></br>
-<em>
-bool
-</em>
-</td>
-<td>
-<p>Running shows the state of execution</p>
-</td>
-</tr>
-<tr>
-<td>
-<code>completed</code></br>
-<em>
-bool
-</em>
-</td>
-<td>
-<p>Completed shows the state of completion</p>
-</td>
-</tr>
-</tbody>
-</table>
 <h3 id="perf.kubestone.xridge.io/v1alpha1.FioVolumeSpec">FioVolumeSpec
 </h3>
 <p>
@@ -601,6 +564,7 @@ point to the created PVC</p>
 <a href="#perf.kubestone.xridge.io/v1alpha1.DrillSpec">DrillSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3Spec">Iperf3Spec</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.PgbenchSpec">PgbenchSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.SysbenchSpec">SysbenchSpec</a>)
 </p>
 <p>
@@ -754,8 +718,8 @@ If enabled the &lsquo;&ndash;udp&rsquo; parameter is added to iperf command line
 <td>
 <code>status</code></br>
 <em>
-<a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3Status">
-Iperf3Status
+<a href="#perf.kubestone.xridge.io/v1alpha1.BenchmarkStatus">
+BenchmarkStatus
 </a>
 </em>
 </td>
@@ -900,47 +864,6 @@ If enabled the &lsquo;&ndash;udp&rsquo; parameter is added to iperf command line
 </tr>
 </tbody>
 </table>
-<h3 id="perf.kubestone.xridge.io/v1alpha1.Iperf3Status">Iperf3Status
-</h3>
-<p>
-(<em>Appears on:</em>
-<a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3">Iperf3</a>)
-</p>
-<p>
-<p>Iperf3Status describes the current state of the benchmark</p>
-</p>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<code>running</code></br>
-<em>
-bool
-</em>
-</td>
-<td>
-<p>Running shows the state of execution</p>
-</td>
-</tr>
-<tr>
-<td>
-<code>completed</code></br>
-<em>
-bool
-</em>
-</td>
-<td>
-<p>Completed shows the state of completion</p>
-</td>
-</tr>
-</tbody>
-</table>
 <h3 id="perf.kubestone.xridge.io/v1alpha1.PersistentVolumeAccessMode">PersistentVolumeAccessMode
 (<code>string</code> alias)</p></h3>
 <p>
@@ -1071,6 +994,214 @@ This is a beta feature.</p>
 <p>
 <p>PersistentVolumeSize defines the size of the PV</p>
 </p>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.Pgbench">Pgbench
+</h3>
+<p>
+<p>Pgbench is the Schema for the pgbenches API</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>metadata</code></br>
+<em>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#objectmeta-v1-meta">
+Kubernetes meta/v1.ObjectMeta
+</a>
+</em>
+</td>
+<td>
+Refer to the Kubernetes API documentation for the fields of the
+<code>metadata</code> field.
+</td>
+</tr>
+<tr>
+<td>
+<code>spec</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PgbenchSpec">
+PgbenchSpec
+</a>
+</em>
+</td>
+<td>
+<br/>
+<br/>
+<table>
+<tr>
+<td>
+<code>image</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.ImageSpec">
+ImageSpec
+</a>
+</em>
+</td>
+<td>
+<p>Image defines the docker image used for the benchmark</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>postgres</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PostgresSpec">
+PostgresSpec
+</a>
+</em>
+</td>
+<td>
+<p>Postgres contains the configuration parameters for the PostgreSQL database
+that will run the benchmark</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>initArgs</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>InitArgs contains the command line arguments passed to the init container</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>args</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Args contains the command line arguments passed to the main pgbench container</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>podConfig</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PodConfigurationSpec">
+PodConfigurationSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>PodConfig contains the configuration for the benchmark pod, including
+pod labels and scheduling policies (affinity, toleration, node selector&hellip;)</p>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<code>status</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.BenchmarkStatus">
+BenchmarkStatus
+</a>
+</em>
+</td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.PgbenchSpec">PgbenchSpec
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.Pgbench">Pgbench</a>)
+</p>
+<p>
+<p>PgbenchSpec describes a pgbench benchmark job</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>image</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.ImageSpec">
+ImageSpec
+</a>
+</em>
+</td>
+<td>
+<p>Image defines the docker image used for the benchmark</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>postgres</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PostgresSpec">
+PostgresSpec
+</a>
+</em>
+</td>
+<td>
+<p>Postgres contains the configuration parameters for the PostgreSQL database
+that will run the benchmark</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>initArgs</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>InitArgs contains the command line arguments passed to the init container</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>args</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Args contains the command line arguments passed to the main pgbench container</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>podConfig</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PodConfigurationSpec">
+PodConfigurationSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>PodConfig contains the configuration for the benchmark pod, including
+pod labels and scheduling policies (affinity, toleration, node selector&hellip;)</p>
+</td>
+</tr>
+</tbody>
+</table>
 <h3 id="perf.kubestone.xridge.io/v1alpha1.PodConfigurationSpec">PodConfigurationSpec
 </h3>
 <p>
@@ -1078,6 +1209,7 @@ This is a beta feature.</p>
 <a href="#perf.kubestone.xridge.io/v1alpha1.DrillSpec">DrillSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3ConfigurationSpec">Iperf3ConfigurationSpec</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.PgbenchSpec">PgbenchSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.SysbenchSpec">SysbenchSpec</a>)
 </p>
 <p>
@@ -1212,6 +1344,80 @@ requirements.</p>
 </tr>
 </tbody>
 </table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.PostgresSpec">PostgresSpec
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PgbenchSpec">PgbenchSpec</a>)
+</p>
+<p>
+<p>PostgresSpec contains the configuration parameters for the PostreSQL database</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>host</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<p>Host is the name of host to connect to</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>port</code></br>
+<em>
+int
+</em>
+</td>
+<td>
+<p>Port number to connect to at the server host</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>user</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<p>User is the PostgreSQL user name to connect as</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>password</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<p>Password is to be used if the server demands password authentication</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>database</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<p>Database is name of the database</p>
+</td>
+</tr>
+</tbody>
+</table>
 <h3 id="perf.kubestone.xridge.io/v1alpha1.PullPolicy">PullPolicy
 (<code>string</code> alias)</p></h3>
 <p>
@@ -1338,8 +1544,8 @@ on a particular test. Some tests also implement their own custom commands.</p>
 <td>
 <code>status</code></br>
 <em>
-<a href="#perf.kubestone.xridge.io/v1alpha1.SysbenchStatus">
-SysbenchStatus
+<a href="#perf.kubestone.xridge.io/v1alpha1.BenchmarkStatus">
+BenchmarkStatus
 </a>
 </em>
 </td>
@@ -1439,49 +1645,8 @@ on a particular test. Some tests also implement their own custom commands.</p>
 </tr>
 </tbody>
 </table>
-<h3 id="perf.kubestone.xridge.io/v1alpha1.SysbenchStatus">SysbenchStatus
-</h3>
-<p>
-(<em>Appears on:</em>
-<a href="#perf.kubestone.xridge.io/v1alpha1.Sysbench">Sysbench</a>)
-</p>
-<p>
-<p>SysbenchStatus describes the current state of the benchmark</p>
-</p>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<code>running</code></br>
-<em>
-bool
-</em>
-</td>
-<td>
-<p>Running shows the state of execution</p>
-</td>
-</tr>
-<tr>
-<td>
-<code>completed</code></br>
-<em>
-bool
-</em>
-</td>
-<td>
-<p>Completed shows the state of completion</p>
-</td>
-</tr>
-</tbody>
-</table>
 <hr/>
 <p><em>
 Generated with <code>gen-crd-api-reference-docs</code>
-on git commit <code>d423768</code>.
+on git commit <code>16c7aa5</code>.
 </em></p>

@@ -1,0 +1,14 @@
+apiVersion: perf.kubestone.xridge.io/v1alpha1
+kind: Pgbench
+metadata:
+  name: pgbench-sample
+spec:
+  image:
+    name: xridge/pgbench
+  postgres:
+    host: postgres
+    port: 5432
+    user: admin
+    password: admin
+    database: benchdb
+  initArgs: -s 5

@@ -25,51 +25,40 @@ import (
 )
 
 const (
-	drillSampleCR     = "../../config/samples/perf_v1alpha1_drill.yaml"
-	e2eNamespaceDrill = "kubestone-e2e-drill"
+	drillSampleCR = "../../config/samples/perf_v1alpha1_drill.yaml"
 )
 
 var _ = Describe("end to end test", func() {
-	Context("preparing namespace", func() {
-		_, _, err := run("kubectl create namespace " + e2eNamespaceDrill)
-		It("should succeed", func() {
+	Context("create from samples", func() {
+		It("should create drill-sample cr", func() {
+			_, _, err := run("kubectl create -n " + e2eNamespaceDrill + " -f " + drillSampleCR)
 			Expect(err).To(BeNil())
 		})
 	})
 
-	Describe("for drill", func() {
-		Context("creation from samples", func() {
-			_, _, err := run("kubectl create -n " + e2eNamespaceDrill + " -f " + drillSampleCR)
-			It("should create drill-sample cr", func() {
-				Expect(err).To(BeNil())
-			})
+	Context("created job", func() {
+		It("Should finish in a pre-defined time", func() {
+			timeout := 60
+			cr := &v1alpha1.Drill{}
+			namespacedName := types.NamespacedName{
+				Namespace: e2eNamespaceDrill,
+				Name:      "drill-sample",
+			}
+			Eventually(func() bool {
+				if err := client.Get(ctx, namespacedName, cr); err != nil {
+					Fail("Unable to get drill CR")
+				}
+				return (cr.Status.Running == false) && (cr.Status.Completed)
+			}, timeout).Should(BeTrue())
 		})
-
-		Context("created job", func() {
-			It("Should finish in a pre-defined time", func() {
-				timeout := 30
-				cr := &v1alpha1.Drill{}
-				// TODO: find the respective objects via the CR owner reference
-				namespacedName := types.NamespacedName{
-					Namespace: e2eNamespaceDrill,
-					Name:      "drill-sample",
-				}
-				Eventually(func() bool {
-					if err := client.Get(ctx, namespacedName, cr); err != nil {
-						Fail("Unable to get drill CR")
-					}
-					return (cr.Status.Running == false) && (cr.Status.Completed)
-				}, timeout).Should(BeTrue())
-			})
-			It("Should leave one successful job", func() {
-				job := &batchv1.Job{}
-				namespacedName := types.NamespacedName{
-					Namespace: e2eNamespaceDrill,
-					Name:      "drill-sample",
-				}
-				Expect(client.Get(ctx, namespacedName, job)).To(Succeed())
-				Expect(job.Status.Succeeded).To(Equal(int32(1)))
-			})
+		It("Should leave one successful job", func() {
+			job := &batchv1.Job{}
+			namespacedName := types.NamespacedName{
+				Namespace: e2eNamespaceDrill,
+				Name:      "drill-sample",
+			}
+			Expect(client.Get(ctx, namespacedName, job)).To(Succeed())
+			Expect(job.Status.Succeeded).To(Equal(int32(1)))
 		})
 	})
 })

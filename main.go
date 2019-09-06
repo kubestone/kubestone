@@ -32,6 +32,7 @@ import (
 	"github.com/xridge/kubestone/controllers/drill"
 	"github.com/xridge/kubestone/controllers/fio"
 	"github.com/xridge/kubestone/controllers/iperf3"
+	"github.com/xridge/kubestone/controllers/pgbench"
 	"github.com/xridge/kubestone/controllers/sysbench"
 	"github.com/xridge/kubestone/pkg/k8s"
 	// +kubebuilder:scaffold:imports
@@ -107,6 +108,13 @@ func main() {
 		Log: ctrl.Log.WithName("controllers").WithName("Drill"),
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "Drill")
+		os.Exit(1)
+	}
+	if err = (&pgbench.Reconciler{
+		K8S: k8sAccess,
+		Log: ctrl.Log.WithName("controllers").WithName("Pgbench"),
+	}).SetupWithManager(mgr); err != nil {
+		setupLog.Error(err, "unable to create controller", "controller", "Pgbench")
 		os.Exit(1)
 	}
 	// +kubebuilder:scaffold:builder

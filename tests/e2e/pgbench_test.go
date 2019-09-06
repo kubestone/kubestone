@@ -20,63 +20,57 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/xridge/kubestone/api/v1alpha1"
-	appsv1 "k8s.io/api/apps/v1"
 	batchv1 "k8s.io/api/batch/v1"
-	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/types"
 )
 
 const (
-	iperf3SampleCR = samplesDir + "/perf_v1alpha1_iperf3.yaml"
+	pgBenchSampleCR = samplesDir + "/perf_v1alpha1_pgbench.yaml"
 )
 
-var _ = Describe("iperf3 end to end test", func() {
-	Context("creation from samples", func() {
-		It("should create iperf3-sample cr", func() {
-			_, _, err := run("kubectl create -n " + e2eNamespaceIperf3 + " -f " + iperf3SampleCR)
+var _ = Describe("pgbench end to end test", func() {
+	Context("install postgresql", func() {
+		It("should succeed", func() {
+			_, _, err := run("kubectl create -f " + testConf + "/postgres.yaml -n " + e2eNamespacePgbench)
+			Expect(err).To(BeNil())
+
+			By("wait until postgres actually starts")
+			_, _, err = run("kubectl rollout status statefulset/postgres -n " + e2eNamespacePgbench)
+			Expect(err).To(BeNil())
+		})
+	})
+
+	Context("create from the example", func() {
+		It("should succeed", func() {
+			_, _, err := run("kubectl create -f " + pgBenchSampleCR + " -n " + e2eNamespacePgbench)
 			Expect(err).To(BeNil())
 		})
 	})
 
 	Context("created job", func() {
-		It("Should finish in a pre-defined time", func() {
-			timeout := 90
-			cr := &v1alpha1.Iperf3{}
+		It("should finish in a pre-defined time", func() {
+			timeout := 60
+			cr := &v1alpha1.Pgbench{}
 			namespacedName := types.NamespacedName{
-				Namespace: e2eNamespaceIperf3,
-				Name:      "iperf3-sample",
+				Namespace: e2eNamespacePgbench,
+				Name:      "pgbench-sample",
 			}
 			Eventually(func() bool {
 				if err := client.Get(ctx, namespacedName, cr); err != nil {
-					Fail("Unable to get iperf3 CR")
+					Fail("Unable to get pgbench CR")
 				}
 				return (cr.Status.Running == false) && (cr.Status.Completed)
 			}, timeout).Should(BeTrue())
 		})
-		It("Should leave a successful job", func() {
+
+		It("should leave a successful job", func() {
 			pod := &batchv1.Job{}
 			namespacedName := types.NamespacedName{
-				Namespace: e2eNamespaceIperf3,
-				Name:      "iperf3-sample-client",
+				Namespace: e2eNamespacePgbench,
+				Name:      "pgbench-sample",
 			}
 			Expect(client.Get(ctx, namespacedName, pod)).To(Succeed())
 			Expect(pod.Status.Succeeded).To(Equal(int32(1)))
-		})
-		It("Should not leave deployment", func() {
-			deployment := &appsv1.Deployment{}
-			namespacedName := types.NamespacedName{
-				Namespace: e2eNamespaceIperf3,
-				Name:      "iperf3-sample",
-			}
-			Expect(client.Get(ctx, namespacedName, deployment)).NotTo(Succeed())
-		})
-		It("Should not leave service", func() {
-			service := &corev1.Service{}
-			namespacedName := types.NamespacedName{
-				Namespace: e2eNamespaceIperf3,
-				Name:      "iperf3-sample",
-			}
-			Expect(client.Get(ctx, namespacedName, service)).NotTo(Succeed())
 		})
 	})
 })

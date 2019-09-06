@@ -4,7 +4,7 @@ apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
   creationTimestamp: null
-  name: drills.perf.kubestone.xridge.io
+  name: pgbenches.perf.kubestone.xridge.io
 spec:
   additionalPrinterColumns:
   - JSONPath: .status.running
@@ -15,14 +15,14 @@ spec:
     type: boolean
   group: perf.kubestone.xridge.io
   names:
-    kind: Drill
-    plural: drills
+    kind: Pgbench
+    plural: pgbenches
   scope: ""
   subresources:
     status: {}
   validation:
     openAPIV3Schema:
-      description: Drill is the Schema for the drills API
+      description: Pgbench is the Schema for the pgbenches API
       properties:
         apiVersion:
           description: 'APIVersion defines the versioned schema of this representation
@@ -37,24 +37,14 @@ spec:
         metadata:
           type: object
         spec:
-          description: 'DrillSpec defines benchmark run for drill load tester The
-            benchmarkFile, and options is passed to drill as follows: drill [OPTIONS]
-            --benchmark <benchmarkFile>'
+          description: PgbenchSpec describes a pgbench benchmark job
           properties:
-            benchmarkFile:
-              description: BenchmarkFile is the entry point file (passed to --benchmark)
-                specified to drill.
+            args:
+              description: Args contains the command line arguments passed to the
+                main pgbench container
               type: string
-            benchmarksVolume:
-              additionalProperties:
-                type: string
-              description: BenchmarksVolume holds the content of benchmark files.
-                The key of the map specifies the filename and the value is the content
-                of the file. ConfigMap is created from the map which is mounted as
-                benchmarks directory to the benchmark pod.
-              type: object
             image:
-              description: Image defines the drill docker image used for the benchmark
+              description: Image defines the docker image used for the benchmark
               properties:
                 name:
                   description: Name is the Docker Image location including the tag
@@ -75,8 +65,9 @@ spec:
               required:
               - name
               type: object
-            options:
-              description: Options are appended to the options parameter set of drill
+            initArgs:
+              description: InitArgs contains the command line arguments passed to
+                the init container
               type: string
             podConfig:
               description: PodConfig contains the configuration for the benchmark
@@ -795,10 +786,36 @@ spec:
                       type: object
                   type: object
               type: object
+            postgres:
+              description: Postgres contains the configuration parameters for the
+                PostgreSQL database that will run the benchmark
+              properties:
+                database:
+                  description: Database is name of the database
+                  type: string
+                host:
+                  description: Host is the name of host to connect to
+                  type: string
+                password:
+                  description: Password is to be used if the server demands password
+                    authentication
+                  type: string
+                port:
+                  description: Port number to connect to at the server host
+                  type: integer
+                user:
+                  description: User is the PostgreSQL user name to connect as
+                  type: string
+              required:
+              - database
+              - host
+              - password
+              - port
+              - user
+              type: object
           required:
-          - benchmarkFile
-          - benchmarksVolume
           - image
+          - postgres
           type: object
         status:
           description: BenchmarkStatus describes the current state of the benchmark

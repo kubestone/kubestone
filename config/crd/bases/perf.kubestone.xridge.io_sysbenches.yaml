@@ -765,7 +765,7 @@ spec:
           - testName
           type: object
         status:
-          description: SysbenchStatus describes the current state of the benchmark
+          description: BenchmarkStatus describes the current state of the benchmark
           properties:
             completed:
               description: Completed shows the state of completion

@@ -55,7 +55,6 @@ func NewJob(cr *perfv1alpha1.Pgbench) *batchv1.Job {
 	job := common.NewPerfJob(objectMeta, "pgbench", cr.Spec.Image, cr.Spec.PodConfig)
 	job.Spec.Template.Spec.InitContainers = append(
 		job.Spec.Template.Spec.InitContainers, initContainer)
-	job.Spec.Template.Spec.Containers[0].Command = []string{"pgbench"}
 	job.Spec.Template.Spec.Containers[0].Args = qsplit.ToStrings([]byte(cr.Spec.Args))
 	job.Spec.Template.Spec.Containers[0].Env = env
 	return job

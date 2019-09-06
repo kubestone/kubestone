@@ -4,7 +4,7 @@ metadata:
   name: pgbench-sample
 spec:
   image:
-    name: postgres:11.5-alpine
+    name: xridge/pgbench
   postgres:
     host: postgres
     port: 5432

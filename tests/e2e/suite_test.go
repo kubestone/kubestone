@@ -33,24 +33,51 @@ import (
 )
 
 const (
-	samplesDir = "../../config/samples/"
+	samplesDir = "../../config/samples"
+	testConf   = "./conf"
 )
+
+const (
+	e2eNamespaceDrill    = "kubestone-e2e-drill"
+	e2eNamespaceFio      = "kubestone-e2e-fio"
+	e2eNamespaceIperf3   = "kubestone-e2e-iperf3"
+	e2eNamespacePgbench  = "kubestone-e2e-pgbench"
+	e2eNamespaceSysbench = "kubestone-e2e-sysbench"
+)
+
+var e2eNamespaces = []string{
+	e2eNamespaceDrill,
+	e2eNamespaceFio,
+	e2eNamespaceIperf3,
+	e2eNamespacePgbench,
+	e2eNamespaceSysbench,
+}
 
 var restClientConfig = ctrl.GetConfigOrDie()
 var client ctrlclient.Client
 var ctx = context.Background()
 var scheme = runtime.NewScheme()
 
-func init() {
+var _ = BeforeSuite(func() {
 	_ = k8sscheme.AddToScheme(scheme)
 	_ = perfv1alpha1.AddToScheme(scheme)
 
 	var err error
 	client, err = ctrlclient.New(restClientConfig, ctrlclient.Options{Scheme: scheme})
 	if err != nil {
-		panic(err)
+		Fail(err.Error())
 	}
-}
+
+	for _, namespace := range e2eNamespaces {
+		run("kubectl create namespace " + namespace)
+	}
+})
+
+var _ = AfterSuite(func() {
+	for _, namespace := range e2eNamespaces {
+		run("kubectl delete namespace " + namespace)
+	}
+})
 
 func TestEndToEnd(t *testing.T) {
 	RegisterFailHandler(Fail)

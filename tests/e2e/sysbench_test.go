@@ -25,51 +25,40 @@ import (
 )
 
 const (
-	sysbenchSampleCR     = samplesDir + "/perf_v1alpha1_sysbench.yaml"
-	e2eNamespaceSysbench = "kubestone-e2e-sysbench"
+	sysbenchSampleCR = samplesDir + "/perf_v1alpha1_sysbench.yaml"
 )
 
-var _ = Describe("end to end test", func() {
-	Context("preparing namespace", func() {
-		_, _, err := run("kubectl create namespace " + e2eNamespaceSysbench)
-		It("should succeed", func() {
+var _ = Describe("sysbench end to end test", func() {
+	Context("creation from samples", func() {
+		It("should create sysbench-sample CR", func() {
+			_, _, err := run("kubectl create -n " + e2eNamespaceSysbench + " -f " + sysbenchSampleCR)
 			Expect(err).To(BeNil())
 		})
 	})
 
-	Describe("for sysbench", func() {
-		Context("creation from samples", func() {
-			_, _, err := run("kubectl create -n " + e2eNamespaceSysbench + " -f " + sysbenchSampleCR)
-			It("should create sysbench-sample CR", func() {
-				Expect(err).To(BeNil())
-			})
+	Context("created job", func() {
+		It("Should finish in a pre-defined time", func() {
+			timeout := 120
+			cr := &v1alpha1.Sysbench{}
+			namespacedName := types.NamespacedName{
+				Namespace: e2eNamespaceSysbench,
+				Name:      "sysbench-sample",
+			}
+			Eventually(func() bool {
+				if err := client.Get(ctx, namespacedName, cr); err != nil {
+					Fail("Unable to get sysbench CR")
+				}
+				return (cr.Status.Running == false) && (cr.Status.Completed)
+			}, timeout).Should(BeTrue())
 		})
-
-		Context("created job", func() {
-			It("Should finish in a pre-defined time", func() {
-				timeout := 120
-				cr := &v1alpha1.Sysbench{}
-				// TODO: find the respective objects via the CR owner reference
-				namespacedName := types.NamespacedName{
-					Namespace: e2eNamespaceSysbench,
-					Name:      "sysbench-sample",
-				}
-				Eventually(func() bool {
-					if err := client.Get(ctx, namespacedName, cr); err != nil {
-						Fail("Unable to get sysbench CR")
-					}
-					return (cr.Status.Running == false) && (cr.Status.Completed)
-				}, timeout).Should(BeTrue())
-			})
-			It("Should leave a successful job", func() {
-				job := &batchv1.Job{}
-				namespacedName := types.NamespacedName{
-					Namespace: e2eNamespaceSysbench,
-					Name:      "sysbench-sample",
-				}
-				Expect(client.Get(ctx, namespacedName, job)).To(Succeed())
-				Expect(job.Status.Succeeded).To(Equal(int32(1)))
-			})
+		It("Should leave a successful job", func() {
+			job := &batchv1.Job{}
+			namespacedName := types.NamespacedName{
+				Namespace: e2eNamespaceSysbench,
+				Name:      "sysbench-sample",
+			}
+			Expect(client.Get(ctx, namespacedName, job)).To(Succeed())
+			Expect(job.Status.Succeeded).To(Equal(int32(1)))
 		})
 	})
 })

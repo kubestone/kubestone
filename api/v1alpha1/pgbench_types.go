@@ -38,12 +38,12 @@ type PostgresSpec struct {
 	Database string `json:"database"`
 }
 
-// PgbenchSpec defines the desired state of Pgbench
+// PgbenchSpec describes a pgbench benchmark job
 type PgbenchSpec struct {
-	// Image defines the sysbench docker image used for the benchmark
+	// Image defines the docker image used for the benchmark
 	Image ImageSpec `json:"image"`
 
-	// Postgres contains the confiugraton parameters for the PostgreSQL database
+	// Postgres contains the configuration parameters for the PostgreSQL database
 	// that will run the benchmark
 	Postgres PostgresSpec `json:"postgres"`
 
@@ -59,12 +59,6 @@ type PgbenchSpec struct {
 	// pod labels and scheduling policies (affinity, toleration, node selector...)
 	// +optional
 	PodConfig PodConfigurationSpec `json:"podConfig,omitempty"`
-}
-
-// PgbenchStatus defines the observed state of Pgbench
-type PgbenchStatus struct {
-	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
 }
 
 // +kubebuilder:object:root=true

@@ -37,14 +37,14 @@ spec:
         metadata:
           type: object
         spec:
-          description: PgbenchSpec defines the desired state of Pgbench
+          description: PgbenchSpec describes a pgbench benchmark job
           properties:
             args:
               description: Args contains the command line arguments passed to the
                 main pgbench container
               type: string
             image:
-              description: Image defines the sysbench docker image used for the benchmark
+              description: Image defines the docker image used for the benchmark
               properties:
                 name:
                   description: Name is the Docker Image location including the tag
@@ -787,8 +787,8 @@ spec:
                   type: object
               type: object
             postgres:
-              description: Postgres contains the confiugraton parameters for the PostgreSQL
-                database that will run the benchmark
+              description: Postgres contains the configuration parameters for the
+                PostgreSQL database that will run the benchmark
               properties:
                 database:
                   description: Database is name of the database

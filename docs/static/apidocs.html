@@ -1044,7 +1044,7 @@ ImageSpec
 </em>
 </td>
 <td>
-<p>Image defines the sysbench docker image used for the benchmark</p>
+<p>Image defines the docker image used for the benchmark</p>
 </td>
 </tr>
 <tr>
@@ -1057,7 +1057,7 @@ PostgresSpec
 </em>
 </td>
 <td>
-<p>Postgres contains the confiugraton parameters for the PostgreSQL database
+<p>Postgres contains the configuration parameters for the PostgreSQL database
 that will run the benchmark</p>
 </td>
 </tr>
@@ -1124,7 +1124,7 @@ BenchmarkStatus
 <a href="#perf.kubestone.xridge.io/v1alpha1.Pgbench">Pgbench</a>)
 </p>
 <p>
-<p>PgbenchSpec defines the desired state of Pgbench</p>
+<p>PgbenchSpec describes a pgbench benchmark job</p>
 </p>
 <table>
 <thead>
@@ -1144,7 +1144,7 @@ ImageSpec
 </em>
 </td>
 <td>
-<p>Image defines the sysbench docker image used for the benchmark</p>
+<p>Image defines the docker image used for the benchmark</p>
 </td>
 </tr>
 <tr>
@@ -1157,7 +1157,7 @@ PostgresSpec
 </em>
 </td>
 <td>
-<p>Postgres contains the confiugraton parameters for the PostgreSQL database
+<p>Postgres contains the configuration parameters for the PostgreSQL database
 that will run the benchmark</p>
 </td>
 </tr>
@@ -1202,11 +1202,6 @@ pod labels and scheduling policies (affinity, toleration, node selector&hellip;)
 </tr>
 </tbody>
 </table>
-<h3 id="perf.kubestone.xridge.io/v1alpha1.PgbenchStatus">PgbenchStatus
-</h3>
-<p>
-<p>PgbenchStatus defines the observed state of Pgbench</p>
-</p>
 <h3 id="perf.kubestone.xridge.io/v1alpha1.PodConfigurationSpec">PodConfigurationSpec
 </h3>
 <p>
@@ -1653,5 +1648,5 @@ on a particular test. Some tests also implement their own custom commands.</p>
 <hr/>
 <p><em>
 Generated with <code>gen-crd-api-reference-docs</code>
-on git commit <code>4f29e8e</code>.
+on git commit <code>16c7aa5</code>.
 </em></p>

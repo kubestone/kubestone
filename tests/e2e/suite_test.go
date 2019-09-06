@@ -69,13 +69,19 @@ var _ = BeforeSuite(func() {
 	}
 
 	for _, namespace := range e2eNamespaces {
-		run("kubectl create namespace " + namespace)
+		_, _, err = run("kubectl create namespace " + namespace)
+		if err != nil {
+			Fail(err.Error())
+		}
 	}
 })
 
 var _ = AfterSuite(func() {
 	for _, namespace := range e2eNamespaces {
-		run("kubectl delete namespace " + namespace)
+		_, _, err := run("kubectl delete namespace " + namespace)
+		if err != nil {
+			Fail(err.Error())
+		}
 	}
 })
 

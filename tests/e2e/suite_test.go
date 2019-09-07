@@ -78,6 +78,10 @@ var _ = BeforeSuite(func() {
 
 var _ = AfterSuite(func() {
 	for _, namespace := range e2eNamespaces {
+		_, _, err := run("kubectl get all --namespace " + namespace)
+		if err != nil {
+			Fail(err.Error())
+		}
 		_, _, err := run("kubectl delete namespace " + namespace)
 		if err != nil {
 			Fail(err.Error())

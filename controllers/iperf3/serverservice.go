@@ -32,8 +32,8 @@ func serverServiceName(cr *perfv1alpha1.Iperf3) string {
 // from the Iperf3 Benchmark Definition
 func NewServerService(cr *perfv1alpha1.Iperf3) *corev1.Service {
 	labels := map[string]string{
-		"app":               "iperf3",
-		"kubestone-cr-name": cr.Name,
+		"kubestone.xridge.io/app":     "iperf3",
+		"kubestone.xridge.io/cr-name": cr.Name,
 	}
 	protocol := corev1.Protocol(corev1.ProtocolTCP)
 	if cr.Spec.UDP {

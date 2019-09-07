@@ -31,8 +31,8 @@ func NewPerfJob(objectMeta metav1.ObjectMeta, app string, imageSpec perfv1alpha1
 	backoffLimit := int32(0)
 
 	labels := map[string]string{
-		"app":               app,
-		"kubestone-cr-name": objectMeta.Name,
+		"kubestone.xridge.io/app":     app,
+		"kubestone.xridge.io/cr-name": objectMeta.Name,
 	}
 	for key, value := range podConfig.PodLabels {
 		labels[key] = value

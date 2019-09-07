@@ -45,8 +45,8 @@ func NewServerDeployment(cr *perfv1alpha1.Iperf3) *appsv1.Deployment {
 	replicas := int32(1)
 
 	labels := map[string]string{
-		"app":               "iperf3",
-		"kubestone-cr-name": cr.Name,
+		"kubestone.xridge.io/app":     "iperf3",
+		"kubestone.xridge.io/cr-name": cr.Name,
 	}
 	// Let's be nice and don't mutate CRs label field
 	for k, v := range cr.Spec.ServerConfiguration.PodLabels {

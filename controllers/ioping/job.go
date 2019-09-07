@@ -33,10 +33,6 @@ func NewJob(cr *perfv1alpha1.Ioping) *batchv1.Job {
 		Namespace: cr.Namespace,
 	}
 
-	cmdLineArgs := []string{}
-	cmdLineArgs = append(cmdLineArgs,
-		qsplit.ToStrings([]byte(cr.Spec.CmdLineArgs))...)
-
 	volumes := []corev1.Volume{}
 	volumeMounts := []corev1.VolumeMount{}
 	if cr.Spec.Volume != nil {
@@ -56,6 +52,9 @@ func NewJob(cr *perfv1alpha1.Ioping) *batchv1.Job {
 			Name: "data", MountPath: "/data",
 		})
 	}
+
+	cmdLineArgs := qsplit.ToStrings([]byte(cr.Spec.CmdLineArgs))
+	cmdLineArgs = append(cmdLineArgs, "/data") // destination
 
 	job := common.NewPerfJob(objectMeta, "ioping", cr.Spec.Image, cr.Spec.PodConfig)
 	job.Spec.Template.Spec.Volumes = volumes

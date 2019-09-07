@@ -17,6 +17,7 @@ limitations under the License.
 package e2e
 
 import (
+	"log"
 	"testing"
 
 	"context"
@@ -80,10 +81,12 @@ var _ = BeforeSuite(func() {
 
 var _ = AfterSuite(func() {
 	for _, namespace := range e2eNamespaces {
-		_, _, err := run("kubectl get all --namespace " + namespace)
+		stdout, _, err := run("kubectl get all --namespace " + namespace)
 		if err != nil {
 			Fail(err.Error())
 		}
+		log.Printf("objects in %s namespace:\n%s\n", namespace, stdout)
+
 		_, _, err = run("kubectl delete namespace " + namespace)
 		if err != nil {
 			Fail(err.Error())

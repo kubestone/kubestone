@@ -31,7 +31,7 @@ const (
 var _ = Describe("ioping end to end test", func() {
 	Context("running benchmark using sample CR", func() {
 		It("should succeed", func() {
-			_, _, err := run("kubectl create -n " + e2eNamespaceIperf3 + " -f " + iopingSampleCR)
+			_, _, err := run("kubectl create -n " + e2eNamespaceIoping + " -f " + iopingSampleCR)
 			Expect(err).To(BeNil())
 		})
 	})

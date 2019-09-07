@@ -24,6 +24,10 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 )
 
+const (
+	iopingSampleCR = "../../config/samples/perf_v1alpha1_ioping.yaml"
+)
+
 var _ = Describe("ioping end to end test", func() {
 	Context("running benchmark using sample CR", func() {
 		It("should succeed", func() {

@@ -17,24 +17,8 @@ limitations under the License.
 package v1alpha1
 
 import (
-	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
-
-// IopingVolumeSpec contains the configuration for the volume that the ioping job
-// will use for benchmarking
-// TODO: Factor VolumeSpec into a common one
-type IopingVolumeSpec struct {
-	// VolumeSource represents the source of the volume, e.g. an existing
-	// PVC, host path, git repo, etc.
-	VolumeSource corev1.VolumeSource `json:"volumeSource,omitempty"`
-
-	// PersistentVolumeClaim describes the persistent volume claim that will be
-	// created and used by the pod. This field *overrides* the VolumeSource to
-	// point to the created PVC
-	// +optional
-	PersistentVolumeClaim *PersistentVolumeClaimSpec `json:"persistentVolumeClaim,omitempty"`
-}
 
 // IopingSpec defines the desired state of Ioping
 type IopingSpec struct {
@@ -54,15 +38,7 @@ type IopingSpec struct {
 	// run on. If missing, no volume will attached to the job and Docker's layered
 	// fs performance will be measured
 	// +optional
-	Volume *IopingVolumeSpec `json:"volume,omitempty"`
-}
-
-// IopingStatus describes the current state of the benchmark
-type IopingStatus struct {
-	// Running shows the state of execution
-	Running bool `json:"running"`
-	// Completed shows the state of completion
-	Completed bool `json:"completed"`
+	Volume *VolumeSpec `json:"volume,omitempty"`
 }
 
 // +kubebuilder:object:root=true
@@ -75,8 +51,8 @@ type Ioping struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   IopingSpec   `json:"spec,omitempty"`
-	Status IopingStatus `json:"status,omitempty"`
+	Spec   IopingSpec      `json:"spec,omitempty"`
+	Status BenchmarkStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true

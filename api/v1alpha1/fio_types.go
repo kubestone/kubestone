@@ -17,23 +17,8 @@ limitations under the License.
 package v1alpha1
 
 import (
-	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
-
-// FioVolumeSpec contains the configuration for the volume that the fio job
-// will use for benchmarking
-type FioVolumeSpec struct {
-	// VolumeSource represents the source of the volume, e.g. an existing
-	// PVC, host path, git repo, etc.
-	VolumeSource corev1.VolumeSource `json:"volumeSource,omitempty"`
-
-	// PersistentVolumeClaim describes the persistent volume claim that will be
-	// created and used by the pod. This field *overrides* the VolumeSource to
-	// point to the created PVC
-	// +optional
-	PersistentVolumeClaim *PersistentVolumeClaimSpec `json:"persistentVolumeClaim,omitempty"`
-}
 
 // FioSpec defines the desired state of Fio
 type FioSpec struct {
@@ -65,7 +50,7 @@ type FioSpec struct {
 	// run on. If missing, no volume will attached to the job and Docker's layered
 	// fs performance will be measured
 	// +optional
-	Volume *FioVolumeSpec `json:"volume,omitempty"`
+	Volume *VolumeSpec `json:"volume,omitempty"`
 }
 
 // +kubebuilder:object:root=true

@@ -69,7 +69,7 @@ var _ = Describe("fio job", func() {
 						PullPolicy: "IfNotPresent",
 					},
 					BuiltinJobFiles: []string{"/jobs/rand-read.fio"},
-					Volume: &perfv1alpha1.FioVolumeSpec{
+					Volume: &perfv1alpha1.VolumeSpec{
 						VolumeSource: corev1.VolumeSource{
 							PersistentVolumeClaim: &corev1.PersistentVolumeClaimVolumeSource{
 								ClaimName: pvcName,
@@ -118,7 +118,7 @@ var _ = Describe("fio job", func() {
 						Name:       "xridge/fio:test",
 						PullPolicy: "IfNotPresent",
 					},
-					Volume: &perfv1alpha1.FioVolumeSpec{},
+					Volume: &perfv1alpha1.VolumeSpec{},
 				},
 			}
 			job = NewJob(&cr)

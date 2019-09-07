@@ -103,6 +103,18 @@ type PersistentVolumeClaimSpec struct {
 	VolumeMode *PersistentVolumeMode `json:"volumeMode,omitempty"`
 }
 
+type VolumeSpec struct {
+	// VolumeSource represents the source of the volume, e.g. an existing
+	// PVC, host path, git repo, etc.
+	VolumeSource corev1.VolumeSource `json:"volumeSource,omitempty"`
+
+	// PersistentVolumeClaim describes the persistent volume claim that will be
+	// created and used by the pod. This field *overrides* the VolumeSource to
+	// point to the created PVC
+	// +optional
+	PersistentVolumeClaim *PersistentVolumeClaimSpec `json:"persistentVolumeClaim,omitempty"`
+}
+
 // PodConfigurationSpec contains the configuration for the benchmark pods
 type PodConfigurationSpec struct {
 	// PodLabels are added to the pod as labels.

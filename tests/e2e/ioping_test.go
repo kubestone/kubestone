@@ -21,11 +21,6 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-const (
-	iopingCrBaseDir    = samplesDir + "/ioping"
-	e2eNamespaceIoping = "kubestone-e2e-ioping"
-)
-
 var _ = Describe("end to end test", func() {
 	// TODO: Add tests here
 	Context("Finalize this", func() {

@@ -24,6 +24,7 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 
 	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
+	"github.com/xridge/kubestone/controllers/common"
 	"github.com/xridge/kubestone/pkg/k8s"
 )
 
@@ -64,7 +65,7 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 	}
 
 	if cr.Spec.Volume != nil && cr.Spec.Volume.PersistentVolumeClaim != nil {
-		pvc, err := NewPersistentVolumeClaim(&cr)
+		pvc, err := common.NewPersistentVolumeClaim(cr.Spec.Volume, cr.Name, cr.Namespace)
 		if err != nil {
 			return ctrl.Result{}, err
 		}

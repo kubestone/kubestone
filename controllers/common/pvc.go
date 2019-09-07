@@ -14,25 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package fio
+package common
 
 import (
+	"github.com/xridge/kubestone/api/v1alpha1"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-
-	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
 )
 
-// NewPersistentVolumeClaim creates a PVC
-func NewPersistentVolumeClaim(cr *perfv1alpha1.Fio) (*corev1.PersistentVolumeClaim, error) {
-	accessModes := make([]corev1.PersistentVolumeAccessMode, len(cr.Spec.Volume.PersistentVolumeClaim.AccessModes))
-	for i, accessMode := range cr.Spec.Volume.PersistentVolumeClaim.AccessModes {
+// NewPersistentVolumeClaim creates a PVC based on the provided volumeSpec, name and namespace
+func NewPersistentVolumeClaim(volumeSpec *v1alpha1.VolumeSpec, name, namespace string) (*corev1.PersistentVolumeClaim, error) {
+	accessModes := make([]corev1.PersistentVolumeAccessMode, len(volumeSpec.PersistentVolumeClaim.AccessModes))
+	for i, accessMode := range volumeSpec.PersistentVolumeClaim.AccessModes {
 		accessModes[i] = corev1.PersistentVolumeAccessMode(accessMode)
 	}
 
 	requests := make(corev1.ResourceList, 1)
-	quantity, err := resource.ParseQuantity(string(cr.Spec.Volume.PersistentVolumeClaim.Size))
+	quantity, err := resource.ParseQuantity(string(volumeSpec.PersistentVolumeClaim.Size))
 	if err != nil {
 		return nil, err
 	}
@@ -40,22 +39,22 @@ func NewPersistentVolumeClaim(cr *perfv1alpha1.Fio) (*corev1.PersistentVolumeCla
 
 	pvc := corev1.PersistentVolumeClaim{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      cr.Name,
-			Namespace: cr.Namespace,
+			Name:      name,
+			Namespace: namespace,
 		},
 		Spec: corev1.PersistentVolumeClaimSpec{
 			AccessModes:      accessModes,
-			Selector:         cr.Spec.Volume.PersistentVolumeClaim.Selector,
-			VolumeName:       cr.Spec.Volume.PersistentVolumeClaim.VolumeName,
-			StorageClassName: cr.Spec.Volume.PersistentVolumeClaim.StorageClassName,
+			Selector:         volumeSpec.PersistentVolumeClaim.Selector,
+			VolumeName:       volumeSpec.PersistentVolumeClaim.VolumeName,
+			StorageClassName: volumeSpec.PersistentVolumeClaim.StorageClassName,
 			Resources: corev1.ResourceRequirements{
 				Requests: requests,
 			},
 		},
 	}
 
-	if cr.Spec.Volume.PersistentVolumeClaim.VolumeMode != nil {
-		volumeMode := corev1.PersistentVolumeMode(*cr.Spec.Volume.PersistentVolumeClaim.VolumeMode)
+	if volumeSpec.PersistentVolumeClaim.VolumeMode != nil {
+		volumeMode := corev1.PersistentVolumeMode(*volumeSpec.PersistentVolumeClaim.VolumeMode)
 		pvc.Spec.VolumeMode = &volumeMode
 	}
 

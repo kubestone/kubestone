@@ -52,8 +52,7 @@ var e2eNamespaces = []string{
 	e2eNamespaceIoping,
 	e2eNamespaceIperf3,
 	e2eNamespacePgbench,
-	e2eNamespaceSysbench,
-	e2eNamespaceIoping,
+	e2eNamespaceSysbench
 }
 
 var restClientConfig = ctrl.GetConfigOrDie()

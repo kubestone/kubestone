@@ -20,7 +20,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// IopingSpec defines the desired state of Ioping
+// IopingSpec defines the ioping benchmark run
 type IopingSpec struct {
 	// Image defines the ioping docker image used for the benchmark
 	Image ImageSpec `json:"image"`

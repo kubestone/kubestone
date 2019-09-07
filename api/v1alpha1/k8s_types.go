@@ -103,6 +103,7 @@ type PersistentVolumeClaimSpec struct {
 	VolumeMode *PersistentVolumeMode `json:"volumeMode,omitempty"`
 }
 
+// VolumeSpec contains the Persistent Volume specification for a benchmark run
 type VolumeSpec struct {
 	// VolumeSource represents the source of the volume, e.g. an existing
 	// PVC, host path, git repo, etc.

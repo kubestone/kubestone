@@ -8,4 +8,4 @@ spec:
     pullPolicy: IfNotPresent
     # pullSecret: null
 
-  cmdLineArgs: -p 3
+  cmdLineArgs: -i 10

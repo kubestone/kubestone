@@ -25,9 +25,9 @@ type IopingSpec struct {
 	// Image defines the ioping docker image used for the benchmark
 	Image ImageSpec `json:"image"`
 
-	// CmdLineArgs are appended to the predefined ioping parameters
+	// Args are appended to the predefined ioping parameters
 	// +optional
-	CmdLineArgs string `json:"cmdLineArgs,omitempty"`
+	Args string `json:"args,omitempty"`
 
 	// PodConfig contains the configuration for the benchmark pod, including
 	// pod labels and scheduling policies (affinity, toleration, node selector...)

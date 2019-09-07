@@ -19,13 +19,42 @@ package e2e
 import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	"github.com/xridge/kubestone/api/v1alpha1"
+	batchv1 "k8s.io/api/batch/v1"
+	"k8s.io/apimachinery/pkg/types"
 )
 
-var _ = Describe("end to end test", func() {
-	// TODO: Add tests here
-	Context("Finalize this", func() {
+var _ = Describe("ioping end to end test", func() {
+	Context("running benchmark using sample CR", func() {
 		It("should succeed", func() {
-			Expect(true).To(BeNil())
+			_, _, err := run("kubectl create -n " + e2eNamespaceIperf3 + " -f " + iopingSampleCR)
+			Expect(err).To(BeNil())
+		})
+	})
+
+	Context("created job", func() {
+		It("Should finish in a pre-defined time", func() {
+			timeout := 60
+			cr := &v1alpha1.Ioping{}
+			namespacedName := types.NamespacedName{
+				Namespace: e2eNamespaceIoping,
+				Name:      "ioping-sample",
+			}
+			Eventually(func() bool {
+				if err := client.Get(ctx, namespacedName, cr); err != nil {
+					Fail("Unable to get ioping CR")
+				}
+				return (cr.Status.Running == false) && (cr.Status.Completed)
+			}, timeout).Should(BeTrue())
+		})
+		It("Should leave one successful job", func() {
+			job := &batchv1.Job{}
+			namespacedName := types.NamespacedName{
+				Namespace: e2eNamespaceIoping,
+				Name:      "ioping-sample",
+			}
+			Expect(client.Get(ctx, namespacedName, job)).To(Succeed())
+			Expect(job.Status.Succeeded).To(Equal(int32(1)))
 		})
 	})
 

@@ -40,6 +40,7 @@ const (
 const (
 	e2eNamespaceDrill    = "kubestone-e2e-drill"
 	e2eNamespaceFio      = "kubestone-e2e-fio"
+	e2eNamespaceIoping   = "kubestone-e2e-ioping"
 	e2eNamespaceIperf3   = "kubestone-e2e-iperf3"
 	e2eNamespacePgbench  = "kubestone-e2e-pgbench"
 	e2eNamespaceSysbench = "kubestone-e2e-sysbench"
@@ -48,9 +49,11 @@ const (
 var e2eNamespaces = []string{
 	e2eNamespaceDrill,
 	e2eNamespaceFio,
+	e2eNamespaceIoping,
 	e2eNamespaceIperf3,
 	e2eNamespacePgbench,
 	e2eNamespaceSysbench,
+	e2eNamespaceIoping,
 }
 
 var restClientConfig = ctrl.GetConfigOrDie()

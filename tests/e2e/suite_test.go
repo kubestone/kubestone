@@ -85,7 +85,7 @@ var _ = AfterSuite(func() {
 		if err != nil {
 			Fail(err.Error())
 		}
-		_, _, err := run("kubectl delete namespace " + namespace)
+		_, _, err = run("kubectl delete namespace " + namespace)
 		if err != nil {
 			Fail(err.Error())
 		}

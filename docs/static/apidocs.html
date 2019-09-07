@@ -16,6 +16,7 @@ Resource Types:
 (<em>Appears on:</em>
 <a href="#perf.kubestone.xridge.io/v1alpha1.Drill">Drill</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.Fio">Fio</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.Ioping">Ioping</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3">Iperf3</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.Pgbench">Pgbench</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.Sysbench">Sysbench</a>)
@@ -375,8 +376,8 @@ pod labels and scheduling policies (affinity, toleration, node selector&hellip;)
 <td>
 <code>volume</code></br>
 <em>
-<a href="#perf.kubestone.xridge.io/v1alpha1.FioVolumeSpec">
-FioVolumeSpec
+<a href="#perf.kubestone.xridge.io/v1alpha1.VolumeSpec">
+VolumeSpec
 </a>
 </em>
 </td>
@@ -493,8 +494,8 @@ pod labels and scheduling policies (affinity, toleration, node selector&hellip;)
 <td>
 <code>volume</code></br>
 <em>
-<a href="#perf.kubestone.xridge.io/v1alpha1.FioVolumeSpec">
-FioVolumeSpec
+<a href="#perf.kubestone.xridge.io/v1alpha1.VolumeSpec">
+VolumeSpec
 </a>
 </em>
 </td>
@@ -507,62 +508,13 @@ fs performance will be measured</p>
 </tr>
 </tbody>
 </table>
-<h3 id="perf.kubestone.xridge.io/v1alpha1.FioVolumeSpec">FioVolumeSpec
-</h3>
-<p>
-(<em>Appears on:</em>
-<a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>)
-</p>
-<p>
-<p>FioVolumeSpec contains the configuration for the volume that the fio job
-will use for benchmarking</p>
-</p>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<code>volumeSource</code></br>
-<em>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#volumesource-v1-core">
-Kubernetes core/v1.VolumeSource
-</a>
-</em>
-</td>
-<td>
-<p>VolumeSource represents the source of the volume, e.g. an existing
-PVC, host path, git repo, etc.</p>
-</td>
-</tr>
-<tr>
-<td>
-<code>persistentVolumeClaim</code></br>
-<em>
-<a href="#perf.kubestone.xridge.io/v1alpha1.PersistentVolumeClaimSpec">
-PersistentVolumeClaimSpec
-</a>
-</em>
-</td>
-<td>
-<em>(Optional)</em>
-<p>PersistentVolumeClaim describes the persistent volume claim that will be
-created and used by the pod. This field <em>overrides</em> the VolumeSource to
-point to the created PVC</p>
-</td>
-</tr>
-</tbody>
-</table>
 <h3 id="perf.kubestone.xridge.io/v1alpha1.ImageSpec">ImageSpec
 </h3>
 <p>
 (<em>Appears on:</em>
 <a href="#perf.kubestone.xridge.io/v1alpha1.DrillSpec">DrillSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.IopingSpec">IopingSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3Spec">Iperf3Spec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.PgbenchSpec">PgbenchSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.SysbenchSpec">SysbenchSpec</a>)
@@ -613,6 +565,194 @@ string
 <em>(Optional)</em>
 <p>PullSecret is an optional list of references to secrets
 in the same namespace to use for pulling any of the images</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.Ioping">Ioping
+</h3>
+<p>
+<p>Ioping is the Schema for the iopings API</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>metadata</code></br>
+<em>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#objectmeta-v1-meta">
+Kubernetes meta/v1.ObjectMeta
+</a>
+</em>
+</td>
+<td>
+Refer to the Kubernetes API documentation for the fields of the
+<code>metadata</code> field.
+</td>
+</tr>
+<tr>
+<td>
+<code>spec</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.IopingSpec">
+IopingSpec
+</a>
+</em>
+</td>
+<td>
+<br/>
+<br/>
+<table>
+<tr>
+<td>
+<code>image</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.ImageSpec">
+ImageSpec
+</a>
+</em>
+</td>
+<td>
+<p>Image defines the ioping docker image used for the benchmark</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>cmdLineArgs</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>CmdLineArgs are appended to the predefined ioping parameters</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>podConfig</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PodConfigurationSpec">
+PodConfigurationSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>PodConfig contains the configuration for the benchmark pod, including
+pod labels and scheduling policies (affinity, toleration, node selector&hellip;)</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>volume</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.VolumeSpec">
+VolumeSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Volume contains the configuration for the volume that the ioping job should
+run on. If missing, no volume will attached to the job and Docker&rsquo;s layered
+fs performance will be measured</p>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<code>status</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.BenchmarkStatus">
+BenchmarkStatus
+</a>
+</em>
+</td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.IopingSpec">IopingSpec
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.Ioping">Ioping</a>)
+</p>
+<p>
+<p>IopingSpec defines the desired state of Ioping</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>image</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.ImageSpec">
+ImageSpec
+</a>
+</em>
+</td>
+<td>
+<p>Image defines the ioping docker image used for the benchmark</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>cmdLineArgs</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>CmdLineArgs are appended to the predefined ioping parameters</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>podConfig</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PodConfigurationSpec">
+PodConfigurationSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>PodConfig contains the configuration for the benchmark pod, including
+pod labels and scheduling policies (affinity, toleration, node selector&hellip;)</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>volume</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.VolumeSpec">
+VolumeSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Volume contains the configuration for the volume that the ioping job should
+run on. If missing, no volume will attached to the job and Docker&rsquo;s layered
+fs performance will be measured</p>
 </td>
 </tr>
 </tbody>
@@ -877,7 +1017,7 @@ If enabled the &lsquo;&ndash;udp&rsquo; parameter is added to iperf command line
 </h3>
 <p>
 (<em>Appears on:</em>
-<a href="#perf.kubestone.xridge.io/v1alpha1.FioVolumeSpec">FioVolumeSpec</a>)
+<a href="#perf.kubestone.xridge.io/v1alpha1.VolumeSpec">VolumeSpec</a>)
 </p>
 <p>
 <p>PersistentVolumeClaimSpec describes the common attributes of storage devices
@@ -1208,6 +1348,7 @@ pod labels and scheduling policies (affinity, toleration, node selector&hellip;)
 (<em>Appears on:</em>
 <a href="#perf.kubestone.xridge.io/v1alpha1.DrillSpec">DrillSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.IopingSpec">IopingSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3ConfigurationSpec">Iperf3ConfigurationSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.PgbenchSpec">PgbenchSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.SysbenchSpec">SysbenchSpec</a>)
@@ -1645,8 +1786,57 @@ on a particular test. Some tests also implement their own custom commands.</p>
 </tr>
 </tbody>
 </table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.VolumeSpec">VolumeSpec
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.IopingSpec">IopingSpec</a>)
+</p>
+<p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>volumeSource</code></br>
+<em>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#volumesource-v1-core">
+Kubernetes core/v1.VolumeSource
+</a>
+</em>
+</td>
+<td>
+<p>VolumeSource represents the source of the volume, e.g. an existing
+PVC, host path, git repo, etc.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>persistentVolumeClaim</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PersistentVolumeClaimSpec">
+PersistentVolumeClaimSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>PersistentVolumeClaim describes the persistent volume claim that will be
+created and used by the pod. This field <em>overrides</em> the VolumeSource to
+point to the created PVC</p>
+</td>
+</tr>
+</tbody>
+</table>
 <hr/>
 <p><em>
 Generated with <code>gen-crd-api-reference-docs</code>
-on git commit <code>16c7aa5</code>.
+on git commit <code>7f8420f</code>.
 </em></p>

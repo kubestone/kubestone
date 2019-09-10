@@ -53,12 +53,12 @@ func NewJob(cr *perfv1alpha1.Ioping) *batchv1.Job {
 		})
 	}
 
-	cmdLineArgs := qsplit.ToStrings([]byte(cr.Spec.CmdLineArgs))
-	cmdLineArgs = append(cmdLineArgs, "/data") // destination
+	args := qsplit.ToStrings([]byte(cr.Spec.Args))
+	args = append(args, "/data") // destination
 
 	job := k8s.NewPerfJob(objectMeta, "ioping", cr.Spec.Image, cr.Spec.PodConfig)
 	job.Spec.Template.Spec.Volumes = volumes
-	job.Spec.Template.Spec.Containers[0].Args = cmdLineArgs
+	job.Spec.Template.Spec.Containers[0].Args = args
 	job.Spec.Template.Spec.Containers[0].VolumeMounts = volumeMounts
 	return job
 }

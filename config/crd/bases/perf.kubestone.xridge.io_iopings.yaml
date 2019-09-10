@@ -37,10 +37,10 @@ spec:
         metadata:
           type: object
         spec:
-          description: IopingSpec defines the desired state of Ioping
+          description: IopingSpec defines the ioping benchmark run
           properties:
-            cmdLineArgs:
-              description: CmdLineArgs are appended to the predefined ioping parameters
+            args:
+              description: Args are appended to the predefined ioping parameters
               type: string
             image:
               description: Image defines the ioping docker image used for the benchmark

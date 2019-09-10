@@ -624,14 +624,14 @@ ImageSpec
 </tr>
 <tr>
 <td>
-<code>cmdLineArgs</code></br>
+<code>args</code></br>
 <em>
 string
 </em>
 </td>
 <td>
 <em>(Optional)</em>
-<p>CmdLineArgs are appended to the predefined ioping parameters</p>
+<p>Args are appended to the predefined ioping parameters</p>
 </td>
 </tr>
 <tr>
@@ -689,7 +689,7 @@ BenchmarkStatus
 <a href="#perf.kubestone.xridge.io/v1alpha1.Ioping">Ioping</a>)
 </p>
 <p>
-<p>IopingSpec defines the desired state of Ioping</p>
+<p>IopingSpec defines the ioping benchmark run</p>
 </p>
 <table>
 <thead>
@@ -714,14 +714,14 @@ ImageSpec
 </tr>
 <tr>
 <td>
-<code>cmdLineArgs</code></br>
+<code>args</code></br>
 <em>
 string
 </em>
 </td>
 <td>
 <em>(Optional)</em>
-<p>CmdLineArgs are appended to the predefined ioping parameters</p>
+<p>Args are appended to the predefined ioping parameters</p>
 </td>
 </tr>
 <tr>
@@ -1794,6 +1794,7 @@ on a particular test. Some tests also implement their own custom commands.</p>
 <a href="#perf.kubestone.xridge.io/v1alpha1.IopingSpec">IopingSpec</a>)
 </p>
 <p>
+<p>VolumeSpec contains the Persistent Volume specification for a benchmark run</p>
 </p>
 <table>
 <thead>
@@ -1838,5 +1839,5 @@ point to the created PVC</p>
 <hr/>
 <p><em>
 Generated with <code>gen-crd-api-reference-docs</code>
-on git commit <code>7f8420f</code>.
+on git commit <code>ce05ca2</code>.
 </em></p>

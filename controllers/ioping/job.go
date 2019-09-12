@@ -33,32 +33,25 @@ func NewJob(cr *perfv1alpha1.Ioping) *batchv1.Job {
 		Namespace: cr.Namespace,
 	}
 
-	volumes := []corev1.Volume{}
-	volumeMounts := []corev1.VolumeMount{}
-	if cr.Spec.Volume != nil {
-		volumeSource := cr.Spec.Volume.VolumeSource
-		if cr.Spec.Volume.PersistentVolumeClaim != nil {
-			// If a PVC was constructed, use that instead of the given volume source
-			volumeSource = corev1.VolumeSource{
-				PersistentVolumeClaim: &corev1.PersistentVolumeClaimVolumeSource{
-					ClaimName: cr.Name,
-				},
-			}
-		}
-		volumes = append(volumes, corev1.Volume{
-			Name: "data", VolumeSource: volumeSource,
-		})
-		volumeMounts = append(volumeMounts, corev1.VolumeMount{
-			Name: "data", MountPath: "/data",
-		})
+	volumes := []corev1.Volume{
+		corev1.Volume{Name: "data", VolumeSource: cr.Spec.Volume.VolumeSource},
+	}
+	volumeMounts := []corev1.VolumeMount{
+		corev1.VolumeMount{Name: "data", MountPath: "/data"},
 	}
 
 	args := qsplit.ToStrings([]byte(cr.Spec.Args))
-	args = append(args, "/data") // destination
+	args = append(args, "/data") // destination parameter of ioping
 
 	job := k8s.NewPerfJob(objectMeta, "ioping", cr.Spec.Image, cr.Spec.PodConfig)
 	job.Spec.Template.Spec.Volumes = volumes
 	job.Spec.Template.Spec.Containers[0].Args = args
 	job.Spec.Template.Spec.Containers[0].VolumeMounts = volumeMounts
 	return job
+}
+
+// IsCrValid validates the given CR and raises error if semantic errors detected
+// For IOPing, the VolumeSpec validity is checked
+func IsCrValid(cr *perfv1alpha1.Ioping) (valid bool, err error) {
+	return cr.Spec.Volume.Validate()
 }

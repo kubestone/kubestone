@@ -35,10 +35,8 @@ type IopingSpec struct {
 	PodConfig PodConfigurationSpec `json:"podConfig,omitempty"`
 
 	// Volume contains the configuration for the volume that the ioping job should
-	// run on. If missing, no volume will attached to the job and Docker's layered
-	// fs performance will be measured
-	// +optional
-	Volume *VolumeSpec `json:"volume,omitempty"`
+	// run on.
+	Volume VolumeSpec `json:"volume"`
 }
 
 // +kubebuilder:object:root=true

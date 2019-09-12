@@ -4,7 +4,15 @@ metadata:
   name: fio-sample
 spec:
   volume:
-    persistentVolumeClaim:
+    volumeSource:
+      persistentVolumeClaim:
+        claimName: GENERATED
+
+    persistentVolumeClaimSpec:
       accessModes:
       - ReadWriteOnce
-      size: 1Gi
+      resources:
+        requests:
+          storage: 1Gi
+        limits:
+          storage: 1Gi

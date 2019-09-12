@@ -783,29 +783,69 @@ spec:
               type: object
             volume:
               description: Volume contains the configuration for the volume that the
-                ioping job should run on. If missing, no volume will attached to the
-                job and Docker's layered fs performance will be measured
+                ioping job should run on.
               properties:
-                persistentVolumeClaim:
-                  description: PersistentVolumeClaim describes the persistent volume
-                    claim that will be created and used by the pod. This field *overrides*
-                    the VolumeSource to point to the created PVC
+                persistentVolumeClaimSpec:
+                  description: PersistentVolumeClaimSpec describes the persistent
+                    volume claim that will be created and used by the pod. If specified,
+                    the VolumeSource.PersistentVolumeClaim's claimName must be set
+                    to 'GENERATED'
                   properties:
                     accessModes:
                       description: 'AccessModes contains the desired access modes
                         the volume should have. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#access-modes-1'
                       items:
-                        description: PersistentVolumeAccessMode defines the way the
-                          pv is mounted
-                        enum:
-                        - ReadWriteOnce
-                        - ReadOnlyMany
-                        - ReadWriteMany
                         type: string
                       type: array
+                    dataSource:
+                      description: This field requires the VolumeSnapshotDataSource
+                        alpha feature gate to be enabled and currently VolumeSnapshot
+                        is the only supported data source. If the provisioner can
+                        support VolumeSnapshot data source, it will create a new volume
+                        and data will be restored to the volume at the same time.
+                        If the provisioner does not support VolumeSnapshot data source,
+                        volume will not be created and the failure will be reported
+                        as an event. In the future, we plan to support more data source
+                        types and the behavior of the provisioner may change.
+                      properties:
+                        apiGroup:
+                          description: APIGroup is the group for the resource being
+                            referenced. If APIGroup is not specified, the specified
+                            Kind must be in the core API group. For any other third-party
+                            types, APIGroup is required.
+                          type: string
+                        kind:
+                          description: Kind is the type of resource being referenced
+                          type: string
+                        name:
+                          description: Name is the name of resource being referenced
+                          type: string
+                      required:
+                      - kind
+                      - name
+                      type: object
+                    resources:
+                      description: 'Resources represents the minimum resources the
+                        volume should have. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#resources'
+                      properties:
+                        limits:
+                          additionalProperties:
+                            type: string
+                          description: 'Limits describes the maximum amount of compute
+                            resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                          type: object
+                        requests:
+                          additionalProperties:
+                            type: string
+                          description: 'Requests describes the minimum amount of compute
+                            resources required. If Requests is omitted for a container,
+                            it defaults to Limits if that is explicitly specified,
+                            otherwise to an implementation-defined value. More info:
+                            https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                          type: object
+                      type: object
                     selector:
-                      description: Selector is a label query over volumes to consider
-                        for binding.
+                      description: A label query over volumes to consider for binding.
                       properties:
                         matchExpressions:
                           description: matchExpressions is a list of label selector
@@ -848,32 +888,26 @@ spec:
                             only "value". The requirements are ANDed.
                           type: object
                       type: object
-                    size:
-                      description: Size defines the size of the PVC
-                      pattern: ^\d+(\.\d+)?([KMGTP]i?)?$
-                      type: string
                     storageClassName:
-                      description: 'StorageClassName is the name of the StorageClass
-                        required by the claim. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#class-1'
+                      description: 'Name of the StorageClass required by the claim.
+                        More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#class-1'
                       type: string
                     volumeMode:
-                      description: VolumeMode defines what type of volume is required
+                      description: volumeMode defines what type of volume is required
                         by the claim. Value of Filesystem is implied when not included
                         in claim spec. This is a beta feature.
-                      enum:
-                      - Block
-                      - Filesystem
                       type: string
                     volumeName:
                       description: VolumeName is the binding reference to the PersistentVolume
                         backing this claim.
                       type: string
-                  required:
-                  - size
                   type: object
                 volumeSource:
                   description: VolumeSource represents the source of the volume, e.g.
-                    an existing PVC, host path, git repo, etc.
+                    EmptyDir, HostPath, Ceph, PersistentVolumeClaim, etc. PersistentVolumeClaim.claimName
+                    can be set to point to an already existing PVC or could be set
+                    to 'GENERATED'. When set to 'GENERATED' The PVC will be created
+                    based on the PersistentVolumeClaimSpec provided to the VolumeSpec.
                   properties:
                     awsElasticBlockStore:
                       description: 'AWSElasticBlockStore represents an AWS Disk resource
@@ -2058,9 +2092,12 @@ spec:
                       - volumePath
                       type: object
                   type: object
+              required:
+              - volumeSource
               type: object
           required:
           - image
+          - volume
           type: object
         status:
           description: BenchmarkStatus describes the current state of the benchmark

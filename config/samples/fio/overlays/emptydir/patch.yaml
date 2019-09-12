@@ -3,4 +3,6 @@ kind: Fio
 metadata:
   name: fio-sample
 spec:
-  volume: {}
+  volume:
+    volumeSource:
+      emptyDir: {}

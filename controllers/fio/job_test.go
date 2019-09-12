@@ -69,7 +69,7 @@ var _ = Describe("fio job", func() {
 						PullPolicy: "IfNotPresent",
 					},
 					BuiltinJobFiles: []string{"/jobs/rand-read.fio"},
-					Volume: &perfv1alpha1.VolumeSpec{
+					Volume: perfv1alpha1.VolumeSpec{
 						VolumeSource: corev1.VolumeSource{
 							PersistentVolumeClaim: &corev1.PersistentVolumeClaimVolumeSource{
 								ClaimName: pvcName,
@@ -107,7 +107,7 @@ var _ = Describe("fio job", func() {
 		})
 	})
 
-	Describe("cr with volume without pvc", func() {
+	Describe("cr with EmptyDir", func() {
 		var cr perfv1alpha1.Fio
 		var job *batchv1.Job
 
@@ -118,16 +118,22 @@ var _ = Describe("fio job", func() {
 						Name:       "xridge/fio:test",
 						PullPolicy: "IfNotPresent",
 					},
-					Volume: &perfv1alpha1.VolumeSpec{},
+					Volume: perfv1alpha1.VolumeSpec{
+						VolumeSource: corev1.VolumeSource{
+							EmptyDir: &corev1.EmptyDirVolumeSource{},
+						},
+					},
 				},
 			}
 			job = NewJob(&cr)
 		})
 
-		Context("with Volume withohout pvc", func() {
+		Context("when instantiated", func() {
 			It("should create an emptydir", func() {
 				Expect(job.Spec.Template.Spec.Volumes[0].PersistentVolumeClaim).To(
 					BeNil())
+				Expect(job.Spec.Template.Spec.Volumes[0].EmptyDir).To(
+					Equal(cr.Spec.Volume.VolumeSource.EmptyDir))
 			})
 		})
 	})

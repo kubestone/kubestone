@@ -20,6 +20,7 @@ import (
 	"context"
 
 	"github.com/go-logr/logr"
+	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/types"
 	ctrl "sigs.k8s.io/controller-runtime"
 
@@ -53,6 +54,17 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 		return ctrl.Result{}, nil
 	}
 
+	// Validate on first entry
+	if !cr.Status.Completed && !cr.Status.Running {
+		if valid, err := IsCrValid(&cr); !valid {
+			_ = r.K8S.RecordEventf(&cr, corev1.EventTypeWarning, k8s.CreateFailed,
+				"CR validation failed: %v", err)
+
+			// Do not requeue invalid CRs
+			return ctrl.Result{}, nil
+		}
+	}
+
 	cr.Status.Running = true
 	if err := r.K8S.Client.Status().Update(ctx, &cr); err != nil {
 		return ctrl.Result{}, err
@@ -63,14 +75,14 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 		return ctrl.Result{}, err
 	}
 
-	if cr.Spec.Volume != nil && cr.Spec.Volume.PersistentVolumeClaim != nil {
-		pvc, err := k8s.NewPersistentVolumeClaim(cr.Spec.Volume, cr.Name, cr.Namespace)
-		if err != nil {
-			return ctrl.Result{}, err
-		}
+	if cr.Spec.Volume.PersistentVolumeClaimSpec != nil {
+		pvc := k8s.NewPersistentVolumeClaim(*cr.Spec.Volume.PersistentVolumeClaimSpec,
+			cr.Name, cr.Namespace)
 		if err := r.K8S.CreateWithReference(ctx, pvc, &cr); err != nil {
 			return ctrl.Result{}, err
 		}
+		// Change ClaimName (from GENERATED) to the PVC was created
+		cr.Spec.Volume.VolumeSource.PersistentVolumeClaim.ClaimName = cr.Name
 	}
 
 	job := NewJob(&cr)

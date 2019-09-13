@@ -7,3 +7,7 @@ spec:
     name: xridge/ioping:1.1
 
   args: -w 10
+
+  volume:
+    volumeSource:
+      emptyDir: {}

@@ -8,6 +8,7 @@ nav:
       - 'Iperf3': benchmarks/iperf3.md
       - 'Sysbench': benchmarks/sysbench.md
       - 'Drill': benchmarks/drill.md
+      - 'pgbench': benchmarks/pgbench.md
   - CRD API docs: apidocs.md
   - Development guide: devguide.md
 
@@ -34,7 +35,7 @@ markdown_extensions:
   - admonition
   - codehilite
 
-theme: 
+theme:
   name: material
   palette:
     primary: 'white'

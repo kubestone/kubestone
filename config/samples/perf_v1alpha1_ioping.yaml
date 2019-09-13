@@ -5,7 +5,5 @@ metadata:
 spec:
   image:
     name: xridge/ioping:1.1
-    pullPolicy: IfNotPresent
-    # pullSecret: null
 
-  cmdLineArgs: -w 10
+  args: -w 10

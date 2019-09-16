@@ -17,7 +17,7 @@ spec:
   serverConfiguration:
     # nodeSelector: null
     podLabels:
-      iperf-mode: server
+      qperf-mode: server
 
     podScheduling:
       affinity:
@@ -30,7 +30,7 @@ spec:
               - key: app
                 operator: In
                 values:
-                - store
+                - server
             topologyKey: "kubernetes.io/hostname"
       # tolerations: null
       # nodeSelector: null
@@ -38,13 +38,16 @@ spec:
     hostNetwork: false
     
   clientConfiguration:
+    podLabels:
+      qperf-mode: client
+
     podScheduling:
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
           - labelSelector:
               matchExpressions:
-              - key: iperf-mode
+              - key: qperf-mode
                 operator: In
                 values:
                 - server

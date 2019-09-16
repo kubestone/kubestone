@@ -69,8 +69,7 @@ func NewServerDeployment(cr *perfv1alpha1.Iperf3) *appsv1.Deployment {
 	// Iperf3 Server does not like if probe connections are made to the port,
 	// therefore we are checking if the port if open or not via shell script
 	// the solution does not assume to have netstat installed in the container
-	readinessCmd := fmt.Sprintf("cat /proc/net/tcp* | awk ' { print toupper($2) } ' | grep -E ':%X$'",
-		Iperf3ServerPort)
+	readinessAwkCmd := fmt.Sprintf("BEGIN{err=1}toupper($2)~/:%04X$/{err=0}END{exit err}", Iperf3ServerPort)
 
 	deployment := appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
@@ -110,9 +109,10 @@ func NewServerDeployment(cr *perfv1alpha1.Iperf3) *appsv1.Deployment {
 								Handler: corev1.Handler{
 									Exec: &corev1.ExecAction{
 										Command: []string{
-											"/bin/sh",
-											"-xc",
-											readinessCmd,
+											"awk",
+											readinessAwkCmd,
+											"/proc/1/net/tcp",
+											"/proc/1/net/tcp6",
 										},
 									},
 								},

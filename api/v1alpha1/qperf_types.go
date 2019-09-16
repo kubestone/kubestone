@@ -47,7 +47,6 @@ type QperfSpec struct {
 	Options string `json:"options,omitempty"`
 
 	// Tests are the tests that we would like to run
-	// +optional
 	Tests []string `json:"tests"`
 
 	// ServerConfiguration contains the configuration of the qperf server
@@ -64,7 +63,7 @@ type QperfSpec struct {
 // +kubebuilder:printcolumn:name="Running",type="boolean",JSONPath=".status.running"
 // +kubebuilder:printcolumn:name="Completed",type="boolean",JSONPath=".status.completed"
 
-// Qperf is the Schema for the qperfs API
+// Qperf is the Schema for the qperf API
 type Qperf struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`

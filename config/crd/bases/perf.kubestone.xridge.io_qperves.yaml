@@ -22,7 +22,7 @@ spec:
     status: {}
   validation:
     openAPIV3Schema:
-      description: Qperf is the Schema for the qperfs API
+      description: Qperf is the Schema for the qperf API
       properties:
         apiVersion:
           description: 'APIVersion defines the versioned schema of this representation
@@ -1512,6 +1512,7 @@ spec:
               type: array
           required:
           - image
+          - tests
           type: object
         status:
           description: BenchmarkStatus describes the current state of the benchmark

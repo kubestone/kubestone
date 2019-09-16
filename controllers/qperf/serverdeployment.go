@@ -17,12 +17,12 @@ limitations under the License.
 package qperf
 
 import (
-	"fmt"
 	"strconv"
 
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/util/intstr"
 
 	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
 )
@@ -48,11 +48,6 @@ func NewServerDeployment(cr *perfv1alpha1.Qperf) *appsv1.Deployment {
 	}
 
 	qperfCmdLineArgs := []string{"--listen_port", strconv.Itoa(perfv1alpha1.QperfPort)}
-
-	// Qperf Server does not like if probe connections are made to the port,
-	// therefore we are checking if the port if open or not via awk script
-	// the solution does not assume to have netstat installed in the container
-	readinessAwkCmd := fmt.Sprintf("BEGIN{err=1}toupper($2)~/:%04X$/{err=0}END{exit err}", perfv1alpha1.QperfPort)
 
 	deployment := appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
@@ -90,13 +85,8 @@ func NewServerDeployment(cr *perfv1alpha1.Qperf) *appsv1.Deployment {
 							},
 							ReadinessProbe: &corev1.Probe{
 								Handler: corev1.Handler{
-									Exec: &corev1.ExecAction{
-										Command: []string{
-											"awk",
-											readinessAwkCmd,
-											"/proc/1/net/tcp",
-											"/proc/1/net/tcp6",
-										},
+									TCPSocket: &corev1.TCPSocketAction{
+										Port: intstr.FromInt(perfv1alpha1.QperfPort),
 									},
 								},
 								InitialDelaySeconds: 5,

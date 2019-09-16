@@ -34,8 +34,8 @@ type Reconciler struct {
 	Log logr.Logger
 }
 
-// +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=qperfs,verbs=get;list;watch;create;update;patch;delete
-// +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=qperfs/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=qperves,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=qperves/status,verbs=get;update;patch
 
 // Reconcile Qperf Benchmark Requests by creating:
 //   - qperf server deployment

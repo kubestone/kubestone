@@ -152,7 +152,7 @@ rules:
 - apiGroups:
   - perf.kubestone.xridge.io
   resources:
-  - qperfs
+  - qperves
   verbs:
   - create
   - delete
@@ -164,7 +164,7 @@ rules:
 - apiGroups:
   - perf.kubestone.xridge.io
   resources:
-  - qperfs/status
+  - qperves/status
   verbs:
   - get
   - patch

@@ -42,6 +42,7 @@ const (
 	e2eNamespaceFio      = "kubestone-e2e-fio"
 	e2eNamespaceIperf3   = "kubestone-e2e-iperf3"
 	e2eNamespacePgbench  = "kubestone-e2e-pgbench"
+	e2eNamespaceQperf    = "kubestone-e2e-qperf"
 	e2eNamespaceSysbench = "kubestone-e2e-sysbench"
 )
 
@@ -50,6 +51,7 @@ var e2eNamespaces = []string{
 	e2eNamespaceFio,
 	e2eNamespaceIperf3,
 	e2eNamespacePgbench,
+	e2eNamespaceQperf,
 	e2eNamespaceSysbench,
 }
 

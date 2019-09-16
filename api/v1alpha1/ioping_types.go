@@ -20,33 +20,21 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// FioSpec defines the desired state of Fio
-type FioSpec struct {
-	// Image defines the fio docker image used for the benchmark
+// IopingSpec defines the ioping benchmark run
+type IopingSpec struct {
+	// Image defines the ioping docker image used for the benchmark
 	Image ImageSpec `json:"image"`
 
-	// BuiltinJobFiles contains a list of fio job files that are already present
-	// in the docker image
+	// Args are appended to the predefined ioping parameters
 	// +optional
-	BuiltinJobFiles []string `json:"builtinJobFiles,omitempty"`
-
-	// CustomJobFiles contains a list of custom fio job files
-	// The exact format of fio job files is documented here:
-	// https://fio.readthedocs.io/en/latest/fio_doc.html#job-file-format
-	// The job files defined here will be mounted to the fio benchmark container
-	// +optional
-	CustomJobFiles []string `json:"customJobFiles,omitempty"`
-
-	// CmdLineArgs are appended to the predefined fio parameters
-	// +optional
-	CmdLineArgs string `json:"cmdLineArgs,omitempty"`
+	Args string `json:"args,omitempty"`
 
 	// PodConfig contains the configuration for the benchmark pod, including
 	// pod labels and scheduling policies (affinity, toleration, node selector...)
 	// +optional
 	PodConfig PodConfigurationSpec `json:"podConfig,omitempty"`
 
-	// Volume contains the configuration for the volume that the fio job should
+	// Volume contains the configuration for the volume that the ioping job should
 	// run on.
 	Volume VolumeSpec `json:"volume"`
 }
@@ -56,24 +44,24 @@ type FioSpec struct {
 // +kubebuilder:printcolumn:name="Running",type="boolean",JSONPath=".status.running"
 // +kubebuilder:printcolumn:name="Completed",type="boolean",JSONPath=".status.completed"
 
-// Fio is the Schema for the fios API
-type Fio struct {
+// Ioping is the Schema for the iopings API
+type Ioping struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   FioSpec         `json:"spec,omitempty"`
+	Spec   IopingSpec      `json:"spec,omitempty"`
 	Status BenchmarkStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 
-// FioList contains a list of Fio
-type FioList struct {
+// IopingList contains a list of Ioping
+type IopingList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []Fio `json:"items"`
+	Items           []Ioping `json:"items"`
 }
 
 func init() {
-	SchemeBuilder.Register(&Fio{}, &FioList{})
+	SchemeBuilder.Register(&Ioping{}, &IopingList{})
 }

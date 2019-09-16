@@ -6,6 +6,7 @@ Current state of the benchmarks
 | ----------------------- | :--------------------------------: | ---------------------------------------------------------------------- |
 | Core/CPU                | [Sysbench](benchmarks/sysbench.md) | [Supported](apidocs.md#perf.kubestone.xridge.io/v1alpha1.SysbenchSpec) |
 | Core/Disk               |      [Fio](benchmarks/fio.md)      | [Supported](apidocs.md#perf.kubestone.xridge.io/v1alpha1.FioSpec)      |
+| Core/Disk               |      [Fio](benchmarks/ioping.md)   | [Supported](apidocs.md#perf.kubestone.xridge.io/v1alpha1.IopingSpec)   |
 | Core/Network            |   [Iperf3](benchmarks/iperf3.md)   | [Supported](apidocs.md#perf.kubestone.xridge.io/v1alpha1.Iperf3Spec)   |
 | HTTP Load Tester        |   [Drill](benchmarks/drill.md)     | [Supported](apidocs.md#perf.kubestone.xridge.io/v1alpha1.DrillSpec)    |
 | Application/PostgreSQL  |  [pgbench](benchmarks/pgbench.md)  | [Supported](apidocs.md#perf.kubestone.xridge.io/v1alpha1.PgbenchSpec)  |

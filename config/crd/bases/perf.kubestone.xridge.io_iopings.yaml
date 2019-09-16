@@ -4,7 +4,7 @@ apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
   creationTimestamp: null
-  name: fios.perf.kubestone.xridge.io
+  name: iopings.perf.kubestone.xridge.io
 spec:
   additionalPrinterColumns:
   - JSONPath: .status.running
@@ -15,14 +15,14 @@ spec:
     type: boolean
   group: perf.kubestone.xridge.io
   names:
-    kind: Fio
-    plural: fios
+    kind: Ioping
+    plural: iopings
   scope: ""
   subresources:
     status: {}
   validation:
     openAPIV3Schema:
-      description: Fio is the Schema for the fios API
+      description: Ioping is the Schema for the iopings API
       properties:
         apiVersion:
           description: 'APIVersion defines the versioned schema of this representation
@@ -37,26 +37,13 @@ spec:
         metadata:
           type: object
         spec:
-          description: FioSpec defines the desired state of Fio
+          description: IopingSpec defines the ioping benchmark run
           properties:
-            builtinJobFiles:
-              description: BuiltinJobFiles contains a list of fio job files that are
-                already present in the docker image
-              items:
-                type: string
-              type: array
-            cmdLineArgs:
-              description: CmdLineArgs are appended to the predefined fio parameters
+            args:
+              description: Args are appended to the predefined ioping parameters
               type: string
-            customJobFiles:
-              description: 'CustomJobFiles contains a list of custom fio job files
-                The exact format of fio job files is documented here: https://fio.readthedocs.io/en/latest/fio_doc.html#job-file-format
-                The job files defined here will be mounted to the fio benchmark container'
-              items:
-                type: string
-              type: array
             image:
-              description: Image defines the fio docker image used for the benchmark
+              description: Image defines the ioping docker image used for the benchmark
               properties:
                 name:
                   description: Name is the Docker Image location including the tag
@@ -796,7 +783,7 @@ spec:
               type: object
             volume:
               description: Volume contains the configuration for the volume that the
-                fio job should run on.
+                ioping job should run on.
               properties:
                 persistentVolumeClaimSpec:
                   description: PersistentVolumeClaimSpec describes the persistent

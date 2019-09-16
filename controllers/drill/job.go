@@ -26,7 +26,7 @@ import (
 
 	"github.com/firepear/qsplit"
 	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
-	"github.com/xridge/kubestone/controllers/common"
+	"github.com/xridge/kubestone/pkg/k8s"
 )
 
 const (
@@ -63,7 +63,7 @@ func NewJob(cr *perfv1alpha1.Drill, configMap *corev1.ConfigMap) *batchv1.Job {
 		},
 	}
 
-	job := common.NewPerfJob(objectMeta, "fio", cr.Spec.Image, cr.Spec.PodConfig)
+	job := k8s.NewPerfJob(objectMeta, "fio", cr.Spec.Image, cr.Spec.PodConfig)
 	job.Spec.Template.Spec.Volumes = volumes
 	job.Spec.Template.Spec.Containers[0].Command = []string{"/bin/sh", "-xc"}
 	job.Spec.Template.Spec.Containers[0].Args = qsplit.ToStrings([]byte(command))

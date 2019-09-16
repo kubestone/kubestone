@@ -23,7 +23,7 @@ import (
 
 	"github.com/firepear/qsplit"
 	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
-	"github.com/xridge/kubestone/controllers/common"
+	"github.com/xridge/kubestone/pkg/k8s"
 )
 
 // NewJob creates a fio benchmark job
@@ -37,6 +37,8 @@ func NewJob(cr *perfv1alpha1.Fio) *batchv1.Job {
 	fioCmdLineArgs = append(fioCmdLineArgs,
 		qsplit.ToStrings([]byte(cr.Spec.CmdLineArgs))...)
 	fioCmdLineArgs = append(fioCmdLineArgs, cr.Spec.BuiltinJobFiles...)
+
+	// TODO: Represent Spec.CustomJobFiles as map instead of list
 	for i := 0; i < len(cr.Spec.CustomJobFiles); i++ {
 		fioCmdLineArgs = append(fioCmdLineArgs, "/custom-jobs/"+CustomJobName(i))
 	}
@@ -58,27 +60,24 @@ func NewJob(cr *perfv1alpha1.Fio) *batchv1.Job {
 			Name: "custom-jobs", MountPath: "/custom-jobs",
 		})
 	}
-	if cr.Spec.Volume != nil {
-		volumeSource := cr.Spec.Volume.VolumeSource
-		if cr.Spec.Volume.PersistentVolumeClaim != nil {
-			// If a PVC was constructed, use that instead of the given volume source
-			volumeSource = corev1.VolumeSource{
-				PersistentVolumeClaim: &corev1.PersistentVolumeClaimVolumeSource{
-					ClaimName: cr.Name,
-				},
-			}
-		}
-		volumes = append(volumes, corev1.Volume{
-			Name: "data", VolumeSource: volumeSource,
-		})
-		volumeMounts = append(volumeMounts, corev1.VolumeMount{
-			Name: "data", MountPath: "/data",
-		})
-	}
 
-	job := common.NewPerfJob(objectMeta, "fio", cr.Spec.Image, cr.Spec.PodConfig)
+	volumes = append(volumes, corev1.Volume{
+		Name: "data", VolumeSource: cr.Spec.Volume.VolumeSource,
+	})
+	volumeMounts = append(volumeMounts, corev1.VolumeMount{
+		Name: "data", MountPath: "/data",
+	})
+
+	job := k8s.NewPerfJob(objectMeta, "fio", cr.Spec.Image, cr.Spec.PodConfig)
 	job.Spec.Template.Spec.Volumes = volumes
 	job.Spec.Template.Spec.Containers[0].Args = fioCmdLineArgs
 	job.Spec.Template.Spec.Containers[0].VolumeMounts = volumeMounts
 	return job
+}
+
+// IsCrValid validates the given CR and raises error if semantic errors detected
+// For fio, the VolumeSpec validity is checked
+func IsCrValid(cr *perfv1alpha1.Fio) (valid bool, err error) {
+	// TODO: Add check here for CustomJobs
+	return cr.Spec.Volume.Validate()
 }

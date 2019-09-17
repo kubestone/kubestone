@@ -20,3 +20,6 @@ resources:
 - group: perf
   version: v1alpha1
   kind: Ioping
+- group: perf
+  version: v1alpha1
+  kind: Qperf

@@ -19,6 +19,7 @@ Resource Types:
 <a href="#perf.kubestone.xridge.io/v1alpha1.Ioping">Ioping</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3">Iperf3</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.Pgbench">Pgbench</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.Qperf">Qperf</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.Sysbench">Sysbench</a>)
 </p>
 <p>
@@ -513,6 +514,7 @@ run on.</p>
 <a href="#perf.kubestone.xridge.io/v1alpha1.IopingSpec">IopingSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3Spec">Iperf3Spec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.PgbenchSpec">PgbenchSpec</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.QperfSpec">QperfSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.SysbenchSpec">SysbenchSpec</a>)
 </p>
 <p>
@@ -1213,6 +1215,7 @@ pod labels and scheduling policies (affinity, toleration, node selector&hellip;)
 <a href="#perf.kubestone.xridge.io/v1alpha1.IopingSpec">IopingSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3ConfigurationSpec">Iperf3ConfigurationSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.PgbenchSpec">PgbenchSpec</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.QperfConfigurationSpec">QperfConfigurationSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.SysbenchSpec">SysbenchSpec</a>)
 </p>
 <p>
@@ -1431,6 +1434,261 @@ string
 <p>PullPolicy controls how the docker images are downloaded
 Defaults to Always if :latest tag is specified, or IfNotPresent otherwise.</p>
 </p>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.Qperf">Qperf
+</h3>
+<p>
+<p>Qperf is the Schema for the qperf API</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>metadata</code></br>
+<em>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#objectmeta-v1-meta">
+Kubernetes meta/v1.ObjectMeta
+</a>
+</em>
+</td>
+<td>
+Refer to the Kubernetes API documentation for the fields of the
+<code>metadata</code> field.
+</td>
+</tr>
+<tr>
+<td>
+<code>spec</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.QperfSpec">
+QperfSpec
+</a>
+</em>
+</td>
+<td>
+<br/>
+<br/>
+<table>
+<tr>
+<td>
+<code>image</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.ImageSpec">
+ImageSpec
+</a>
+</em>
+</td>
+<td>
+<p>Image defines the qperf docker image used for the benchmark</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>options</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Options are options for the qperf binary</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>tests</code></br>
+<em>
+[]string
+</em>
+</td>
+<td>
+<p>Tests are the tests that we would like to run</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>serverConfiguration</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.QperfConfigurationSpec">
+QperfConfigurationSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>ServerConfiguration contains the configuration of the qperf server</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>clientConfiguration</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.QperfConfigurationSpec">
+QperfConfigurationSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>ClientConfiguration contains the configuration of the qperf client</p>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<code>status</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.BenchmarkStatus">
+BenchmarkStatus
+</a>
+</em>
+</td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.QperfConfigurationSpec">QperfConfigurationSpec
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.QperfSpec">QperfSpec</a>)
+</p>
+<p>
+<p>QperfConfigurationSpec contains configuration parameters
+with scheduling options for the both the qperf client
+and server instances.</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>PodConfigurationSpec</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PodConfigurationSpec">
+PodConfigurationSpec
+</a>
+</em>
+</td>
+<td>
+<p>
+(Members of <code>PodConfigurationSpec</code> are embedded into this type.)
+</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>hostNetwork</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>HostNetwork requested for the qperf pod, if enabled the
+hosts network namespace is used. Default to false.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.QperfSpec">QperfSpec
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.Qperf">Qperf</a>)
+</p>
+<p>
+<p>QperfSpec defines the Qperf Benchmark Stone which
+consist of server deployment with service definition
+and client pod.</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>image</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.ImageSpec">
+ImageSpec
+</a>
+</em>
+</td>
+<td>
+<p>Image defines the qperf docker image used for the benchmark</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>options</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Options are options for the qperf binary</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>tests</code></br>
+<em>
+[]string
+</em>
+</td>
+<td>
+<p>Tests are the tests that we would like to run</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>serverConfiguration</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.QperfConfigurationSpec">
+QperfConfigurationSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>ServerConfiguration contains the configuration of the qperf server</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>clientConfiguration</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.QperfConfigurationSpec">
+QperfConfigurationSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>ClientConfiguration contains the configuration of the qperf client</p>
+</td>
+</tr>
+</tbody>
+</table>
 <h3 id="perf.kubestone.xridge.io/v1alpha1.Sysbench">Sysbench
 </h3>
 <p>
@@ -1707,5 +1965,5 @@ claimName must be set to &lsquo;GENERATED&rsquo;</p>
 <hr/>
 <p><em>
 Generated with <code>gen-crd-api-reference-docs</code>
-on git commit <code>c6c4f6a</code>.
+on git commit <code>276061d</code>.
 </em></p>

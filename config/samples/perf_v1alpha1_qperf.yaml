@@ -1,0 +1,54 @@
+---
+apiVersion: perf.kubestone.xridge.io/v1alpha1
+kind: Qperf
+metadata:
+  name: qperf-sample
+spec:
+  image:
+    name: xridge/qperf:0.4.11-r0
+    pullPolicy: IfNotPresent
+    # pullSecret: null
+
+  options: "--verbose --time 10"
+  tests:
+  - tcp_bw
+  - tcp_lat
+
+  serverConfiguration:
+    # nodeSelector: null
+    podLabels:
+      qperf-mode: server
+
+    podScheduling:
+      affinity:
+        # nodeAffinity: null
+        # podAffinity: null
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - server
+            topologyKey: "kubernetes.io/hostname"
+      # tolerations: null
+      # nodeSelector: null
+      # nodeName: null
+    hostNetwork: false
+    
+  clientConfiguration:
+    podLabels:
+      qperf-mode: client
+
+    podScheduling:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: qperf-mode
+                operator: In
+                values:
+                - server
+            topologyKey: "kubernetes.io/hostname"

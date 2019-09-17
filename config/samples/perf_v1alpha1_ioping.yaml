@@ -1,0 +1,13 @@
+apiVersion: perf.kubestone.xridge.io/v1alpha1
+kind: Ioping
+metadata:
+  name: ioping-sample
+spec:
+  image:
+    name: xridge/ioping:1.1
+
+  args: -w 10
+
+  volume:
+    volumeSource:
+      emptyDir: {}

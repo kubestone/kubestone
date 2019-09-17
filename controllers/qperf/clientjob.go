@@ -24,7 +24,7 @@ import (
 
 	"github.com/firepear/qsplit"
 	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
-	"github.com/xridge/kubestone/controllers/common"
+	"github.com/xridge/kubestone/pkg/k8s"
 )
 
 // +kubebuilder:rbac:groups="",resources=pods,verbs=get;list;create;delete
@@ -56,7 +56,7 @@ func NewClientJob(cr *perfv1alpha1.Qperf) *batchv1.Job {
 
 	backoffLimit := int32(6)
 
-	job := common.NewPerfJob(objectMeta, "qperf-client", cr.Spec.Image, cr.Spec.ClientConfiguration.PodConfigurationSpec)
+	job := k8s.NewPerfJob(objectMeta, "qperf-client", cr.Spec.Image, cr.Spec.ClientConfiguration.PodConfigurationSpec)
 	job.Spec.BackoffLimit = &backoffLimit
 	job.Spec.Template.Spec.Containers[0].Args = qperfCmdLineArgs
 	job.Spec.Template.Spec.HostNetwork = cr.Spec.ClientConfiguration.HostNetwork

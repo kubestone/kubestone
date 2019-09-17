@@ -31,6 +31,7 @@ import (
 	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
 	"github.com/xridge/kubestone/controllers/drill"
 	"github.com/xridge/kubestone/controllers/fio"
+	"github.com/xridge/kubestone/controllers/ioping"
 	"github.com/xridge/kubestone/controllers/iperf3"
 	"github.com/xridge/kubestone/controllers/pgbench"
 	"github.com/xridge/kubestone/controllers/qperf"
@@ -116,6 +117,13 @@ func main() {
 		Log: ctrl.Log.WithName("controllers").WithName("Pgbench"),
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "Pgbench")
+		os.Exit(1)
+	}
+	if err = (&ioping.Reconciler{
+		K8S: k8sAccess,
+		Log: ctrl.Log.WithName("controllers").WithName("Ioping"),
+	}).SetupWithManager(mgr); err != nil {
+		setupLog.Error(err, "unable to create controller", "controller", "Ioping")
 		os.Exit(1)
 	}
 	if err = (&qperf.Reconciler{

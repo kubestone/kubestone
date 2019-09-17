@@ -14,16 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package common
+package k8s
 
 import (
-	"testing"
-
-	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
+	corev1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-func TestCommonController(t *testing.T) {
-	RegisterFailHandler(Fail)
-	RunSpecs(t, "Common Suite")
+// NewPersistentVolumeClaim creates a PVC based on the provided pvcSpec, name and namespace
+func NewPersistentVolumeClaim(pvcSpec corev1.PersistentVolumeClaimSpec, name, namespace string) *corev1.PersistentVolumeClaim {
+	pvc := corev1.PersistentVolumeClaim{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      name,
+			Namespace: namespace,
+		},
+		Spec: pvcSpec,
+	}
+
+	return &pvc
 }

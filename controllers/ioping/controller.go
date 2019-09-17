@@ -14,15 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package fio
+package ioping
 
 import (
 	"context"
 
 	"github.com/go-logr/logr"
-	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/types"
 	ctrl "sigs.k8s.io/controller-runtime"
+
+	corev1 "k8s.io/api/core/v1"
 
 	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
 	"github.com/xridge/kubestone/pkg/k8s"
@@ -34,17 +35,14 @@ type Reconciler struct {
 	Log logr.Logger
 }
 
-// +kubebuilder:rbac:groups="",resources=configmaps,verbs=create
-// +kubebuilder:rbac:groups="",resources=persistentvolumeclaims,verbs=create
-// +kubebuilder:rbac:groups=batch,resources=jobs,verbs=get;list;create;delete
-// +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=fios,verbs=get;list;watch;create;update;patch;delete
-// +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=fios/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=iopings,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=iopings/status,verbs=get;update;patch
 
-// Reconcile creates fio job(s) based on the custom resource(s)
+// Reconcile creates ioping job based on the custom resource
 func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 	ctx := context.Background()
 
-	var cr perfv1alpha1.Fio
+	var cr perfv1alpha1.Ioping
 	if err := r.K8S.Client.Get(ctx, req.NamespacedName, &cr); err != nil {
 		return ctrl.Result{}, k8s.IgnoreNotFound(err)
 	}
@@ -67,11 +65,6 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 
 	cr.Status.Running = true
 	if err := r.K8S.Client.Status().Update(ctx, &cr); err != nil {
-		return ctrl.Result{}, err
-	}
-
-	configMap := NewConfigMap(&cr)
-	if err := r.K8S.CreateWithReference(ctx, configMap, &cr); err != nil {
 		return ctrl.Result{}, err
 	}
 
@@ -114,11 +107,12 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 	}
 
 	return ctrl.Result{}, nil
+
 }
 
 // SetupWithManager registers the Reconciler with the provided manager
 func (r *Reconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
-		For(&perfv1alpha1.Fio{}).
+		For(&perfv1alpha1.Ioping{}).
 		Complete(r)
 }

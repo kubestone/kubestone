@@ -17,8 +17,9 @@ limitations under the License.
 package v1alpha1
 
 import (
+	"errors"
+
 	corev1 "k8s.io/api/core/v1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 // PullPolicy controls how the docker images are downloaded
@@ -65,42 +66,42 @@ type PodSchedulingSpec struct {
 	NodeName string `json:"nodeName,omitempty"`
 }
 
-// PersistentVolumeAccessMode defines the way the pv is mounted
-// +kubebuilder:validation:Enum=ReadWriteOnce;ReadOnlyMany;ReadWriteMany
-type PersistentVolumeAccessMode string
+// VolumeSpec contains the Volume Definition used for the benchmarks.
+// It can point to an EmptyDir, HostPath, already existing PVC or PVC
+// to be created benchmark time.
+type VolumeSpec struct {
+	// VolumeSource represents the source of the volume, e.g. EmptyDir,
+	// HostPath, Ceph, PersistentVolumeClaim, etc.
+	// PersistentVolumeClaim.claimName can be set to point to an already
+	// existing PVC or could be set to 'GENERATED'. When set to 'GENERATED'
+	// The PVC will be created based on the PersistentVolumeClaimSpec provided
+	// to the VolumeSpec.
+	VolumeSource corev1.VolumeSource `json:"volumeSource"`
 
-// PersistentVolumeMode describes how a volume is intended to be consumed, either Block or Filesystem.
-// +kubebuilder:validation:Enum=Block;Filesystem
-type PersistentVolumeMode string
+	// PersistentVolumeClaimSpec describes the persistent volume claim that will be
+	// created and used by the pod. If specified, the VolumeSource.PersistentVolumeClaim's
+	// claimName must be set to 'GENERATED'
+	// +optional
+	PersistentVolumeClaimSpec *corev1.PersistentVolumeClaimSpec `json:"persistentVolumeClaimSpec,omitempty"`
+}
 
-// PersistentVolumeSize defines the size of the PV
-// +kubebuilder:validation:Pattern=^\d+(\.\d+)?([KMGTP]i?)?$
-type PersistentVolumeSize string
+// GeneratedPVC is the pre-defined name to be used as ClaimName
+// when the PVC is created on the fly for the benchmark.
+const GeneratedPVC = "GENERATED"
 
-// PersistentVolumeClaimSpec describes the common attributes of storage devices
-// and allows a Source for provider-specific attributes
-type PersistentVolumeClaimSpec struct {
-	// Size defines the size of the PVC
-	Size PersistentVolumeSize `json:"size"`
-	// AccessModes contains the desired access modes the volume should have.
-	// More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#access-modes-1
-	// +optional
-	AccessModes []PersistentVolumeAccessMode `json:"accessModes,omitempty"`
-	// Selector is a label query over volumes to consider for binding.
-	// +optional
-	Selector *metav1.LabelSelector `json:"selector,omitempty" protobuf:"bytes,4,opt,name=selector"`
-	// VolumeName is the binding reference to the PersistentVolume backing this claim.
-	// +optional
-	VolumeName string `json:"volumeName,omitempty"`
-	// StorageClassName is the name of the StorageClass required by the claim.
-	// More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#class-1
-	// +optional
-	StorageClassName *string `json:"storageClassName,omitempty"`
-	// VolumeMode defines what type of volume is required by the claim.
-	// Value of Filesystem is implied when not included in claim spec.
-	// This is a beta feature.
-	// +optional
-	VolumeMode *PersistentVolumeMode `json:"volumeMode,omitempty"`
+// Validate method validates that the provided VolumeSpec meets the
+// requirements:
+// If PersistentVolumeClaimSpec is provided, then the VolumeSource's
+// PersistentVolumClaim's ClaimName should be set to GeneratedPVC
+func (v *VolumeSpec) Validate() (ok bool, err error) {
+	if v.PersistentVolumeClaimSpec != nil {
+		if v.VolumeSource.PersistentVolumeClaim != nil &&
+			v.VolumeSource.PersistentVolumeClaim.ClaimName != GeneratedPVC {
+			return false, errors.New("If PersistentVolumeClaimSpec is defined, " +
+				"VolumeSource.PersistentVolumeClaim.ClaimName must be set to " + GeneratedPVC)
+		}
+	}
+	return true, nil
 }
 
 // PodConfigurationSpec contains the configuration for the benchmark pods

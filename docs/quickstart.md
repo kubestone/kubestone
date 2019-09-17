@@ -76,10 +76,15 @@ spec:
   image:
     name: xridge/fio:3.13
   volume:
-    persistentVolumeClaim:
+    persistentVolumeClaimSpec:
       accessModes:
       - ReadWriteOnce
-      size: 1Gi
+      resources:
+        requests:
+          storage: 1Gi
+    volumeSource:
+      persistentVolumeClaim:
+        claimName: GENERATED
 ```
 
 
@@ -89,7 +94,7 @@ When we create this resource in Kubernetes, the operator interprets it and creat
 - `metadata.name`: Identifies the Custom Resource. Later, this can be used to query or delete the benchmark in the cluster.
 - `cmdLineArgs`: Arguments passed to the benchmark. In this case we are providing the arguments to fio (a filesystem benchmark). It instructs the benchmark to execute a random write test with 4Mb of block size with an overall transfer size of 256 MB.
 - `image.name`: Describes the Docker Image of the benchmark. In case of [Fio](https://fio.readthedocs.io/) we are using [xridge's fio Docker Image](https://cloud.docker.com/u/xridge/repository/docker/xridge/fio), which is built from [this repository](https://github.com/xridge/fio-docker/).
-- `volume.persistentVolumeClaim`: Given that Fio is a disk benchmark we can set a PersistentVolumeClaim for the benchmark to be executed. The above setup instructs Kubernetes to take 1GB of space from the default StorageClass and use it for the benchmark.
+- `volume.persistentVolumeClaimSpec`: Given that Fio is a disk benchmark we can set a PersistentVolumeClaim for the benchmark to be executed. The above setup instructs Kubernetes to take 1GB of space from the default StorageClass and use it for the benchmark.
 
 
 
@@ -118,29 +123,34 @@ Annotations:  <none>
 API Version:  perf.kubestone.xridge.io/v1alpha1
 Kind:         Fio
 Metadata:
-  Creation Timestamp:  2019-08-24T17:22:21Z
+  Creation Timestamp:  2019-09-14T11:31:02Z
   Generation:          1
-  Resource Version:    25337705
+  Resource Version:    31488293
   Self Link:           /apis/perf.kubestone.xridge.io/v1alpha1/namespaces/kubestone/fios/fio-sample
-  UID:                 bb18f3d3-c693-11e9-8071-4439c4920abc
+  UID:                 21cdbe92-d6e3-11e9-ba70-4439c4920abc
 Spec:
   Cmd Line Args:  --name=randwrite --iodepth=1 --rw=randwrite --bs=4m --size=256M
   Image:
-    Name:         xridge/fio:3.13
-    Pull Policy:  Always
-  Persistent Volume Claim:
-    Access Modes:
-      ReadWriteOnce
-    Size:  5Gi
+    Name:  xridge/fio:3.13
+  Volume:
+    Persistent Volume Claim Spec:
+      Access Modes:
+        ReadWriteOnce
+      Resources:
+        Requests:
+          Storage:  1Gi
+    Volume Source:
+      Persistent Volume Claim:
+        Claim Name:  GENERATED
 Status:
   Completed:  true
   Running:    false
 Events:
   Type    Reason           Age   From       Message
   ----    ------           ----  ----       -------
-  Normal  CreateSucceeded  25s   kubestone  Created /api/v1/namespaces/kubestone/configmaps/fio-sample
-  Normal  CreateSucceeded  25s   kubestone  Created /api/v1/namespaces/kubestone/persistentvolumeclaims/fio-sample
-  Normal  CreateSucceeded  25s   kubestone  Created /apis/batch/v1/namespaces/kubestone/jobs/fio-sample
+  Normal  CreateSucceeded  11s   kubestone  Created /api/v1/namespaces/kubestone/configmaps/fio-sample
+  Normal  CreateSucceeded  11s   kubestone  Created /api/v1/namespaces/kubestone/persistentvolumeclaims/fio-sample
+  Normal  CreateSucceeded  11s   kubestone  Created /apis/batch/v1/namespaces/kubestone/jobs/fio-sample
 ```
 
 
@@ -212,8 +222,12 @@ We have learned that Kubestone uses Custom Resources to define benchmarks. We ca
 
 ```bash
 $ kubectl get crds | grep kubestone
-fios.perf.kubestone.xridge.io           2019-08-24T18:12:34Z
-iperf3s.perf.kubestone.xridge.io        2019-08-24T18:12:34Z
+drills.perf.kubestone.xridge.io         2019-09-08T05:51:26Z
+fios.perf.kubestone.xridge.io           2019-09-08T05:51:26Z
+iopings.perf.kubestone.xridge.io        2019-09-08T05:51:26Z
+iperf3s.perf.kubestone.xridge.io        2019-09-08T05:51:26Z
+pgbenches.perf.kubestone.xridge.io      2019-09-08T05:51:26Z
+sysbenches.perf.kubestone.xridge.io     2019-09-08T05:51:26Z
 ```
 
 Using the CRD names above, we can list the executed benchmarks in the system.

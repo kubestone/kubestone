@@ -16,6 +16,7 @@ Resource Types:
 (<em>Appears on:</em>
 <a href="#perf.kubestone.xridge.io/v1alpha1.Drill">Drill</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.Fio">Fio</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.Ioping">Ioping</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3">Iperf3</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.Pgbench">Pgbench</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.Qperf">Qperf</a>, 
@@ -376,16 +377,14 @@ pod labels and scheduling policies (affinity, toleration, node selector&hellip;)
 <td>
 <code>volume</code></br>
 <em>
-<a href="#perf.kubestone.xridge.io/v1alpha1.FioVolumeSpec">
-FioVolumeSpec
+<a href="#perf.kubestone.xridge.io/v1alpha1.VolumeSpec">
+VolumeSpec
 </a>
 </em>
 </td>
 <td>
-<em>(Optional)</em>
 <p>Volume contains the configuration for the volume that the fio job should
-run on. If missing, no volume will attached to the job and Docker&rsquo;s layered
-fs performance will be measured</p>
+run on.</p>
 </td>
 </tr>
 </table>
@@ -494,66 +493,14 @@ pod labels and scheduling policies (affinity, toleration, node selector&hellip;)
 <td>
 <code>volume</code></br>
 <em>
-<a href="#perf.kubestone.xridge.io/v1alpha1.FioVolumeSpec">
-FioVolumeSpec
+<a href="#perf.kubestone.xridge.io/v1alpha1.VolumeSpec">
+VolumeSpec
 </a>
 </em>
 </td>
 <td>
-<em>(Optional)</em>
 <p>Volume contains the configuration for the volume that the fio job should
-run on. If missing, no volume will attached to the job and Docker&rsquo;s layered
-fs performance will be measured</p>
-</td>
-</tr>
-</tbody>
-</table>
-<h3 id="perf.kubestone.xridge.io/v1alpha1.FioVolumeSpec">FioVolumeSpec
-</h3>
-<p>
-(<em>Appears on:</em>
-<a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>)
-</p>
-<p>
-<p>FioVolumeSpec contains the configuration for the volume that the fio job
-will use for benchmarking</p>
-</p>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<code>volumeSource</code></br>
-<em>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#volumesource-v1-core">
-Kubernetes core/v1.VolumeSource
-</a>
-</em>
-</td>
-<td>
-<p>VolumeSource represents the source of the volume, e.g. an existing
-PVC, host path, git repo, etc.</p>
-</td>
-</tr>
-<tr>
-<td>
-<code>persistentVolumeClaim</code></br>
-<em>
-<a href="#perf.kubestone.xridge.io/v1alpha1.PersistentVolumeClaimSpec">
-PersistentVolumeClaimSpec
-</a>
-</em>
-</td>
-<td>
-<em>(Optional)</em>
-<p>PersistentVolumeClaim describes the persistent volume claim that will be
-created and used by the pod. This field <em>overrides</em> the VolumeSource to
-point to the created PVC</p>
+run on.</p>
 </td>
 </tr>
 </tbody>
@@ -564,6 +511,7 @@ point to the created PVC</p>
 (<em>Appears on:</em>
 <a href="#perf.kubestone.xridge.io/v1alpha1.DrillSpec">DrillSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.IopingSpec">IopingSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3Spec">Iperf3Spec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.PgbenchSpec">PgbenchSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.QperfSpec">QperfSpec</a>, 
@@ -615,6 +563,190 @@ string
 <em>(Optional)</em>
 <p>PullSecret is an optional list of references to secrets
 in the same namespace to use for pulling any of the images</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.Ioping">Ioping
+</h3>
+<p>
+<p>Ioping is the Schema for the iopings API</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>metadata</code></br>
+<em>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#objectmeta-v1-meta">
+Kubernetes meta/v1.ObjectMeta
+</a>
+</em>
+</td>
+<td>
+Refer to the Kubernetes API documentation for the fields of the
+<code>metadata</code> field.
+</td>
+</tr>
+<tr>
+<td>
+<code>spec</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.IopingSpec">
+IopingSpec
+</a>
+</em>
+</td>
+<td>
+<br/>
+<br/>
+<table>
+<tr>
+<td>
+<code>image</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.ImageSpec">
+ImageSpec
+</a>
+</em>
+</td>
+<td>
+<p>Image defines the ioping docker image used for the benchmark</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>args</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Args are appended to the predefined ioping parameters</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>podConfig</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PodConfigurationSpec">
+PodConfigurationSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>PodConfig contains the configuration for the benchmark pod, including
+pod labels and scheduling policies (affinity, toleration, node selector&hellip;)</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>volume</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.VolumeSpec">
+VolumeSpec
+</a>
+</em>
+</td>
+<td>
+<p>Volume contains the configuration for the volume that the ioping job should
+run on.</p>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<code>status</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.BenchmarkStatus">
+BenchmarkStatus
+</a>
+</em>
+</td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.IopingSpec">IopingSpec
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.Ioping">Ioping</a>)
+</p>
+<p>
+<p>IopingSpec defines the ioping benchmark run</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>image</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.ImageSpec">
+ImageSpec
+</a>
+</em>
+</td>
+<td>
+<p>Image defines the ioping docker image used for the benchmark</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>args</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Args are appended to the predefined ioping parameters</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>podConfig</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PodConfigurationSpec">
+PodConfigurationSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>PodConfig contains the configuration for the benchmark pod, including
+pod labels and scheduling policies (affinity, toleration, node selector&hellip;)</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>volume</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.VolumeSpec">
+VolumeSpec
+</a>
+</em>
+</td>
+<td>
+<p>Volume contains the configuration for the volume that the ioping job should
+run on.</p>
 </td>
 </tr>
 </tbody>
@@ -866,136 +998,6 @@ If enabled the &lsquo;&ndash;udp&rsquo; parameter is added to iperf command line
 </tr>
 </tbody>
 </table>
-<h3 id="perf.kubestone.xridge.io/v1alpha1.PersistentVolumeAccessMode">PersistentVolumeAccessMode
-(<code>string</code> alias)</p></h3>
-<p>
-(<em>Appears on:</em>
-<a href="#perf.kubestone.xridge.io/v1alpha1.PersistentVolumeClaimSpec">PersistentVolumeClaimSpec</a>)
-</p>
-<p>
-<p>PersistentVolumeAccessMode defines the way the pv is mounted</p>
-</p>
-<h3 id="perf.kubestone.xridge.io/v1alpha1.PersistentVolumeClaimSpec">PersistentVolumeClaimSpec
-</h3>
-<p>
-(<em>Appears on:</em>
-<a href="#perf.kubestone.xridge.io/v1alpha1.FioVolumeSpec">FioVolumeSpec</a>)
-</p>
-<p>
-<p>PersistentVolumeClaimSpec describes the common attributes of storage devices
-and allows a Source for provider-specific attributes</p>
-</p>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<code>size</code></br>
-<em>
-<a href="#perf.kubestone.xridge.io/v1alpha1.PersistentVolumeSize">
-PersistentVolumeSize
-</a>
-</em>
-</td>
-<td>
-<p>Size defines the size of the PVC</p>
-</td>
-</tr>
-<tr>
-<td>
-<code>accessModes</code></br>
-<em>
-<a href="#perf.kubestone.xridge.io/v1alpha1.PersistentVolumeAccessMode">
-[]PersistentVolumeAccessMode
-</a>
-</em>
-</td>
-<td>
-<em>(Optional)</em>
-<p>AccessModes contains the desired access modes the volume should have.
-More info: <a href="https://kubernetes.io/docs/concepts/storage/persistent-volumes#access-modes-1">https://kubernetes.io/docs/concepts/storage/persistent-volumes#access-modes-1</a></p>
-</td>
-</tr>
-<tr>
-<td>
-<code>selector</code></br>
-<em>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#labelselector-v1-meta">
-Kubernetes meta/v1.LabelSelector
-</a>
-</em>
-</td>
-<td>
-<em>(Optional)</em>
-<p>Selector is a label query over volumes to consider for binding.</p>
-</td>
-</tr>
-<tr>
-<td>
-<code>volumeName</code></br>
-<em>
-string
-</em>
-</td>
-<td>
-<em>(Optional)</em>
-<p>VolumeName is the binding reference to the PersistentVolume backing this claim.</p>
-</td>
-</tr>
-<tr>
-<td>
-<code>storageClassName</code></br>
-<em>
-string
-</em>
-</td>
-<td>
-<em>(Optional)</em>
-<p>StorageClassName is the name of the StorageClass required by the claim.
-More info: <a href="https://kubernetes.io/docs/concepts/storage/persistent-volumes#class-1">https://kubernetes.io/docs/concepts/storage/persistent-volumes#class-1</a></p>
-</td>
-</tr>
-<tr>
-<td>
-<code>volumeMode</code></br>
-<em>
-<a href="#perf.kubestone.xridge.io/v1alpha1.PersistentVolumeMode">
-PersistentVolumeMode
-</a>
-</em>
-</td>
-<td>
-<em>(Optional)</em>
-<p>VolumeMode defines what type of volume is required by the claim.
-Value of Filesystem is implied when not included in claim spec.
-This is a beta feature.</p>
-</td>
-</tr>
-</tbody>
-</table>
-<h3 id="perf.kubestone.xridge.io/v1alpha1.PersistentVolumeMode">PersistentVolumeMode
-(<code>string</code> alias)</p></h3>
-<p>
-(<em>Appears on:</em>
-<a href="#perf.kubestone.xridge.io/v1alpha1.PersistentVolumeClaimSpec">PersistentVolumeClaimSpec</a>)
-</p>
-<p>
-<p>PersistentVolumeMode describes how a volume is intended to be consumed, either Block or Filesystem.</p>
-</p>
-<h3 id="perf.kubestone.xridge.io/v1alpha1.PersistentVolumeSize">PersistentVolumeSize
-(<code>string</code> alias)</p></h3>
-<p>
-(<em>Appears on:</em>
-<a href="#perf.kubestone.xridge.io/v1alpha1.PersistentVolumeClaimSpec">PersistentVolumeClaimSpec</a>)
-</p>
-<p>
-<p>PersistentVolumeSize defines the size of the PV</p>
-</p>
 <h3 id="perf.kubestone.xridge.io/v1alpha1.Pgbench">Pgbench
 </h3>
 <p>
@@ -1210,6 +1212,7 @@ pod labels and scheduling policies (affinity, toleration, node selector&hellip;)
 (<em>Appears on:</em>
 <a href="#perf.kubestone.xridge.io/v1alpha1.DrillSpec">DrillSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.IopingSpec">IopingSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3ConfigurationSpec">Iperf3ConfigurationSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.PgbenchSpec">PgbenchSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.QperfConfigurationSpec">QperfConfigurationSpec</a>, 
@@ -1903,8 +1906,64 @@ on a particular test. Some tests also implement their own custom commands.</p>
 </tr>
 </tbody>
 </table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.VolumeSpec">VolumeSpec
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.IopingSpec">IopingSpec</a>)
+</p>
+<p>
+<p>VolumeSpec contains the Volume Definition used for the benchmarks.
+It can point to an EmptyDir, HostPath, already existing PVC or PVC
+to be created benchmark time.</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>volumeSource</code></br>
+<em>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#volumesource-v1-core">
+Kubernetes core/v1.VolumeSource
+</a>
+</em>
+</td>
+<td>
+<p>VolumeSource represents the source of the volume, e.g. EmptyDir,
+HostPath, Ceph, PersistentVolumeClaim, etc.
+PersistentVolumeClaim.claimName can be set to point to an already
+existing PVC or could be set to &lsquo;GENERATED&rsquo;. When set to &lsquo;GENERATED&rsquo;
+The PVC will be created based on the PersistentVolumeClaimSpec provided
+to the VolumeSpec.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>persistentVolumeClaimSpec</code></br>
+<em>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#persistentvolumeclaimspec-v1-core">
+Kubernetes core/v1.PersistentVolumeClaimSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>PersistentVolumeClaimSpec describes the persistent volume claim that will be
+created and used by the pod. If specified, the VolumeSource.PersistentVolumeClaim&rsquo;s
+claimName must be set to &lsquo;GENERATED&rsquo;</p>
+</td>
+</tr>
+</tbody>
+</table>
 <hr/>
 <p><em>
 Generated with <code>gen-crd-api-reference-docs</code>
-on git commit <code>144873b</code>.
+on git commit <code>276061d</code>.
 </em></p>

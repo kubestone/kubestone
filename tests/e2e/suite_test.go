@@ -17,6 +17,7 @@ limitations under the License.
 package e2e
 
 import (
+	"log"
 	"testing"
 
 	"context"
@@ -40,6 +41,7 @@ const (
 const (
 	e2eNamespaceDrill    = "kubestone-e2e-drill"
 	e2eNamespaceFio      = "kubestone-e2e-fio"
+	e2eNamespaceIoping   = "kubestone-e2e-ioping"
 	e2eNamespaceIperf3   = "kubestone-e2e-iperf3"
 	e2eNamespacePgbench  = "kubestone-e2e-pgbench"
 	e2eNamespaceQperf    = "kubestone-e2e-qperf"
@@ -49,6 +51,7 @@ const (
 var e2eNamespaces = []string{
 	e2eNamespaceDrill,
 	e2eNamespaceFio,
+	e2eNamespaceIoping,
 	e2eNamespaceIperf3,
 	e2eNamespacePgbench,
 	e2eNamespaceQperf,
@@ -80,7 +83,13 @@ var _ = BeforeSuite(func() {
 
 var _ = AfterSuite(func() {
 	for _, namespace := range e2eNamespaces {
-		_, _, err := run("kubectl delete namespace " + namespace)
+		stdout, _, err := run("kubectl get all --namespace " + namespace)
+		if err != nil {
+			Fail(err.Error())
+		}
+		log.Printf("objects in %s namespace:\n%s\n", namespace, stdout)
+
+		_, _, err = run("kubectl delete namespace " + namespace)
 		if err != nil {
 			Fail(err.Error())
 		}

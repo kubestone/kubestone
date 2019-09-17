@@ -4,10 +4,12 @@ nav:
   - Quickstart guide: quickstart.md
   - Benchmarks:
       - 'Benchmarks home': benchmarks-index.md
-      - 'Fio': benchmarks/fio.md
-      - 'Iperf3': benchmarks/iperf3.md
-      - 'Sysbench': benchmarks/sysbench.md
-      - 'Drill': benchmarks/drill.md
+      - 'fio': benchmarks/fio.md
+      - 'ioping': benchmarks/ioping.md
+      - 'iperf3': benchmarks/iperf3.md
+      - 'sysbench': benchmarks/sysbench.md
+      - 'drill': benchmarks/drill.md
+      - 'pgbench': benchmarks/pgbench.md
   - CRD API docs: apidocs.md
   - Development guide: devguide.md
 
@@ -34,7 +36,7 @@ markdown_extensions:
   - admonition
   - codehilite
 
-theme: 
+theme:
   name: material
   palette:
     primary: 'white'

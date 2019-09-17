@@ -25,7 +25,7 @@ import (
 
 	"github.com/firepear/qsplit"
 	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
-	"github.com/xridge/kubestone/controllers/common"
+	"github.com/xridge/kubestone/pkg/k8s"
 )
 
 // NewJob creates a new pgbench job
@@ -52,7 +52,7 @@ func NewJob(cr *perfv1alpha1.Pgbench) *batchv1.Job {
 		Env:             env,
 	}
 
-	job := common.NewPerfJob(objectMeta, "pgbench", cr.Spec.Image, cr.Spec.PodConfig)
+	job := k8s.NewPerfJob(objectMeta, "pgbench", cr.Spec.Image, cr.Spec.PodConfig)
 	job.Spec.Template.Spec.InitContainers = append(
 		job.Spec.Template.Spec.InitContainers, initContainer)
 	job.Spec.Template.Spec.Containers[0].Args = qsplit.ToStrings([]byte(cr.Spec.Args))

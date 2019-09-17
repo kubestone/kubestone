@@ -63,7 +63,7 @@ type QperfSpec struct {
 // +kubebuilder:printcolumn:name="Running",type="boolean",JSONPath=".status.running"
 // +kubebuilder:printcolumn:name="Completed",type="boolean",JSONPath=".status.completed"
 
-// Qperf is the Schema for the qperf API
+// Qperf is the Schema for the qperves API
 type Qperf struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`

@@ -40,18 +40,14 @@ install: manifests
 
 # Deploy controller in the configured Kubernetes cluster in ~/.kube/config
 deploy: manifests
-	kubectl apply -f config/crd/bases
 	kustomize build config/default | kubectl apply -f -
 
 # Deployment used for end-to-end test
 deploy-e2e: manifests
-	kubectl apply -f config/crd/bases
 	kustomize build config/e2e | kubectl apply -f -
 
 # Generate manifests: CRD, RBAC, etc.
-manifests: manifests-code
-
-manifests-code: controller-gen
+manifests: controller-gen
 	$(CONTROLLER_GEN) $(CRD_OPTIONS) rbac:roleName=manager-role webhook paths="./..." output:crd:artifacts:config=config/crd/bases
 
 # Download gen-crd-api-reference-docs

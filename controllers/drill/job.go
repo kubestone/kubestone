@@ -66,7 +66,7 @@ func NewJob(cr *perfv1alpha1.Drill, configMap *corev1.ConfigMap) *batchv1.Job {
 	job := k8s.NewPerfJob(objectMeta, "fio", cr.Spec.Image, cr.Spec.PodConfig)
 	job.Spec.Template.Spec.Volumes = volumes
 	job.Spec.Template.Spec.Containers[0].Command = []string{"/bin/sh", "-xc"}
-	job.Spec.Template.Spec.Containers[0].Args = qsplit.ToStrings([]byte(command))
+	job.Spec.Template.Spec.Containers[0].Args = []string{command}
 	job.Spec.Template.Spec.Containers[0].VolumeMounts = volumeMounts
 	return job
 }

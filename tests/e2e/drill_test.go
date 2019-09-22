@@ -51,6 +51,20 @@ var _ = Describe("end to end test", func() {
 				return (cr.Status.Running == false) && (cr.Status.Completed)
 			}, timeout).Should(BeTrue())
 		})
+		It("Should leave one successful pod that actually fetched kubernetes.io", func() {
+			inNamespace := ctrlclient.InNamespace(e2eNamespaceDrill)
+			matchingLabel := ctrlclient.MatchingLabels{
+				"job-name": "drill-sample",
+			}
+			podList := &corev1.PodList{}
+			Expect(client.List(ctx, podList, inNamespace, matchingLabel)).To(Succeed())
+			Expect(len(podList.Items)).To(Equal(1))
+			pod := podList.Items[0]
+
+			output, _, err := run("kubectl logs -n " + e2eNamespaceDrill + " " + pod.Name)
+			Expect(err).To(BeNil())
+			Expect(output).To(ContainSubstring("Fetch kubernetes.io"))
+		})
 		It("Should leave one successful job", func() {
 			job := &batchv1.Job{}
 			namespacedName := types.NamespacedName{

@@ -21,8 +21,8 @@ import (
 )
 
 // DrillSpec defines benchmark run for drill load tester
-// The benchmarkFile, and options is passed to drill as follows:
-// drill [OPTIONS] --benchmark <benchmarkFile>
+// The benchmarkFile, and arguments is passed to drill as follows:
+// drill [args] --benchmark <benchmarkFile>
 type DrillSpec struct {
 	// Image defines the drill docker image used for the benchmark
 	Image ImageSpec `json:"image"`
@@ -36,9 +36,9 @@ type DrillSpec struct {
 	// BenchmarkFile is the entry point file (passed to --benchmark) specified to drill.
 	BenchmarkFile string `json:"benchmarkFile"`
 
-	// Options are appended to the options parameter set of drill
+	// Args are appended to the options parameter set of drill
 	// +optional
-	Options string `json:"options,omitempty"`
+	Args string `json:"args,omitempty"`
 
 	// PodConfig contains the configuration for the benchmark pod, including
 	// pod labels and scheduling policies (affinity, toleration, node selector...)

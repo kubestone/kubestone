@@ -37,9 +37,9 @@ type FioSpec struct {
 	// +optional
 	CustomJobFiles []string `json:"customJobFiles,omitempty"`
 
-	// CmdLineArgs are appended to the predefined fio parameters
+	// Args are appended to the predefined fio parameters
 	// +optional
-	CmdLineArgs string `json:"cmdLineArgs,omitempty"`
+	Args string `json:"args,omitempty"`
 
 	// PodConfig contains the configuration for the benchmark pod, including
 	// pod labels and scheduling policies (affinity, toleration, node selector...)

@@ -6,4 +6,4 @@ spec:
   builtinJobFiles:
    - /jobs/rand-read.fio
    - /jobs/rand-write.fio
-  cmdLineArgs:
+  args:

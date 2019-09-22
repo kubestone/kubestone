@@ -38,9 +38,12 @@ spec:
           type: object
         spec:
           description: 'DrillSpec defines benchmark run for drill load tester The
-            benchmarkFile, and options is passed to drill as follows: drill [OPTIONS]
+            benchmarkFile, and arguments is passed to drill as follows: drill [args]
             --benchmark <benchmarkFile>'
           properties:
+            args:
+              description: Args are appended to the options parameter set of drill
+              type: string
             benchmarkFile:
               description: BenchmarkFile is the entry point file (passed to --benchmark)
                 specified to drill.
@@ -75,9 +78,6 @@ spec:
               required:
               - name
               type: object
-            options:
-              description: Options are appended to the options parameter set of drill
-              type: string
             podConfig:
               description: PodConfig contains the configuration for the benchmark
                 pod, including pod labels and scheduling policies (affinity, toleration,

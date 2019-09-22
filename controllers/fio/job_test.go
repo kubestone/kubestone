@@ -37,7 +37,7 @@ var _ = Describe("fio job", func() {
 						PullPolicy: "Always",
 						PullSecret: "a-pull-secret",
 					},
-					CmdLineArgs: "--name=randwrite --iodepth=1 --rw=randwrite --bs=4m --direct=1 --size=256M --numjobs=1",
+					Args: "--name=randwrite --iodepth=1 --rw=randwrite --bs=4m --direct=1 --size=256M --numjobs=1",
 				},
 			}
 			job = NewJob(&cr)

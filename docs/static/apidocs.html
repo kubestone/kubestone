@@ -137,14 +137,14 @@ string
 </tr>
 <tr>
 <td>
-<code>options</code></br>
+<code>args</code></br>
 <em>
 string
 </em>
 </td>
 <td>
 <em>(Optional)</em>
-<p>Options are appended to the options parameter set of drill</p>
+<p>Args are appended to the options parameter set of drill</p>
 </td>
 </tr>
 <tr>
@@ -187,8 +187,8 @@ BenchmarkStatus
 </p>
 <p>
 <p>DrillSpec defines benchmark run for drill load tester
-The benchmarkFile, and options is passed to drill as follows:
-drill [OPTIONS] &ndash;benchmark <benchmarkFile></p>
+The benchmarkFile, and arguments is passed to drill as follows:
+drill [args] &ndash;benchmark <benchmarkFile></p>
 </p>
 <table>
 <thead>
@@ -238,14 +238,14 @@ string
 </tr>
 <tr>
 <td>
-<code>options</code></br>
+<code>args</code></br>
 <em>
 string
 </em>
 </td>
 <td>
 <em>(Optional)</em>
-<p>Options are appended to the options parameter set of drill</p>
+<p>Args are appended to the options parameter set of drill</p>
 </td>
 </tr>
 <tr>
@@ -348,14 +348,14 @@ The job files defined here will be mounted to the fio benchmark container</p>
 </tr>
 <tr>
 <td>
-<code>cmdLineArgs</code></br>
+<code>args</code></br>
 <em>
 string
 </em>
 </td>
 <td>
 <em>(Optional)</em>
-<p>CmdLineArgs are appended to the predefined fio parameters</p>
+<p>Args are appended to the predefined fio parameters</p>
 </td>
 </tr>
 <tr>
@@ -464,14 +464,14 @@ The job files defined here will be mounted to the fio benchmark container</p>
 </tr>
 <tr>
 <td>
-<code>cmdLineArgs</code></br>
+<code>args</code></br>
 <em>
 string
 </em>
 </td>
 <td>
 <em>(Optional)</em>
-<p>CmdLineArgs are appended to the predefined fio parameters</p>
+<p>Args are appended to the predefined fio parameters</p>
 </td>
 </tr>
 <tr>
@@ -898,14 +898,14 @@ PodConfigurationSpec
 </tr>
 <tr>
 <td>
-<code>cmdLineArgs</code></br>
+<code>args</code></br>
 <em>
 string
 </em>
 </td>
 <td>
 <em>(Optional)</em>
-<p>CmdLineArgs are appended to the predefined iperf3 parameters</p>
+<p>Args are appended to the predefined iperf3 parameters</p>
 </td>
 </tr>
 <tr>
@@ -1489,14 +1489,14 @@ ImageSpec
 </tr>
 <tr>
 <td>
-<code>options</code></br>
+<code>args</code></br>
 <em>
 string
 </em>
 </td>
 <td>
 <em>(Optional)</em>
-<p>Options are options for the qperf binary</p>
+<p>Args are options for the qperf binary</p>
 </td>
 </tr>
 <tr>
@@ -1563,7 +1563,7 @@ BenchmarkStatus
 </p>
 <p>
 <p>QperfConfigurationSpec contains configuration parameters
-with scheduling options for the both the qperf client
+with scheduling arguments for the both the qperf client
 and server instances.</p>
 </p>
 <table>
@@ -1638,14 +1638,14 @@ ImageSpec
 </tr>
 <tr>
 <td>
-<code>options</code></br>
+<code>args</code></br>
 <em>
 string
 </em>
 </td>
 <td>
 <em>(Optional)</em>
-<p>Options are options for the qperf binary</p>
+<p>Args are options for the qperf binary</p>
 </td>
 </tr>
 <tr>
@@ -1762,14 +1762,14 @@ pod labels and scheduling policies (affinity, toleration, node selector&hellip;)
 </tr>
 <tr>
 <td>
-<code>options</code></br>
+<code>args</code></br>
 <em>
 string
 </em>
 </td>
 <td>
 <em>(Optional)</em>
-<p>Options is a list of zero or more command line options starting with &lsquo;&ndash;&rsquo;.</p>
+<p>Args is a list of zero or more command line arguments starting with &lsquo;&ndash;&rsquo;.</p>
 </td>
 </tr>
 <tr>
@@ -1823,8 +1823,8 @@ BenchmarkStatus
 </p>
 <p>
 <p>SysbenchSpec contains the configuration parameters
-with scheduling options for the sysbench benchmark.
-The options, testName and command parameters are passed
+with scheduling arguments for the sysbench benchmark.
+The arguments, testName and command parameters are passed
 to the sysbench benchmarking application.</p>
 </p>
 <table>
@@ -1868,14 +1868,14 @@ pod labels and scheduling policies (affinity, toleration, node selector&hellip;)
 </tr>
 <tr>
 <td>
-<code>options</code></br>
+<code>args</code></br>
 <em>
 string
 </em>
 </td>
 <td>
 <em>(Optional)</em>
-<p>Options is a list of zero or more command line options starting with &lsquo;&ndash;&rsquo;.</p>
+<p>Args is a list of zero or more command line arguments starting with &lsquo;&ndash;&rsquo;.</p>
 </td>
 </tr>
 <tr>
@@ -1965,5 +1965,5 @@ claimName must be set to &lsquo;GENERATED&rsquo;</p>
 <hr/>
 <p><em>
 Generated with <code>gen-crd-api-reference-docs</code>
-on git commit <code>a227c85</code>.
+on git commit <code>0d9e77c</code>.
 </em></p>

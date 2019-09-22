@@ -9,7 +9,7 @@ spec:
     pullPolicy: IfNotPresent
     # pullSecret: null
 
-  options: "--verbose --time 10"
+  args: "--verbose --time 10"
   tests:
   - tcp_bw
   - tcp_lat
@@ -36,7 +36,7 @@ spec:
       # nodeSelector: null
       # nodeName: null
     hostNetwork: false
-    
+
   clientConfiguration:
     podLabels:
       qperf-mode: client

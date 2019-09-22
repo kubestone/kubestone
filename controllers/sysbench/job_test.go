@@ -34,7 +34,7 @@ var _ = Describe("sysbench job", func() {
 					Image: perfv1alpha1.ImageSpec{
 						Name: "xridge/sysbench:test",
 					},
-					Options:  "--threads=2 --time=20",
+					Args:     "--threads=2 --time=20",
 					TestName: "cpu",
 					Command:  "run",
 				},
@@ -43,7 +43,7 @@ var _ = Describe("sysbench job", func() {
 		})
 
 		Context("with command line arguments", func() {
-			It("should have the same options", func() {
+			It("should have the same args", func() {
 				Expect(job.Spec.Template.Spec.Containers[0].Args).To(
 					ContainElement("--threads=2"))
 				Expect(job.Spec.Template.Spec.Containers[0].Args).To(

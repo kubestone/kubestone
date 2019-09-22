@@ -40,6 +40,9 @@ spec:
           description: QperfSpec defines the Qperf Benchmark Stone which consist of
             server deployment with service definition and client pod.
           properties:
+            args:
+              description: Args are options for the qperf binary
+              type: string
             clientConfiguration:
               description: ClientConfiguration contains the configuration of the qperf
                 client
@@ -782,9 +785,6 @@ spec:
               required:
               - name
               type: object
-            options:
-              description: Options are options for the qperf binary
-              type: string
             serverConfiguration:
               description: ServerConfiguration contains the configuration of the qperf
                 server

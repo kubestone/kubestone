@@ -44,8 +44,8 @@ spec:
               description: ClientConfiguration contains the configuration of the iperf3
                 client
               properties:
-                cmdLineArgs:
-                  description: CmdLineArgs are appended to the predefined iperf3 parameters
+                args:
+                  description: Args are appended to the predefined iperf3 parameters
                   type: string
                 hostNetwork:
                   description: HostNetwork requested for the iperf3 pod, if enabled
@@ -789,8 +789,8 @@ spec:
               description: ServerConfiguration contains the configuration of the iperf3
                 server
               properties:
-                cmdLineArgs:
-                  description: CmdLineArgs are appended to the predefined iperf3 parameters
+                args:
+                  description: Args are appended to the predefined iperf3 parameters
                   type: string
                 hostNetwork:
                   description: HostNetwork requested for the iperf3 pod, if enabled

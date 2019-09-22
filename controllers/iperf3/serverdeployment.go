@@ -53,18 +53,18 @@ func NewServerDeployment(cr *perfv1alpha1.Iperf3) *appsv1.Deployment {
 		labels[k] = v
 	}
 
-	iperfCmdLineArgs := []string{
+	iperfArgs := []string{
 		"--server",
 		"--port", strconv.Itoa(Iperf3ServerPort)}
 
 	protocol := corev1.Protocol(corev1.ProtocolTCP)
 	if cr.Spec.UDP {
-		iperfCmdLineArgs = append(iperfCmdLineArgs, "--udp")
+		iperfArgs = append(iperfArgs, "--udp")
 		protocol = corev1.Protocol(corev1.ProtocolUDP)
 	}
 
-	iperfCmdLineArgs = append(iperfCmdLineArgs,
-		qsplit.ToStrings([]byte(cr.Spec.ClientConfiguration.CmdLineArgs))...)
+	iperfArgs = append(iperfArgs,
+		qsplit.ToStrings([]byte(cr.Spec.ClientConfiguration.Args))...)
 
 	// Iperf3 Server does not like if probe connections are made to the port,
 	// therefore we are checking if the port if open or not via shell script
@@ -97,7 +97,7 @@ func NewServerDeployment(cr *perfv1alpha1.Iperf3) *appsv1.Deployment {
 							Image:           cr.Spec.Image.Name,
 							ImagePullPolicy: corev1.PullPolicy(cr.Spec.Image.PullPolicy),
 							Command:         []string{"iperf3"},
-							Args:            iperfCmdLineArgs,
+							Args:            iperfArgs,
 							Ports: []corev1.ContainerPort{
 								{
 									Name:          "iperf-server",

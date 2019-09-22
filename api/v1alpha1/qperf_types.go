@@ -24,7 +24,7 @@ import (
 const QperfPort = 19765
 
 // QperfConfigurationSpec contains configuration parameters
-// with scheduling options for the both the qperf client
+// with scheduling arguments for the both the qperf client
 // and server instances.
 type QperfConfigurationSpec struct {
 	PodConfigurationSpec `json:",inline"`
@@ -42,9 +42,9 @@ type QperfSpec struct {
 	// Image defines the qperf docker image used for the benchmark
 	Image ImageSpec `json:"image"`
 
-	// Options are options for the qperf binary
+	// Args are options for the qperf binary
 	// +optional
-	Options string `json:"options,omitempty"`
+	Args string `json:"args,omitempty"`
 
 	// Tests are the tests that we would like to run
 	Tests []string `json:"tests"`

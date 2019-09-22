@@ -44,7 +44,7 @@ var _ = Describe("drill job", func() {
 						"included-file.yml": "included content",
 					},
 					BenchmarkFile: "the-benchmark.yml",
-					Options:       "--no-check-certificate --stats",
+					Args:          "--no-check-certificate --stats",
 				},
 			}
 			configMap := corev1.ConfigMap{

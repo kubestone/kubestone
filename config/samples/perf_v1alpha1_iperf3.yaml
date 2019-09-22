@@ -10,7 +10,7 @@ spec:
     # pullSecret: null
 
   serverConfiguration:
-    cmdLineArgs: --verbose
+    args: --verbose
     # nodeSelector: null
     podLabels:
       iperf-mode: server
@@ -32,7 +32,7 @@ spec:
       # nodeSelector: null
       # nodeName: null
     hostNetwork: false
-    
+
   clientConfiguration:
     podScheduling:
       affinity:

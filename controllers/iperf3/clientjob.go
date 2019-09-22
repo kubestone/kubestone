@@ -48,23 +48,23 @@ func NewClientJob(cr *perfv1alpha1.Iperf3) *batchv1.Job {
 
 	serverAddress := serverServiceName(cr)
 
-	iperfCmdLineArgs := []string{
+	iperfArgs := []string{
 		"--client", serverAddress,
 		"--port", strconv.Itoa(Iperf3ServerPort),
 	}
 
 	if cr.Spec.UDP {
-		iperfCmdLineArgs = append(iperfCmdLineArgs, "--udp")
+		iperfArgs = append(iperfArgs, "--udp")
 	}
 
-	iperfCmdLineArgs = append(iperfCmdLineArgs,
-		qsplit.ToStrings([]byte(cr.Spec.ClientConfiguration.CmdLineArgs))...)
+	iperfArgs = append(iperfArgs,
+		qsplit.ToStrings([]byte(cr.Spec.ClientConfiguration.Args))...)
 
 	job := k8s.NewPerfJob(objectMeta, "iperf3-client", cr.Spec.Image,
 		cr.Spec.ClientConfiguration.PodConfigurationSpec)
 	backoffLimit := int32(6)
 	job.Spec.BackoffLimit = &backoffLimit
-	job.Spec.Template.Spec.Containers[0].Args = iperfCmdLineArgs
+	job.Spec.Template.Spec.Containers[0].Args = iperfArgs
 	job.Spec.Template.Spec.HostNetwork = cr.Spec.ClientConfiguration.HostNetwork
 	return job
 }

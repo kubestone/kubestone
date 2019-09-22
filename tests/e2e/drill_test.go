@@ -19,9 +19,11 @@ package e2e
 import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	"github.com/xridge/kubestone/api/v1alpha1"
+
 	batchv1 "k8s.io/api/batch/v1"
 	corev1 "k8s.io/api/core/v1"
+
+	"github.com/xridge/kubestone/api/v1alpha1"
 	"k8s.io/apimachinery/pkg/types"
 	ctrlclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
@@ -30,7 +32,7 @@ const (
 	drillSampleCR = "../../config/samples/perf_v1alpha1_drill.yaml"
 )
 
-var _ = Describe("end to end test", func() {
+var _ = FDescribe("end to end test", func() {
 	Context("create from samples", func() {
 		It("should create drill-sample cr", func() {
 			_, _, err := run("kubectl create -n " + e2eNamespaceDrill + " -f " + drillSampleCR)

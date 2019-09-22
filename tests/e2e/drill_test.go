@@ -21,7 +21,9 @@ import (
 	. "github.com/onsi/gomega"
 	"github.com/xridge/kubestone/api/v1alpha1"
 	batchv1 "k8s.io/api/batch/v1"
+	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/types"
+	ctrlclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 const (

@@ -80,7 +80,7 @@ func (a *Access) CreateWithReference(ctx context.Context, object, owner metav1.O
 	}
 
 	if !errors.IsAlreadyExists(err) {
-		_ = a.RecordEventf(owner, corev1.EventTypeNormal, CreateSucceeded,
+		_ = a.RecordEventf(owner, corev1.EventTypeNormal, Created,
 			"Created %v", object.GetSelfLink())
 	}
 
@@ -116,7 +116,7 @@ func (a *Access) DeleteObject(ctx context.Context, object, owner metav1.Object) 
 	}
 
 	if !errors.IsNotFound(err) {
-		_ = a.RecordEventf(owner, corev1.EventTypeNormal, DeleteSucceeded,
+		_ = a.RecordEventf(owner, corev1.EventTypeNormal, Deleted,
 			"Deleted %v", object.GetSelfLink())
 	}
 

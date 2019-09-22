@@ -32,7 +32,7 @@ const (
 	drillSampleCR = "../../config/samples/perf_v1alpha1_drill.yaml"
 )
 
-var _ = FDescribe("end to end test", func() {
+var _ = Describe("end to end test", func() {
 	Context("create from samples", func() {
 		It("should create drill-sample cr", func() {
 			_, _, err := run("kubectl create -n " + e2eNamespaceDrill + " -f " + drillSampleCR)

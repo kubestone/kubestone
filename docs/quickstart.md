@@ -148,9 +148,9 @@ Status:
 Events:
   Type    Reason           Age   From       Message
   ----    ------           ----  ----       -------
-  Normal  CreateSucceeded  11s   kubestone  Created /api/v1/namespaces/kubestone/configmaps/fio-sample
-  Normal  CreateSucceeded  11s   kubestone  Created /api/v1/namespaces/kubestone/persistentvolumeclaims/fio-sample
-  Normal  CreateSucceeded  11s   kubestone  Created /apis/batch/v1/namespaces/kubestone/jobs/fio-sample
+  Normal  Created  11s   kubestone  Created /api/v1/namespaces/kubestone/configmaps/fio-sample
+  Normal  Created  11s   kubestone  Created /api/v1/namespaces/kubestone/persistentvolumeclaims/fio-sample
+  Normal  Created  11s   kubestone  Created /apis/batch/v1/namespaces/kubestone/jobs/fio-sample
 ```
 
 

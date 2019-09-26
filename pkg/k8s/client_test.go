@@ -107,7 +107,7 @@ var _ = Describe("Client", func() {
 
 					if len(eventList.Items) > 0 {
 						event := eventList.Items[0]
-						Expect(event.Reason).To(Equal(CreateSucceeded))
+						Expect(event.Reason).To(Equal(Created))
 						Expect(event.Message).To(ContainSubstring("Created"))
 						Expect(event.Message).To(ContainSubstring(pod.Name))
 					}

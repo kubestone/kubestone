@@ -28,10 +28,10 @@ import (
 const (
 	// CreateFailed is an event provided via EventRecorder
 	CreateFailed = "CreateFailed"
-	// CreateSucceeded is an event provided via EventRecorder
-	CreateSucceeded = "CreateSucceeded"
-	// DeleteSucceeded is an event provided via EventRecorder
-	DeleteSucceeded = "DeleteSucceeded"
+	// Created is an event provided via EventRecorder
+	Created = "Created"
+	// Deleted is an event provided via EventRecorder
+	Deleted = "Deleted"
 )
 
 // NewEventRecorder creates a new event recorder

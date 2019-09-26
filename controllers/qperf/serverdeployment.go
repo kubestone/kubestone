@@ -47,7 +47,7 @@ func NewServerDeployment(cr *perfv1alpha1.Qperf) *appsv1.Deployment {
 		labels[k] = v
 	}
 
-	qperfArgs := []string{"--listen_port", strconv.Itoa(perfv1alpha1.QperfPort)}
+	args := []string{"--listen_port", strconv.Itoa(perfv1alpha1.QperfPort)}
 
 	deployment := appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
@@ -75,7 +75,7 @@ func NewServerDeployment(cr *perfv1alpha1.Qperf) *appsv1.Deployment {
 							Image:           cr.Spec.Image.Name,
 							ImagePullPolicy: corev1.PullPolicy(cr.Spec.Image.PullPolicy),
 							Command:         []string{"qperf"},
-							Args:            qperfArgs,
+							Args:            args,
 							Ports: []corev1.ContainerPort{
 								{
 									Name:          "qperf-server",

@@ -32,11 +32,10 @@ func NewJob(cr *perfv1alpha1.Sysbench) *batchv1.Job {
 		Namespace: cr.Namespace,
 	}
 
-	sysbenchArgs := []string{}
-	sysbenchArgs = append(sysbenchArgs, qsplit.ToStrings([]byte(cr.Spec.Args))...)
-	sysbenchArgs = append(sysbenchArgs, cr.Spec.TestName, cr.Spec.Command)
+	args := qsplit.ToStrings([]byte(cr.Spec.Args))
+	args = append(args, cr.Spec.TestName, cr.Spec.Command)
 
 	job := k8s.NewPerfJob(objectMeta, "sysbench", cr.Spec.Image, cr.Spec.PodConfig)
-	job.Spec.Template.Spec.Containers[0].Args = sysbenchArgs
+	job.Spec.Template.Spec.Containers[0].Args = args
 	return job
 }

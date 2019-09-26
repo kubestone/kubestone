@@ -38,7 +38,7 @@ spec:
           type: object
         spec:
           description: SysbenchSpec contains the configuration parameters with scheduling
-            arguments for the sysbench benchmark. The arguments, testName and command
+            options for the sysbench benchmark. The arguments, testName and command
             parameters are passed to the sysbench benchmarking application.
           properties:
             args:

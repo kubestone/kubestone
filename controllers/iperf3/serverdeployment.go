@@ -53,17 +53,17 @@ func NewServerDeployment(cr *perfv1alpha1.Iperf3) *appsv1.Deployment {
 		labels[k] = v
 	}
 
-	iperfArgs := []string{
+	args := []string{
 		"--server",
 		"--port", strconv.Itoa(Iperf3ServerPort)}
 
 	protocol := corev1.Protocol(corev1.ProtocolTCP)
 	if cr.Spec.UDP {
-		iperfArgs = append(iperfArgs, "--udp")
+		args = append(args, "--udp")
 		protocol = corev1.Protocol(corev1.ProtocolUDP)
 	}
 
-	iperfArgs = append(iperfArgs,
+	args = append(args,
 		qsplit.ToStrings([]byte(cr.Spec.ClientConfiguration.Args))...)
 
 	// Iperf3 Server does not like if probe connections are made to the port,
@@ -97,7 +97,7 @@ func NewServerDeployment(cr *perfv1alpha1.Iperf3) *appsv1.Deployment {
 							Image:           cr.Spec.Image.Name,
 							ImagePullPolicy: corev1.PullPolicy(cr.Spec.Image.PullPolicy),
 							Command:         []string{"iperf3"},
-							Args:            iperfArgs,
+							Args:            args,
 							Ports: []corev1.ContainerPort{
 								{
 									Name:          "iperf-server",

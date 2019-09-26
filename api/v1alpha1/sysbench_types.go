@@ -21,7 +21,7 @@ import (
 )
 
 // SysbenchSpec contains the configuration parameters
-// with scheduling arguments for the sysbench benchmark.
+// with scheduling options for the sysbench benchmark.
 // The arguments, testName and command parameters are passed
 // to the sysbench benchmarking application.
 type SysbenchSpec struct {

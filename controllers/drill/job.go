@@ -40,8 +40,8 @@ func NewJob(cr *perfv1alpha1.Drill, configMap *corev1.ConfigMap) *batchv1.Job {
 		Namespace: cr.Namespace,
 	}
 
-	Args := fmt.Sprintf("%s --benchmark %s", cr.Spec.Args, cr.Spec.BenchmarkFile)
-	command := fmt.Sprintf("cd %s && %s %s", benchmarksDir, drill, Args)
+	argsWithBenchmark := fmt.Sprintf("%s --benchmark %s", cr.Spec.Args, cr.Spec.BenchmarkFile)
+	command := fmt.Sprintf("cd %s && %s %s", benchmarksDir, drill, argsWithBenchmark)
 
 	volumes := []corev1.Volume{
 		corev1.Volume{

@@ -24,7 +24,6 @@ import (
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	"github.com/firepear/qsplit"
 	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
 	"github.com/xridge/kubestone/pkg/k8s"
 )
@@ -66,7 +65,7 @@ func NewJob(cr *perfv1alpha1.Drill, configMap *corev1.ConfigMap) *batchv1.Job {
 	job := k8s.NewPerfJob(objectMeta, "fio", cr.Spec.Image, cr.Spec.PodConfig)
 	job.Spec.Template.Spec.Volumes = volumes
 	job.Spec.Template.Spec.Containers[0].Command = []string{"/bin/sh", "-xc"}
-	job.Spec.Template.Spec.Containers[0].Args = qsplit.ToStrings([]byte(command))
+	job.Spec.Template.Spec.Containers[0].Args = []string{command}
 	job.Spec.Template.Spec.Containers[0].VolumeMounts = volumeMounts
 	return job
 }

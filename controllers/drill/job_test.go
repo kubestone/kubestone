@@ -54,14 +54,12 @@ var _ = Describe("drill job", func() {
 		})
 		Context("with command line args specified", func() {
 			It("should have the same args", func() {
-				Expect(job.Spec.Template.Spec.Containers[0].Args).To(
-					ContainElement("--no-check-certificate"))
-				Expect(job.Spec.Template.Spec.Containers[0].Args).To(
-					ContainElement("--stats"))
-				Expect(job.Spec.Template.Spec.Containers[0].Args).To(
-					ContainElement("--benchmark"))
-				Expect(job.Spec.Template.Spec.Containers[0].Args).To(
-					ContainElement(cr.Spec.BenchmarkFile))
+				Expect(len(job.Spec.Template.Spec.Containers[0].Args)).To(Equal(1))
+				args := job.Spec.Template.Spec.Containers[0].Args[0]
+				Expect(args).To(ContainSubstring("--no-check-certificate"))
+				Expect(args).To(ContainSubstring("--stats"))
+				Expect(args).To(ContainSubstring("--benchmark"))
+				Expect(args).To(ContainSubstring(cr.Spec.BenchmarkFile))
 			})
 		})
 

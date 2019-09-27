@@ -1119,8 +1119,8 @@ spec:
                             TODO: Add other useful fields. apiVersion, kind, uid?'
                           type: string
                         optional:
-                          description: Specify whether the ConfigMap or it's keys
-                            must be defined
+                          description: Specify whether the ConfigMap or its keys must
+                            be defined
                           type: boolean
                       type: object
                     csi:
@@ -1658,7 +1658,7 @@ spec:
                                     type: string
                                   optional:
                                     description: Specify whether the ConfigMap or
-                                      it's keys must be defined
+                                      its keys must be defined
                                     type: boolean
                                 type: object
                               downwardAPI:
@@ -2021,7 +2021,7 @@ spec:
                             type: object
                           type: array
                         optional:
-                          description: Specify whether the Secret or it's keys must
+                          description: Specify whether the Secret or its keys must
                             be defined
                           type: boolean
                         secretName:

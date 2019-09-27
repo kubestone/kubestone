@@ -37,7 +37,7 @@ func TestK8sController(t *testing.T) {
 
 var testenv *envtest.Environment
 var cfg *rest.Config
-var clientset *kubernetes.Clientset
+var cs *kubernetes.Clientset
 var scheme *runtime.Scheme
 
 var _ = BeforeSuite(func(done Done) {
@@ -47,7 +47,7 @@ var _ = BeforeSuite(func(done Done) {
 	cfg, err = testenv.Start()
 	Expect(err).NotTo(HaveOccurred())
 
-	clientset, err = kubernetes.NewForConfig(cfg)
+	cs, err = kubernetes.NewForConfig(cfg)
 	Expect(err).NotTo(HaveOccurred())
 
 	scheme = runtime.NewScheme()

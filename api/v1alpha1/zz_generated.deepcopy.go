@@ -71,7 +71,7 @@ func (in *Drill) DeepCopyObject() runtime.Object {
 func (in *DrillList) DeepCopyInto(out *DrillList) {
 	*out = *in
 	out.TypeMeta = in.TypeMeta
-	out.ListMeta = in.ListMeta
+	in.ListMeta.DeepCopyInto(&out.ListMeta)
 	if in.Items != nil {
 		in, out := &in.Items, &out.Items
 		*out = make([]Drill, len(*in))
@@ -154,7 +154,7 @@ func (in *Fio) DeepCopyObject() runtime.Object {
 func (in *FioList) DeepCopyInto(out *FioList) {
 	*out = *in
 	out.TypeMeta = in.TypeMeta
-	out.ListMeta = in.ListMeta
+	in.ListMeta.DeepCopyInto(&out.ListMeta)
 	if in.Items != nil {
 		in, out := &in.Items, &out.Items
 		*out = make([]Fio, len(*in))
@@ -256,7 +256,7 @@ func (in *Ioping) DeepCopyObject() runtime.Object {
 func (in *IopingList) DeepCopyInto(out *IopingList) {
 	*out = *in
 	out.TypeMeta = in.TypeMeta
-	out.ListMeta = in.ListMeta
+	in.ListMeta.DeepCopyInto(&out.ListMeta)
 	if in.Items != nil {
 		in, out := &in.Items, &out.Items
 		*out = make([]Ioping, len(*in))
@@ -349,7 +349,7 @@ func (in *Iperf3ConfigurationSpec) DeepCopy() *Iperf3ConfigurationSpec {
 func (in *Iperf3List) DeepCopyInto(out *Iperf3List) {
 	*out = *in
 	out.TypeMeta = in.TypeMeta
-	out.ListMeta = in.ListMeta
+	in.ListMeta.DeepCopyInto(&out.ListMeta)
 	if in.Items != nil {
 		in, out := &in.Items, &out.Items
 		*out = make([]Iperf3, len(*in))
@@ -426,7 +426,7 @@ func (in *Pgbench) DeepCopyObject() runtime.Object {
 func (in *PgbenchList) DeepCopyInto(out *PgbenchList) {
 	*out = *in
 	out.TypeMeta = in.TypeMeta
-	out.ListMeta = in.ListMeta
+	in.ListMeta.DeepCopyInto(&out.ListMeta)
 	if in.Items != nil {
 		in, out := &in.Items, &out.Items
 		*out = make([]Pgbench, len(*in))
@@ -592,7 +592,7 @@ func (in *QperfConfigurationSpec) DeepCopy() *QperfConfigurationSpec {
 func (in *QperfList) DeepCopyInto(out *QperfList) {
 	*out = *in
 	out.TypeMeta = in.TypeMeta
-	out.ListMeta = in.ListMeta
+	in.ListMeta.DeepCopyInto(&out.ListMeta)
 	if in.Items != nil {
 		in, out := &in.Items, &out.Items
 		*out = make([]Qperf, len(*in))
@@ -674,7 +674,7 @@ func (in *Sysbench) DeepCopyObject() runtime.Object {
 func (in *SysbenchList) DeepCopyInto(out *SysbenchList) {
 	*out = *in
 	out.TypeMeta = in.TypeMeta
-	out.ListMeta = in.ListMeta
+	in.ListMeta.DeepCopyInto(&out.ListMeta)
 	if in.Items != nil {
 		in, out := &in.Items, &out.Items
 		*out = make([]Sysbench, len(*in))

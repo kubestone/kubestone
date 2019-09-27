@@ -72,7 +72,7 @@ kind: Fio
 metadata:
   name: fio-sample
 spec:
-  cmdLineArgs: --name=randwrite --iodepth=1 --rw=randwrite --bs=4m --size=256M
+  args: --name=randwrite --iodepth=1 --rw=randwrite --bs=4m --size=256M
   image:
     name: xridge/fio:3.13
   volume:
@@ -92,7 +92,7 @@ spec:
 When we create this resource in Kubernetes, the operator interprets it and creates the associated benchmark. The fields of the Custom Resource controls how the benchmark will be executed:
 
 - `metadata.name`: Identifies the Custom Resource. Later, this can be used to query or delete the benchmark in the cluster.
-- `cmdLineArgs`: Arguments passed to the benchmark. In this case we are providing the arguments to fio (a filesystem benchmark). It instructs the benchmark to execute a random write test with 4Mb of block size with an overall transfer size of 256 MB.
+- `args`: Arguments passed to the benchmark. In this case we are providing the arguments to fio (a filesystem benchmark). It instructs the benchmark to execute a random write test with 4Mb of block size with an overall transfer size of 256 MB.
 - `image.name`: Describes the Docker Image of the benchmark. In case of [Fio](https://fio.readthedocs.io/) we are using [xridge's fio Docker Image](https://cloud.docker.com/u/xridge/repository/docker/xridge/fio), which is built from [this repository](https://github.com/xridge/fio-docker/).
 - `volume.persistentVolumeClaimSpec`: Given that Fio is a disk benchmark we can set a PersistentVolumeClaim for the benchmark to be executed. The above setup instructs Kubernetes to take 1GB of space from the default StorageClass and use it for the benchmark.
 
@@ -129,7 +129,7 @@ Metadata:
   Self Link:           /apis/perf.kubestone.xridge.io/v1alpha1/namespaces/kubestone/fios/fio-sample
   UID:                 21cdbe92-d6e3-11e9-ba70-4439c4920abc
 Spec:
-  Cmd Line Args:  --name=randwrite --iodepth=1 --rw=randwrite --bs=4m --size=256M
+  Args:  --name=randwrite --iodepth=1 --rw=randwrite --bs=4m --size=256M
   Image:
     Name:  xridge/fio:3.13
   Volume:
@@ -259,7 +259,7 @@ Since the Custom Resource has ownership on the created resources, the underlying
 
 Now you are familiar with the key concepts of Kubestone, it is time to explore and benchmark.
 
-You can play around with Fio Benchmark via it's `cmdLineArgs`, Persistent Volume and Scheduling related settings. You can find more information about that in Fio's benchmark page.
+You can play around with Fio Benchmark via it's `Args`, Persistent Volume and Scheduling related settings. You can find more information about that in Fio's benchmark page.
 
 If you are interested in other benchmarks, please refer to our [benchmark suite](benchmarks-index.md).
 

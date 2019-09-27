@@ -19,4 +19,4 @@ spec:
     size=1G
     ioengine=libaio
     iodepth=16
-  cmdLineArgs:
+  args:

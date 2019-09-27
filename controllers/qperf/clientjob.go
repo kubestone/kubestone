@@ -46,19 +46,19 @@ func NewClientJob(cr *perfv1alpha1.Qperf) *batchv1.Job {
 		Namespace: cr.Namespace,
 	}
 
-	qperfCmdLineArgs := []string{
+	args := []string{
 		serverServiceName(cr),
 		"--listen_port",
 		strconv.Itoa(perfv1alpha1.QperfPort),
 	}
-	qperfCmdLineArgs = append(qperfCmdLineArgs, qsplit.ToStrings([]byte(cr.Spec.Options))...)
-	qperfCmdLineArgs = append(qperfCmdLineArgs, cr.Spec.Tests...)
+	args = append(args, qsplit.ToStrings([]byte(cr.Spec.Args))...)
+	args = append(args, cr.Spec.Tests...)
 
 	backoffLimit := int32(6)
 
 	job := k8s.NewPerfJob(objectMeta, "qperf-client", cr.Spec.Image, cr.Spec.ClientConfiguration.PodConfigurationSpec)
 	job.Spec.BackoffLimit = &backoffLimit
-	job.Spec.Template.Spec.Containers[0].Args = qperfCmdLineArgs
+	job.Spec.Template.Spec.Containers[0].Args = args
 	job.Spec.Template.Spec.HostNetwork = cr.Spec.ClientConfiguration.HostNetwork
 
 	return job

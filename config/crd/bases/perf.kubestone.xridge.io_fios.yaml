@@ -39,15 +39,15 @@ spec:
         spec:
           description: FioSpec defines the desired state of Fio
           properties:
+            args:
+              description: Args are appended to the predefined fio parameters
+              type: string
             builtinJobFiles:
               description: BuiltinJobFiles contains a list of fio job files that are
                 already present in the docker image
               items:
                 type: string
               type: array
-            cmdLineArgs:
-              description: CmdLineArgs are appended to the predefined fio parameters
-              type: string
             customJobFiles:
               description: 'CustomJobFiles contains a list of custom fio job files
                 The exact format of fio job files is documented here: https://fio.readthedocs.io/en/latest/fio_doc.html#job-file-format
@@ -2105,8 +2105,6 @@ spec:
                       - volumePath
                       type: object
                   type: object
-              required:
-              - volumeSource
               type: object
           required:
           - image

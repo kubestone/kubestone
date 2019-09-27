@@ -26,9 +26,9 @@ import (
 type Iperf3ConfigurationSpec struct {
 	PodConfigurationSpec `json:",inline"`
 
-	// CmdLineArgs are appended to the predefined iperf3 parameters
+	// Args are appended to the predefined iperf3 parameters
 	// +optional
-	CmdLineArgs string `json:"cmdLineArgs,omitempty"`
+	Args string `json:"args,omitempty"`
 
 	// HostNetwork requested for the iperf3 pod, if enabled the
 	// hosts network namespace is used. Default to false.

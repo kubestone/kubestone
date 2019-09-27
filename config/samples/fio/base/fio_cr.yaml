@@ -5,5 +5,5 @@ metadata:
 spec:
   image:
     name: xridge/fio:3.13
-  cmdLineArgs: --name=randwrite --iodepth=1 --rw=randwrite --bs=4m --size=256M
+  args: --name=randwrite --iodepth=1 --rw=randwrite --bs=4m --size=256M
   volume: {}

@@ -76,7 +76,7 @@ type VolumeSpec struct {
 	// existing PVC or could be set to 'GENERATED'. When set to 'GENERATED'
 	// The PVC will be created based on the PersistentVolumeClaimSpec provided
 	// to the VolumeSpec.
-	VolumeSource corev1.VolumeSource `json:"volumeSource"`
+	VolumeSource corev1.VolumeSource `json:"volumeSource,omitempty"`
 
 	// PersistentVolumeClaimSpec describes the persistent volume claim that will be
 	// created and used by the pod. If specified, the VolumeSource.PersistentVolumeClaim's

@@ -67,12 +67,12 @@ var _ = Describe("Client Pod", func() {
 			})
 		})
 
-		Context("with Options specified", func() {
+		Context("with Args specified", func() {
 			It("should appear in command line args", func() {
-				cr.Spec.Options = "--option1 --option2"
+				cr.Spec.Args = "--option1 --option2"
 				job = NewClientJob(&cr)
 				Expect(strings.Join(job.Spec.Template.Spec.Containers[0].Args, " ")).To(
-					ContainSubstring(cr.Spec.Options))
+					ContainSubstring(cr.Spec.Args))
 			})
 		})
 

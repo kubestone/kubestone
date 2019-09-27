@@ -33,14 +33,12 @@ func NewJob(cr *perfv1alpha1.Fio) *batchv1.Job {
 		Namespace: cr.Namespace,
 	}
 
-	fioCmdLineArgs := []string{}
-	fioCmdLineArgs = append(fioCmdLineArgs,
-		qsplit.ToStrings([]byte(cr.Spec.CmdLineArgs))...)
-	fioCmdLineArgs = append(fioCmdLineArgs, cr.Spec.BuiltinJobFiles...)
+	args := qsplit.ToStrings([]byte(cr.Spec.Args))
+	args = append(args, cr.Spec.BuiltinJobFiles...)
 
 	// TODO: Represent Spec.CustomJobFiles as map instead of list
 	for i := 0; i < len(cr.Spec.CustomJobFiles); i++ {
-		fioCmdLineArgs = append(fioCmdLineArgs, "/custom-jobs/"+CustomJobName(i))
+		args = append(args, "/custom-jobs/"+CustomJobName(i))
 	}
 
 	volumes := []corev1.Volume{}
@@ -70,7 +68,7 @@ func NewJob(cr *perfv1alpha1.Fio) *batchv1.Job {
 
 	job := k8s.NewPerfJob(objectMeta, "fio", cr.Spec.Image, cr.Spec.PodConfig)
 	job.Spec.Template.Spec.Volumes = volumes
-	job.Spec.Template.Spec.Containers[0].Args = fioCmdLineArgs
+	job.Spec.Template.Spec.Containers[0].Args = args
 	job.Spec.Template.Spec.Containers[0].VolumeMounts = volumeMounts
 	return job
 }

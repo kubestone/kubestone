@@ -2092,8 +2092,6 @@ spec:
                       - volumePath
                       type: object
                   type: object
-              required:
-              - volumeSource
               type: object
           required:
           - image

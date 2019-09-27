@@ -22,7 +22,7 @@ import (
 
 // SysbenchSpec contains the configuration parameters
 // with scheduling options for the sysbench benchmark.
-// The options, testName and command parameters are passed
+// The arguments, testName and command parameters are passed
 // to the sysbench benchmarking application.
 type SysbenchSpec struct {
 	// Image defines the sysbench docker image used for the benchmark
@@ -33,9 +33,9 @@ type SysbenchSpec struct {
 	// +optional
 	PodConfig PodConfigurationSpec `json:"podConfig,inline"`
 
-	// Options is a list of zero or more command line options starting with '--'.
+	// Args is a list of zero or more command line arguments starting with '--'.
 	// +optional
-	Options string `json:"options,omitempty"`
+	Args string `json:"args,omitempty"`
 
 	// TestName is the name of a built-in test (e.g. `fileio`, `memory`, `cpu`, etc.), or a name of one of the bundled
 	// Lua scripts (e.g. `oltp_read_only`), or a path to a custom Lua script.

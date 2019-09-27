@@ -45,7 +45,7 @@ var _ = Describe("Server Deployment", func() {
 						PullSecret: "pull-secret",
 					},
 
-					Options: "--option1 --option2",
+					Args: "--arg1 --arg2",
 
 					ServerConfiguration: ksapi.QperfConfigurationSpec{
 						HostNetwork: true,

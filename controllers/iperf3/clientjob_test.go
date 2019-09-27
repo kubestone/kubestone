@@ -39,7 +39,7 @@ var _ = Describe("Client Pod", func() {
 						Name: "foo",
 					},
 					ClientConfiguration: ksapi.Iperf3ConfigurationSpec{
-						CmdLineArgs: "--testing --things",
+						Args:        "--testing --things",
 						HostNetwork: true,
 					},
 				},

@@ -44,7 +44,7 @@ var _ = Describe("Server Deployment", func() {
 					},
 
 					ServerConfiguration: ksapi.Iperf3ConfigurationSpec{
-						CmdLineArgs: "--testing --things",
+						Args:        "--testing --things",
 						HostNetwork: true,
 						PodConfigurationSpec: ksapi.PodConfigurationSpec{
 							PodLabels: map[string]string{"labels": "are", "really": "useful"},

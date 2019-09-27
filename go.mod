@@ -3,6 +3,7 @@ module github.com/xridge/kubestone
 go 1.12
 
 require (
+	github.com/ahmetb/gen-crd-api-reference-docs v0.1.5 // indirect
 	github.com/firepear/qsplit v2.2.3+incompatible
 	github.com/go-logr/logr v0.1.0
 	github.com/go-logr/zapr v0.1.1

@@ -16,7 +16,9 @@ spec:
   group: perf.kubestone.xridge.io
   names:
     kind: Drill
+    listKind: DrillList
     plural: drills
+    singular: drill
   scope: ""
   subresources:
     status: {}

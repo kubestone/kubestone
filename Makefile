@@ -14,8 +14,6 @@ else
 GOBIN=$(shell go env GOBIN)
 endif
 
-GOLANGCI_VERSION = v1.17.1
-
 all: manager
 
 # Run unit tests
@@ -74,7 +72,7 @@ vet:
 # Download golangci-lint if needed
 golangci-lint:
 ifeq (, $(shell which golangci-lint))
-	go get github.com/golangci/golangci-lint/cmd/golangci-lint@${GOLANGCI_VERSION}
+	go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.17.1
 GOLANGCI_LINT=$(shell go env GOPATH)/bin/golangci-lint
 else
 GOLANGCI_LINT=$(shell which golangci-lint)
@@ -102,7 +100,7 @@ docker-push:
 # download controller-gen if necessary
 controller-gen:
 ifeq (, $(shell which controller-gen))
-	go get sigs.k8s.io/controller-tools/cmd/controller-gen@v0.2.0
+	go get sigs.k8s.io/controller-tools/cmd/controller-gen@v0.2.1
 CONTROLLER_GEN=$(GOBIN)/controller-gen
 else
 CONTROLLER_GEN=$(shell which controller-gen)

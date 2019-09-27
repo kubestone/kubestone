@@ -16,7 +16,9 @@ spec:
   group: perf.kubestone.xridge.io
   names:
     kind: Qperf
+    listKind: QperfList
     plural: qperves
+    singular: qperf
   scope: ""
   subresources:
     status: {}

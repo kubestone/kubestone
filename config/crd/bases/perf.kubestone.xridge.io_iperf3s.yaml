@@ -16,7 +16,9 @@ spec:
   group: perf.kubestone.xridge.io
   names:
     kind: Iperf3
+    listKind: Iperf3List
     plural: iperf3s
+    singular: iperf3
   scope: ""
   subresources:
     status: {}

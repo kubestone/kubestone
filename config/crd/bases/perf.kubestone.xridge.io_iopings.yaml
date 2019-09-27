@@ -16,7 +16,9 @@ spec:
   group: perf.kubestone.xridge.io
   names:
     kind: Ioping
+    listKind: IopingList
     plural: iopings
+    singular: ioping
   scope: ""
   subresources:
     status: {}

@@ -16,7 +16,9 @@ spec:
   group: perf.kubestone.xridge.io
   names:
     kind: Fio
+    listKind: FioList
     plural: fios
+    singular: fio
   scope: ""
   subresources:
     status: {}

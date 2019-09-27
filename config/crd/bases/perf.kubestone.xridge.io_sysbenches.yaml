@@ -16,7 +16,9 @@ spec:
   group: perf.kubestone.xridge.io
   names:
     kind: Sysbench
+    listKind: SysbenchList
     plural: sysbenches
+    singular: sysbench
   scope: ""
   subresources:
     status: {}

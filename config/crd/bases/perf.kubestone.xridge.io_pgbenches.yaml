@@ -16,7 +16,9 @@ spec:
   group: perf.kubestone.xridge.io
   names:
     kind: Pgbench
+    listKind: PgbenchList
     plural: pgbenches
+    singular: pgbench
   scope: ""
   subresources:
     status: {}

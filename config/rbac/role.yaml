@@ -84,6 +84,12 @@ rules:
 - apiGroups:
   - perf.kubestone.xridge.io
   resources:
+  - drills/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - perf.kubestone.xridge.io
+  resources:
   - drills/status
   verbs:
   - get
@@ -101,6 +107,12 @@ rules:
   - patch
   - update
   - watch
+- apiGroups:
+  - perf.kubestone.xridge.io
+  resources:
+  - fios/finalizers
+  verbs:
+  - update
 - apiGroups:
   - perf.kubestone.xridge.io
   resources:
@@ -124,6 +136,12 @@ rules:
 - apiGroups:
   - perf.kubestone.xridge.io
   resources:
+  - iopings/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - perf.kubestone.xridge.io
+  resources:
   - iopings/status
   verbs:
   - get
@@ -141,6 +159,12 @@ rules:
   - patch
   - update
   - watch
+- apiGroups:
+  - perf.kubestone.xridge.io
+  resources:
+  - iperf3s/finalizers
+  verbs:
+  - update
 - apiGroups:
   - perf.kubestone.xridge.io
   resources:
@@ -164,6 +188,12 @@ rules:
 - apiGroups:
   - perf.kubestone.xridge.io
   resources:
+  - pgbenches/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - perf.kubestone.xridge.io
+  resources:
   - pgbenches/status
   verbs:
   - get
@@ -184,6 +214,12 @@ rules:
 - apiGroups:
   - perf.kubestone.xridge.io
   resources:
+  - qperves/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - perf.kubestone.xridge.io
+  resources:
   - qperves/status
   verbs:
   - get
@@ -201,6 +237,12 @@ rules:
   - patch
   - update
   - watch
+- apiGroups:
+  - perf.kubestone.xridge.io
+  resources:
+  - sysbenches/finalizers
+  verbs:
+  - update
 - apiGroups:
   - perf.kubestone.xridge.io
   resources:

@@ -36,6 +36,7 @@ type Reconciler struct {
 
 // +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=iperf3s,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=iperf3s/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=iperf3s/finalizers,verbs=update
 
 // Reconcile Iperf3 Benchmark Requests by creating:
 //   - iperf3 server deployment

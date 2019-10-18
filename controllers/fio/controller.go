@@ -39,6 +39,7 @@ type Reconciler struct {
 // +kubebuilder:rbac:groups=batch,resources=jobs,verbs=get;list;create;delete
 // +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=fios,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=fios/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=fios/finalizers,verbs=update
 
 // Reconcile creates fio job(s) based on the custom resource(s)
 func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {

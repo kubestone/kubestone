@@ -35,6 +35,7 @@ type Reconciler struct {
 
 // +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=sysbenches,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=sysbenches/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=sysbenches/finalizers,verbs=update
 
 // Reconcile creates sysbench job(s) based on the custom resource(s)
 func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {

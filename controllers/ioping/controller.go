@@ -37,6 +37,7 @@ type Reconciler struct {
 
 // +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=iopings,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=iopings/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=iopings/finalizers,verbs=update
 
 // Reconcile creates ioping job based on the custom resource
 func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {

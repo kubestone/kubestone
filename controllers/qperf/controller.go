@@ -36,6 +36,7 @@ type Reconciler struct {
 
 // +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=qperves,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=qperves/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=qperves/finalizers,verbs=update
 
 // Reconcile Qperf Benchmark Requests by creating:
 //   - qperf server deployment

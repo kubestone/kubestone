@@ -37,6 +37,7 @@ type Reconciler struct {
 
 // +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=drills,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=drills/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=drills/finalizers,verbs=update
 
 // Reconcile creates drill job for the Custom Resources
 func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {

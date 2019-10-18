@@ -9,7 +9,8 @@ Current state of the benchmarks
 | Core/Disk               |   [ioping](benchmarks/ioping.md)   | [Supported](apidocs.md#perf.kubestone.xridge.io/v1alpha1.IopingSpec)   |
 | Core/Memory             | [sysbench](benchmarks/sysbench.md) | [Supported](apidocs.md#perf.kubestone.xridge.io/v1alpha1.SysbenchSpec) |
 | Core/Network            |   [iperf3](benchmarks/iperf3.md)   | [Supported](apidocs.md#perf.kubestone.xridge.io/v1alpha1.Iperf3Spec)   |
-| HTTP Load Tester        |   [drill](benchmarks/drill.md)     | [Supported](apidocs.md#perf.kubestone.xridge.io/v1alpha1.DrillSpec)    |
+| Core/Network            |    [qperf](benchmarks/qperf.md)    | [Supported](apidocs.md#perf.kubestone.xridge.io/v1alpha1.QperfSpec)    |
+| HTTP Load Tester        |    [drill](benchmarks/drill.md)    | [Supported](apidocs.md#perf.kubestone.xridge.io/v1alpha1.DrillSpec)    |
 | Application/Etcd        |                etcd                | [Planned](https://github.com/xridge/kubestone/issues/15)               |
 | Application/K8S         |              kubeperf              | [Planned](https://github.com/xridge/kubestone/issues/14)               |
 | Application/PostgreSQL  |  [pgbench](benchmarks/pgbench.md)  | [Supported](apidocs.md#perf.kubestone.xridge.io/v1alpha1.PgbenchSpec)  |

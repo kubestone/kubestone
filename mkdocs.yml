@@ -4,12 +4,13 @@ nav:
   - Quickstart guide: quickstart.md
   - Benchmarks:
       - 'Benchmarks home': benchmarks-index.md
+      - 'drill': benchmarks/drill.md
       - 'fio': benchmarks/fio.md
       - 'ioping': benchmarks/ioping.md
       - 'iperf3': benchmarks/iperf3.md
-      - 'sysbench': benchmarks/sysbench.md
-      - 'drill': benchmarks/drill.md
       - 'pgbench': benchmarks/pgbench.md
+      - 'qperf': benchmarks/qperf.md
+      - 'sysbench': benchmarks/sysbench.md
   - CRD API docs: apidocs.md
   - Development guide: devguide.md
 

@@ -1,8 +1,0 @@
-apiVersion: perf.kubestone.xridge.io/v1alpha1
-kind: Fio
-metadata:
-  name: fio-sample
-spec:
-  volume:
-    volumeSource:
-      emptyDir: {}

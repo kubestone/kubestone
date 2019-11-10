@@ -5,6 +5,7 @@ metadata:
 spec:
   volume:
     volumeSource:
+      emptyDir: null
       persistentVolumeClaim:
         claimName: GENERATED
 

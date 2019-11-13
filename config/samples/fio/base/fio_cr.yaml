@@ -8,4 +8,12 @@ spec:
   cmdLineArgs: --name=randwrite --iodepth=1 --rw=randwrite --bs=4m --size=256M
   volume:
     volumeSource:
-      emptyDir: {}
+      persistentVolumeClaim:
+        claimName: GENERATED
+
+    persistentVolumeClaimSpec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 256M

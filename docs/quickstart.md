@@ -94,6 +94,11 @@ When we create this resource in Kubernetes, the operator interprets it and creat
 - `image.name`: Describes the Docker Image of the benchmark. In case of [Fio](https://fio.readthedocs.io/) we are using [xridge's fio Docker Image](https://cloud.docker.com/u/xridge/repository/docker/xridge/fio), which is built from [this repository](https://github.com/xridge/fio-docker/).
 - `volume.persistentVolumeClaimSpec`: Given that Fio is a disk benchmark we can set a PersistentVolumeClaim for the benchmark to be executed. The above setup instructs Kubernetes to take 1GB of space from the default StorageClass and use it for the benchmark.
 
+You can see some additional configuration examples for fio, using Kustomize overlays. Kustomize takes the [base yaml](https://github.com/xridge/kubestone/blob/master/config/samples/fio/base/fio_cr.yaml) and patches it with an overlay file to render the final yaml file, which describes the benchmark. For example to use emptydirs instead of actual PVCs, you can run
+
+```bash
+$ kustomize build github.com/xridge/kubestone/config/samples/fio/overlays/emptydir
+```
 
 
 ### Running the benchmark
@@ -115,10 +120,10 @@ The resulting object can be queried using the object's type (`fio`) and it's nam
 ```bash
 $ kubectl describe --namespace kubestone fio fio-sample
 Name:         fio-sample
-Namespace:    default
+Namespace:    kubestone
 Labels:       <none>
 Annotations:  kubectl.kubernetes.io/last-applied-configuration:
-                {"apiVersion":"perf.kubestone.xridge.io/v1alpha1","kind":"Fio","metadata":{"annotations":{},"name":"fio-sample","namespace":"default"},...
+                {"apiVersion":"perf.kubestone.xridge.io/v1alpha1","kind":"Fio","metadata":{"annotations":{},"name":"fio-sample","namespace":"kubestone"},...
 API Version:  perf.kubestone.xridge.io/v1alpha1
 Kind:         Fio
 Metadata:

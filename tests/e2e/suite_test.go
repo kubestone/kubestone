@@ -18,6 +18,7 @@ package e2e
 
 import (
 	"log"
+	"strings"
 	"testing"
 
 	"context"
@@ -88,6 +89,20 @@ var _ = AfterSuite(func() {
 			Fail(err.Error())
 		}
 		log.Printf("objects in %s namespace:\n%s\n", namespace, stdout)
+
+		stdout, _, err = run("kubectl get pod --namespace " + namespace +
+			" --field-selector status.phase!=Completed -o name")
+		if err != nil {
+			Fail(err.Error())
+		}
+		notCompletedPods := strings.Split(stdout, "\n")
+		for _, pod := range notCompletedPods {
+			stdout, _, err = run("kubectl describe --namespace " + namespace + " " + pod)
+			if err != nil {
+				Fail(err.Error())
+			}
+			log.Printf("Not completed " + pod + " description:\n" + stdout)
+		}
 
 		_, _, err = run("kubectl delete namespace " + namespace)
 		if err != nil {

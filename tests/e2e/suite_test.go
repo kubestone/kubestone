@@ -105,7 +105,11 @@ var _ = AfterSuite(func() {
 			if err != nil {
 				Fail(err.Error())
 			}
-			log.Printf("Not completed " + pod + " description:\n" + stdout)
+			log.Printf("Not completed %s description:\n%s", namespace, stdout)
+			stdout, _, _ = run("kubectl logs --namespace " + namespace + " " + pod)
+			if stdout != "" {
+				log.Printf("Not completed %s logs:\n%s", namespace, stdout)
+			}
 		}
 
 		_, _, err = run("kubectl delete namespace " + namespace)

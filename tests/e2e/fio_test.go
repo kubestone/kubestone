@@ -31,7 +31,7 @@ const (
 	fioCrBaseDir = samplesDir + "/fio"
 )
 
-var _ = FDescribe("end to end test", func() {
+var _ = Describe("end to end test", func() {
 	DescribeTable("creating fio job from multiple CRs",
 		func(crDir string) {
 			splits := strings.Split(crDir, "/")

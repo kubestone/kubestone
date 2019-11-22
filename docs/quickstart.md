@@ -72,7 +72,7 @@ metadata:
 spec:
   cmdLineArgs: --name=randwrite --iodepth=1 --rw=randwrite --bs=4m --size=256M
   image:
-    name: xridge/fio:3.13
+    name: xridge/fio:3.13-r1
   volume:
     persistentVolumeClaimSpec:
       accessModes:
@@ -135,7 +135,7 @@ Metadata:
 Spec:
   Cmd Line Args:  --name=randwrite --iodepth=1 --rw=randwrite --bs=4m --size=256M
   Image:
-    Name:  xridge/fio:3.13
+    Name:  xridge/fio:3.13-r1
   Volume:
     Persistent Volume Claim Spec:
       Access Modes:

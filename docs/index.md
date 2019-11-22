@@ -30,7 +30,7 @@ For complete documentation please refer to the [CRD API Docs page](apidocs.md).
 
 ## Community
 
-You can reach us on [Slack](https://join.slack.com/t/kubestone/shared_invite/enQtNzI1OTkxMTU5MzYzLWRmY2Q3NGM4MTM0OWJjMDRjZWU0MDI4Y2Q3M2EyMzE3M2U2Y2QxMzhhN2VmY2Q4YzMxZmY1MzMxZTEzYjI0NDk) and via the [Kubestone Mail Group](https://groups.google.com/forum/#!forum/kubestone). 
+You can reach us on [Slack](https://join.slack.com/t/kubestone/shared_invite/enQtODQ1OTIwOTU4NzQxLTdmY2M0ZTkwYWU2YzQ1YmY1Y2U3NTE4MDQzMzBkYTVjZDNmOGE1MTkxYTEyOGM5MzFhYWM5M2NlYzVkYWUzZmY) and via the [Kubestone Mail Group](https://groups.google.com/forum/#!forum/kubestone).
 
 
 

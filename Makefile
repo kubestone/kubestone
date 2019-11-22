@@ -14,7 +14,7 @@ else
 GOBIN=$(shell go env GOBIN)
 endif
 
-GOLANGCI_VERSION = v1.17.1
+GOLANGCI_VERSION = v1.21.0
 
 all: manager
 
@@ -82,7 +82,7 @@ endif
 
 # Run linter. GOGC is set to reduce memory footprint
 lint: golangci-lint
-	GOGC=10 $(GOLANGCI_LINT) run -v --deadline 10m
+	GOGC=10 $(GOLANGCI_LINT) run -v --timeout 10m
 
 # Generate code
 generate: controller-gen

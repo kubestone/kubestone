@@ -77,7 +77,7 @@ jobs:
             git checkout -- ./docs/apidocs/template/pkg.tpl
             # Print generated file names which are different
             echo "Non up-to-date files:"
-            git diff --name-only --exit-code
+            git diff --exit-code
             echo "--bai--"
 
 workflows:

@@ -91,12 +91,16 @@ var _ = AfterSuite(func() {
 		log.Printf("objects in %s namespace:\n%s\n", namespace, stdout)
 
 		stdout, _, err = run("kubectl get pod --namespace " + namespace +
-			" --field-selector status.phase!=Completed -o name")
+			" --field-selector status.phase!=Succeeded -o name")
 		if err != nil {
 			Fail(err.Error())
 		}
 		notCompletedPods := strings.Split(stdout, "\n")
 		for _, pod := range notCompletedPods {
+			pod := strings.TrimSpace(pod)
+			if pod == "" {
+				continue
+			}
 			stdout, _, err = run("kubectl describe --namespace " + namespace + " " + pod)
 			if err != nil {
 				Fail(err.Error())

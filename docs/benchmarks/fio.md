@@ -13,8 +13,8 @@ Kubestone generates a Kubernetes Job from each fio CR that will run a single pod
 
 When `customJobFiles` are specified in the CR a ConfigMap will be created to hold the content of the job files. The entries in the ConfigMap named using the following pattern: `customJobN`, where N is the item in the customJobFiles list.
 
-`Volume` defines the volume to use for benchmarking. 
-`Volume.VolumeSource` provides way to mount already existing PVCs, HostPath, EmptyDir (and others) to the benchmark. 
+`Volume` defines the volume to use for benchmarking.
+`Volume.VolumeSource` provides way to mount already existing PVCs, HostPath, EmptyDir (and others) to the benchmark.
 
 When `Volume.PersistentVolumeClaimSpec` is defined (and `Volume.VolumeSource.PersistentVolumeClaim.ClaimName` set to 'GENERATED') a new PVC will be created for the benchmark. Note: The created volume is not freed up or removed after the benchmark run.
 
@@ -25,9 +25,9 @@ You can find [configuration examples](https://github.com/xridge/kubestone/tree/m
 
 
 ## Sample benchmark
-To run a sample benchmark with PVC mode, the following command can be used:
+To run a sample fio benchmark, the following command can be used:
 ```bash
-$ kustomize build github.com/xridge/kubestone/config/samples/fio/overlays/pvc | kubectl create --namespace kubestone -f -
+$ kustomize build github.com/xridge/kubestone/config/samples/fio/base | kubectl create --namespace kubestone -f -
 ```
 
 Please refer to the [quickstart guide](../quickstart.md) for further details.

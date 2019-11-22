@@ -17,10 +17,10 @@ limitations under the License.
 package e2e
 
 import (
-	"io/ioutil"
 	"strings"
 
 	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/extensions/table"
 	. "github.com/onsi/gomega"
 	"github.com/xridge/kubestone/api/v1alpha1"
 	batchv1 "k8s.io/api/batch/v1"
@@ -32,59 +32,42 @@ const (
 )
 
 var _ = Describe("end to end test", func() {
-	fioCrDirs := []string{fioCrBaseDir + "/base"}
-	fioOverlayContents, err := ioutil.ReadDir(fioCrBaseDir + "/overlays")
-	if err != nil {
-		Fail("Didn't find any fio CRs under " + fioCrBaseDir)
-	}
-	for _, fioOverlayContent := range fioOverlayContents {
-		if fioOverlayContent.IsDir() {
-			fioCrDirs = append(fioCrDirs, fioCrBaseDir+"/overlays/"+fioOverlayContent.Name())
-		}
-	}
-
-	Describe("creating fio job from multiple CRs", func() {
-		for _, fioCrDir := range fioCrDirs {
-			splits := strings.Split(fioCrDir, "/")
+	DescribeTable("creating fio job from multiple CRs",
+		func(crDir string) {
+			splits := strings.Split(crDir, "/")
 			dirName := splits[len(splits)-1]
 			crName := "fio-" + strings.ReplaceAll(dirName, "_", "-")
 
-			Context("when creating from cr", func() {
-				It("should create fio-sample cr", func() {
-					_, _, err := run(`bash -c "` +
-						"kustomize build " + fioCrDir + " | " +
-						"sed 's/name: fio-sample/name: " + crName + "/' | " +
-						"kubectl create -n " + e2eNamespaceFio + ` -f -"`)
-					Expect(err).To(BeNil())
-				})
-			})
+			By("creating fio job from " + crDir)
+			_, _, err := run(`bash -c "` +
+				"kustomize build " + crDir + " | " +
+				"sed 's/name: fio-sample/name: " + crName + "/' | " +
+				"kubectl create -n " + e2eNamespaceFio + ` -f -"`)
+			Expect(err).To(BeNil())
 
-			Context("the created job", func() {
-				It("should finish in a pre-defined time", func() {
-					timeout := 90
-					cr := &v1alpha1.Fio{}
-					// TODO: find the respective objects via the CR owner reference
-					namespacedName := types.NamespacedName{
-						Namespace: e2eNamespaceFio,
-						Name:      crName,
-					}
-					Eventually(func() bool {
-						if err := client.Get(ctx, namespacedName, cr); err != nil {
-							Fail("Unable to get fio CR: " + err.Error())
-						}
-						return !cr.Status.Running && cr.Status.Completed
-					}, timeout).Should(BeTrue())
-				})
-				It("Should leave a successful job", func() {
-					job := &batchv1.Job{}
-					namespacedName := types.NamespacedName{
-						Namespace: e2eNamespaceFio,
-						Name:      crName,
-					}
-					Expect(client.Get(ctx, namespacedName, job)).To(Succeed())
-					Expect(job.Status.Succeeded).To(Equal(int32(1)))
-				})
-			})
-		}
-	})
+			By("checking the created CR")
+			timeout := 180
+			cr := &v1alpha1.Fio{}
+			namespacedName := types.NamespacedName{
+				Namespace: e2eNamespaceFio,
+				Name:      crName,
+			}
+			Eventually(func() bool {
+				if err := client.Get(ctx, namespacedName, cr); err != nil {
+					Fail("Unable to get fio CR: " + err.Error())
+				}
+				return !cr.Status.Running && cr.Status.Completed
+			}, timeout).Should(BeTrue())
+
+			By("checking the created job")
+			job := &batchv1.Job{}
+			Expect(client.Get(ctx, namespacedName, job)).To(Succeed())
+			Expect(job.Status.Succeeded).To(Equal(int32(1)))
+		},
+
+		Entry("base", fioCrBaseDir+"/base"),
+		Entry("emptydir", fioCrBaseDir+"/overlays/emptydir"),
+		Entry("builtin jobs", fioCrBaseDir+"/overlays/builtin_jobs"),
+		Entry("custom jobs", fioCrBaseDir+"/overlays/custom_jobs"),
+	)
 })

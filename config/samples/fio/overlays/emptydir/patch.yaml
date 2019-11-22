@@ -6,3 +6,5 @@ spec:
   volume:
     volumeSource:
       emptyDir: {}
+      persistentVolumeClaim: null    # Needs to be removed from the base
+    persistentVolumeClaimSpec: null  # Needs to be removed from the base

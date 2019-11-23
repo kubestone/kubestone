@@ -1,4 +1,6 @@
-# pgbench - Benchmark test on PostgreSQL
+title: Kubestone - pgbench: Performance benchmark for PostgreSQL
+
+# pgbench - Performance benchmark for PostgreSQL
 
 !!! quote
     pgbench is a simple program for running benchmark tests on PostgreSQL. It runs the same sequence of SQL commands over and over, possibly in multiple concurrent database sessions, and then calculates the average transaction rate (transactions per second). By default, pgbench tests a scenario that is loosely based on TPC-B, involving five SELECT, UPDATE, and INSERT commands per transaction. However, it is easy to test other cases by writing your own transaction script files.

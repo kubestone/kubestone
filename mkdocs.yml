@@ -36,6 +36,7 @@ markdown_extensions:
       base_path: docs/
   - admonition
   - codehilite
+  - meta
 
 theme:
   name: material

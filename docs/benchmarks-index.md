@@ -1,3 +1,5 @@
+title: Kubestone - Performance benchmarks
+
 [//]: # (This file is not located under benchmarks/ so that both index.md and this document can include benchmarks-status.md. If the two is not on the same path, links from benchmark-status.md won't work)
 
 # Kubestone Benchmarks

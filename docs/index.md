@@ -1,3 +1,5 @@
+title: Kubestone - Kubernetes & OpenShift performance benchmarking
+
 ![Kubestone](images/kubestone-logo-notext.png)  
 # Kubestone
 

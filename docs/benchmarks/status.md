@@ -1,3 +1,5 @@
+title: Kubestone - List of performance benchmarks
+
 [//]: #(The links from this file are based on / as both files including this status page are located in /)
 
 Current state of the benchmarks

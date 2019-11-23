@@ -1,3 +1,5 @@
+title: Kubestone - Quickstart guide
+
 # Quickstart Guide
 
 

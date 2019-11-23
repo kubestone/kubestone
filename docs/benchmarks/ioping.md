@@ -1,3 +1,5 @@
+title: Kubestone - ioping: Storage Latency benchmark
+
 # ioping - Storage Latency benchmark
 
 !!! quote

@@ -1,7 +1,7 @@
 package ocplogtest
 
 import (
-	"golang.org/x/tools/go/ssa/interp/testdata/src/fmt"
+	"fmt"
 	batchv1 "k8s.io/api/batch/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
@@ -22,7 +22,7 @@ func NewJob(cr *perfv1alpha1.OcpLogtest) *batchv1.Job {
 		"ocp_logtest.py",
 	}
 
-	if cr.Spec.FixedLine == true {
+	if cr.Spec.FixedLine {
 		args = append(args, "--line-length")
 	}
 

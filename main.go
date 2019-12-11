@@ -135,9 +135,8 @@ func main() {
 		os.Exit(1)
 	}
 	if err = (&ocplogtest.Reconciler{
-		Client: mgr.GetClient(),
-		Log:    ctrl.Log.WithName("controllers").WithName("OcpLogtest"),
-		Scheme: mgr.GetScheme(),
+		K8S: k8sAccess,
+		Log: ctrl.Log.WithName("controllers").WithName("OcpLogtest"),
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "OcpLogtest")
 		os.Exit(1)

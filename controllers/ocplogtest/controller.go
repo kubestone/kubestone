@@ -37,7 +37,6 @@ type Reconciler struct {
 
 func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 	ctx := context.Background()
-	_ = r.Log.WithValues("ocplogtest", req.NamespacedName)
 
 	var cr perfv1alpha1.OcpLogtest
 	if err := r.K8S.Client.Get(ctx, req.NamespacedName, &cr); err != nil {
@@ -62,6 +61,7 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 		Namespace: cr.Namespace,
 		Name:      cr.Name,
 	})
+
 	if err != nil {
 		return ctrl.Result{}, err
 	}

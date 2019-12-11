@@ -18,6 +18,7 @@ package main
 
 import (
 	"flag"
+	"github.com/xridge/kubestone/controllers/ocplogtest"
 	"os"
 
 	"github.com/go-logr/zapr"
@@ -131,6 +132,14 @@ func main() {
 		Log: ctrl.Log.WithName("controllers").WithName("Qperf"),
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "Qperf")
+		os.Exit(1)
+	}
+	if err = (&ocplogtest.Reconciler{
+		Client: mgr.GetClient(),
+		Log:    ctrl.Log.WithName("controllers").WithName("OcpLogtest"),
+		Scheme: mgr.GetScheme(),
+	}).SetupWithManager(mgr); err != nil {
+		setupLog.Error(err, "unable to create controller", "controller", "OcpLogtest")
 		os.Exit(1)
 	}
 	// +kubebuilder:scaffold:builder

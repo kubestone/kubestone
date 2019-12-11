@@ -6,11 +6,20 @@ metadata:
   creationTimestamp: null
   name: ocplogtests.perf.kubestone.xridge.io
 spec:
+  additionalPrinterColumns:
+  - JSONPath: .status.running
+    name: Running
+    type: boolean
+  - JSONPath: .status.completed
+    name: Completed
+    type: boolean
   group: perf.kubestone.xridge.io
   names:
     kind: OcpLogtest
     plural: ocplogtests
   scope: ""
+  subresources:
+    status: {}
   validation:
     openAPIV3Schema:
       description: OcpLogtest is the Schema for the ocplogtests API

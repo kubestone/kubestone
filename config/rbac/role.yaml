@@ -188,6 +188,12 @@ rules:
 - apiGroups:
   - perf.kubestone.xridge.io
   resources:
+  - ocplogtests/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - perf.kubestone.xridge.io
+  resources:
   - ocplogtests/status
   verbs:
   - get

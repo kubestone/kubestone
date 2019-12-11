@@ -29,9 +29,9 @@ var _ = Describe("ocplogtest job", func() {
 					Name: "quay.io/mffiedler/ocp-logtest:latest",
 				},
 				LineLength: 1024,
-				NumLines: 300000,
-				Rate: 60000,
-				FixedLine: true,
+				NumLines:   300000,
+				Rate:       60000,
+				FixedLine:  true,
 			},
 		}
 		job := NewJob(&cr)

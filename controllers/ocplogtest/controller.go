@@ -34,6 +34,7 @@ type Reconciler struct {
 
 // +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=ocplogtests,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=ocplogtests/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=ocplogtests/finalizers,verbs=update
 
 func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 	ctx := context.Background()

@@ -46,13 +46,10 @@ type OcpLogtestSpec struct {
 	PodConfig PodConfigurationSpec `json:"podConfig,omitempty"`
 }
 
-// OcpLogtestStatus defines the observed state of OcpLogtest
-type OcpLogtestStatus struct {
-	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
-}
-
 // +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
+// +kubebuilder:printcolumn:name="Running",type="boolean",JSONPath=".status.running"
+// +kubebuilder:printcolumn:name="Completed",type="boolean",JSONPath=".status.completed"
 
 // OcpLogtest is the Schema for the ocplogtests API
 type OcpLogtest struct {

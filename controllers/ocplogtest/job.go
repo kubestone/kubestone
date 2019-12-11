@@ -16,28 +16,27 @@ func NewJob(cr *perfv1alpha1.OcpLogtest) *batchv1.Job {
 		Namespace: cr.Namespace,
 	}
 
-	job := k8s.NewPerfJob(objectMeta, "pgbench", cr.Spec.Image, cr.Spec.PodConfig)
-
 	args := []string{
 		"ocp_logtest.py",
 	}
 
-	if cr.Spec.FixedLine {
-		args = append(args, "--line-length")
-	}
-
 	if cr.Spec.LineLength > 0 {
-		args = append(args, fmt.Sprintf("--fixed-line=%d", cr.Spec.LineLength))
+		args = append(args, "--line-length", fmt.Sprintf("%d", cr.Spec.LineLength))
 	}
 
 	if cr.Spec.NumLines > 0 {
-		args = append(args, fmt.Sprintf("--num-lines=%d", cr.Spec.NumLines))
+		args = append(args, "--num-lines", fmt.Sprintf("%d", cr.Spec.NumLines))
 	}
 
 	if cr.Spec.Rate > 0 {
-		args = append(args, fmt.Sprintf("--rate=%d", cr.Spec.Rate))
+		args = append(args, "--rate", fmt.Sprintf("%d", cr.Spec.Rate))
 	}
 
+	if cr.Spec.FixedLine {
+		args = append(args, "--fixed-line")
+	}
+
+	job := k8s.NewPerfJob(objectMeta, "pgbench", cr.Spec.Image, cr.Spec.PodConfig)
 	job.Spec.Template.Spec.Containers[0].Command = []string{"python"}
 	job.Spec.Template.Spec.Containers[0].Args = args
 

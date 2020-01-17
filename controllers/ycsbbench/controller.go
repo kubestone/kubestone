@@ -19,6 +19,8 @@ type Reconciler struct {
 // +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=ycsbbenches,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=ycsbbenches/status,verbs=get;update;patch
 // +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=ycsbbenches/finalizers,verbs=update
+
+//
 func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 	ctx := context.Background()
 	_ = r.Log.WithValues("ycsbbench", req.NamespacedName)

@@ -5,7 +5,11 @@ metadata:
 spec:
   image:
     name: diamantisolutions/ycsb:latest
-  action: load
-  db_type: redis
-  workletter: a
-  db_args: -p redis.host=10.0.0.1
+  database: redis
+  workload: a
+  options:
+    threadcount: 1
+    target: 100
+  properties:
+    redis.host: 10.0.0.1
+

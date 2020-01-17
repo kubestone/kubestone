@@ -12,15 +12,20 @@ type YcsbBenchSpec struct {
 	// Image defines the docker image used for the benchmark
 	Image ImageSpec `json:"image"`
 
-	Action     string `json:"action"`
-	DbType     string `json:"db_type"`
-	Workletter string `json:"workletter"`
-	DbArgs     string `json:"db_args"`
+	Database   string            `json:"database"`
+	Workload   string            `json:"workload"`
+	Options    YcsbBenchOptions  `json:"options,omitempty"`
+	Properties map[string]string `json:"properties"`
 
 	// PodConfig contains the configuration for the benchmark pod, including
 	// pod labels and scheduling policies (affinity, toleration, node selector...)
 	// +optional
 	PodConfig PodConfigurationSpec `json:"podConfig,omitempty"`
+}
+
+type YcsbBenchOptions struct {
+	Threadcount int `json:"threadcount,omitempty"`
+	Target      int `json:"target,omitempty"`
 }
 
 // +kubebuilder:object:root=true

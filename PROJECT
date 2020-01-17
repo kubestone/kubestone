@@ -23,3 +23,7 @@ resources:
 - group: perf
   version: v1alpha1
   kind: Qperf
+- group: perf
+  kind: YcsbBench
+  version: v1alpha1
+version: "2"

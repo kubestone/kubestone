@@ -133,8 +133,6 @@ func testNewJob(cr perfv1alpha1.YcsbBench, expected_args []string) {
 		containers := job.Spec.Template.Spec.Containers
 		cont := containers[0]
 
-		print(cont.Args)
-
 		It("should have 1 container", func() {
 			Expect(len(containers)).To(Equal(1))
 		})

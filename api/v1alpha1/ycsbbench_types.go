@@ -25,8 +25,8 @@ type YcsbBenchSpec struct {
 	// Image defines the docker image used for the benchmark
 	Image ImageSpec `json:"image"`
 
-	Database   string            `json:"database"`
-	Workload   string            `json:"workload"`
+	Database string `json:"database"`
+	Workload string `json:"workload"`
 	// +optional
 	Options    YcsbBenchOptions  `json:"options,omitempty"`
 	Properties map[string]string `json:"properties"`

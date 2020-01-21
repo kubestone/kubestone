@@ -74,6 +74,14 @@ spec:
               description: Options is a list of zero or more command line options
                 starting with '--'.
               type: string
+            podAnnotations:
+              additionalProperties:
+                type: string
+              description: 'Annotations is an unstructured key value map stored with
+                a resource that may be set by external tools to store and retrieve
+                arbitrary metadata. They are not queryable and should be preserved
+                when modifying objects. More info: http://kubernetes.io/docs/user-guide/annotations'
+              type: object
             podLabels:
               additionalProperties:
                 type: string

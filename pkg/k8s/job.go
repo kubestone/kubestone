@@ -38,6 +38,17 @@ func NewPerfJob(objectMeta metav1.ObjectMeta, app string, imageSpec perfv1alpha1
 		labels[key] = value
 	}
 
+	if podConfig.PodAnnotations != nil {
+		if objectMeta.Annotations != nil {
+			// If its already set add the values onto the existing map
+			for k, v := range podConfig.PodAnnotations {
+				objectMeta.Annotations[k] = v
+			}
+		} else {
+			objectMeta.Annotations = podConfig.PodAnnotations
+		}
+	}
+
 	job := batchv1.Job{
 		ObjectMeta: objectMeta,
 		Spec: batchv1.JobSpec{

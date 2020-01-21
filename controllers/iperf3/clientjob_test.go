@@ -41,6 +41,11 @@ var _ = Describe("Client Pod", func() {
 					ClientConfiguration: ksapi.Iperf3ConfigurationSpec{
 						CmdLineArgs: "--testing --things",
 						HostNetwork: true,
+						PodConfigurationSpec: ksapi.PodConfigurationSpec{
+							PodAnnotations: map[string]string{
+								"annotation_one": "value_one",
+							},
+						},
 					},
 				},
 			}
@@ -98,6 +103,12 @@ var _ = Describe("Client Pod", func() {
 			It("should retry 6 times", func() {
 				Expect(job.Spec.BackoffLimit).To(
 					Equal(&defaultBackoffLimit))
+			})
+		})
+
+		Context("with added annotations", func() {
+			It("should contain pod annotations", func() {
+				Expect(job.ObjectMeta.Annotations).To(HaveKey("annotation_one"))
 			})
 		})
 	})

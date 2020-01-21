@@ -18,7 +18,6 @@ package v1alpha1
 
 import (
 	"errors"
-
 	corev1 "k8s.io/api/core/v1"
 )
 
@@ -106,6 +105,14 @@ func (v *VolumeSpec) Validate() (ok bool, err error) {
 
 // PodConfigurationSpec contains the configuration for the benchmark pods
 type PodConfigurationSpec struct {
+
+	// Annotations is an unstructured key value map stored with a resource that may be
+	// set by external tools to store and retrieve arbitrary metadata. They are not
+	// queryable and should be preserved when modifying objects.
+	// More info: http://kubernetes.io/docs/user-guide/annotations
+	// +optional
+	PodAnnotations map[string]string `json:"podAnnotations,omitempty"`
+
 	// PodLabels are added to the pod as labels.
 	// +optional
 	PodLabels map[string]string `json:"podLabels,omitempty"`

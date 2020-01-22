@@ -73,8 +73,9 @@ func NewServerDeployment(cr *perfv1alpha1.Iperf3) *appsv1.Deployment {
 
 	deployment := appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      serverDeploymentName(cr),
-			Namespace: cr.Namespace,
+			Name:        serverDeploymentName(cr),
+			Namespace:   cr.Namespace,
+			Annotations: cr.Spec.ServerConfiguration.PodConfigurationSpec.PodAnnotations,
 		},
 		Spec: appsv1.DeploymentSpec{
 			Selector: &metav1.LabelSelector{
@@ -83,7 +84,8 @@ func NewServerDeployment(cr *perfv1alpha1.Iperf3) *appsv1.Deployment {
 			Replicas: &replicas,
 			Template: corev1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{
-					Labels: labels,
+					Labels:      labels,
+					Annotations: cr.Spec.ServerConfiguration.PodConfigurationSpec.PodAnnotations,
 				},
 				Spec: corev1.PodSpec{
 					ImagePullSecrets: []corev1.LocalObjectReference{

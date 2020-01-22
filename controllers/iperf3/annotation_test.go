@@ -103,6 +103,16 @@ var _ = Describe("Pod Annotations", func() {
 			It("doesnt have server annotations", func() {
 				Expect(jobSpec.Annotations).ToNot(HaveKey("anno_two"))
 			})
+
+			Context("template", func() {
+				It("has client annotations", func() {
+					Expect(jobSpec.Spec.Template.Annotations).To(HaveKey("anno_one"))
+				})
+
+				It("doesnt have server annotations", func() {
+					Expect(jobSpec.Spec.Template.Annotations).ToNot(HaveKey("anno_two"))
+				})
+			})
 		})
 
 		Context("client configuration", func() {

@@ -69,6 +69,13 @@ var _ = Describe("Client Pod", func() {
 			})
 		})
 
+		Context("with cmdLineArgs specified", func() {
+			It("--testing mode is set", func() {
+				Expect(job.Spec.Template.Spec.Containers[0].Args).To(
+					ContainElement("--testing"))
+			})
+		})
+
 		Context("with UDP mode specified", func() {
 			cr.Spec.UDP = true
 			job := NewClientJob(&cr)

@@ -136,6 +136,13 @@ var _ = Describe("Server Deployment", func() {
 			})
 		})
 
+		Context("with cmdLineArgs specified", func() {
+			It("--testing mode is set", func() {
+				Expect(deployment.Spec.Template.Spec.Containers[0].Args).To(
+					ContainElement("--testing"))
+			})
+		})
+
 		Context("with podLabels specified", func() {
 			It("should contain all podLabels", func() {
 				for k, v := range cr.Spec.ServerConfiguration.PodLabels {

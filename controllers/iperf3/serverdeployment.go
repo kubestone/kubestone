@@ -64,7 +64,7 @@ func NewServerDeployment(cr *perfv1alpha1.Iperf3) *appsv1.Deployment {
 	}
 
 	iperfCmdLineArgs = append(iperfCmdLineArgs,
-		qsplit.ToStrings([]byte(cr.Spec.ClientConfiguration.CmdLineArgs))...)
+		qsplit.ToStrings([]byte(cr.Spec.ServerConfiguration.CmdLineArgs))...)
 
 	// Iperf3 Server does not like if probe connections are made to the port,
 	// therefore we are checking if the port if open or not via shell script

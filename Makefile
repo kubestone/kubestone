@@ -107,3 +107,6 @@ CONTROLLER_GEN=$(GOBIN)/controller-gen
 else
 CONTROLLER_GEN=$(shell which controller-gen)
 endif
+
+# All the things needed before you make a PR
+pre-commit: generate apidocs manifests fmt vet

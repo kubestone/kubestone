@@ -31,8 +31,8 @@ var _ = Describe("Pod Annotations", func() {
 						CmdLineArgs: "--testing --things",
 						HostNetwork: true,
 						PodConfigurationSpec: ksapi.PodConfigurationSpec{
-							PodAnnotations: map[string]string{"anno_two": "exists"},
-							PodLabels:      map[string]string{"labels": "are", "really": "useful"},
+							Annotations: map[string]string{"anno_two": "exists"},
+							PodLabels:   map[string]string{"labels": "are", "really": "useful"},
 							PodScheduling: ksapi.PodSchedulingSpec{
 								Affinity: &corev1.Affinity{
 									NodeAffinity: &corev1.NodeAffinity{
@@ -81,7 +81,7 @@ var _ = Describe("Pod Annotations", func() {
 						CmdLineArgs: "--testing --things",
 						HostNetwork: true,
 						PodConfigurationSpec: ksapi.PodConfigurationSpec{
-							PodAnnotations: map[string]string{
+							Annotations: map[string]string{
 								"anno_one": "value_two",
 							},
 						},

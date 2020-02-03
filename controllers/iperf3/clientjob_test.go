@@ -42,7 +42,7 @@ var _ = Describe("Client Pod", func() {
 						CmdLineArgs: "--testing --things",
 						HostNetwork: true,
 						PodConfigurationSpec: ksapi.PodConfigurationSpec{
-							PodAnnotations: map[string]string{
+							Annotations: map[string]string{
 								"annotation_one": "value_one",
 							},
 						},

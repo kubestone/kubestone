@@ -43,7 +43,7 @@ func NewServerService(cr *perfv1alpha1.Iperf3) *corev1.Service {
 		ObjectMeta: metav1.ObjectMeta{
 			Name:        serverServiceName(cr),
 			Namespace:   cr.Namespace,
-			Annotations: cr.Spec.ClientConfiguration.PodConfigurationSpec.PodAnnotations,
+			Annotations: cr.Spec.ClientConfiguration.PodConfigurationSpec.Annotations,
 		},
 		Spec: corev1.ServiceSpec{
 			Ports: []corev1.ServicePort{

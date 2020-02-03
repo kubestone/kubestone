@@ -75,7 +75,7 @@ func NewServerDeployment(cr *perfv1alpha1.Iperf3) *appsv1.Deployment {
 		ObjectMeta: metav1.ObjectMeta{
 			Name:        serverDeploymentName(cr),
 			Namespace:   cr.Namespace,
-			Annotations: cr.Spec.ServerConfiguration.PodConfigurationSpec.PodAnnotations,
+			Annotations: cr.Spec.ServerConfiguration.PodConfigurationSpec.Annotations,
 		},
 		Spec: appsv1.DeploymentSpec{
 			Selector: &metav1.LabelSelector{
@@ -85,7 +85,7 @@ func NewServerDeployment(cr *perfv1alpha1.Iperf3) *appsv1.Deployment {
 			Template: corev1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels:      labels,
-					Annotations: cr.Spec.ServerConfiguration.PodConfigurationSpec.PodAnnotations,
+					Annotations: cr.Spec.ServerConfiguration.PodConfigurationSpec.Annotations,
 				},
 				Spec: corev1.PodSpec{
 					ImagePullSecrets: []corev1.LocalObjectReference{

@@ -41,6 +41,14 @@ spec:
             options for the sysbench benchmark. The options, testName and command
             parameters are passed to the sysbench benchmarking application.
           properties:
+            annotations:
+              additionalProperties:
+                type: string
+              description: 'Annotations is an unstructured key value map stored with
+                a resource that may be set by external tools to store and retrieve
+                arbitrary metadata. They are not queryable and should be preserved
+                when modifying objects. More info: http://kubernetes.io/docs/user-guide/annotations'
+              type: object
             command:
               description: Command is an optional argument that will be passed by
                 sysbench to the built-in test or script specified with TestName. Command

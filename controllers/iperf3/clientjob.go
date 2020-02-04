@@ -66,5 +66,6 @@ func NewClientJob(cr *perfv1alpha1.Iperf3) *batchv1.Job {
 	job.Spec.BackoffLimit = &backoffLimit
 	job.Spec.Template.Spec.Containers[0].Args = iperfCmdLineArgs
 	job.Spec.Template.Spec.HostNetwork = cr.Spec.ClientConfiguration.HostNetwork
+
 	return job
 }

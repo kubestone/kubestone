@@ -19,12 +19,15 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	corev1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/api/resource"
 
 	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
 )
 
 var _ = Describe("pgbench job", func() {
 	Describe("NewJob", func() {
+		var memResource, _ = resource.ParseQuantity("4Gi")
+
 		cr := perfv1alpha1.Pgbench{
 			Spec: perfv1alpha1.PgbenchSpec{
 				Image: perfv1alpha1.ImageSpec{
@@ -36,6 +39,17 @@ var _ = Describe("pgbench job", func() {
 					User:     "admin",
 					Password: "admin",
 					Database: "benchdb",
+				},
+				PodConfig: perfv1alpha1.PodConfigurationSpec{
+					Annotations:   nil,
+					PodLabels:     nil,
+					PodScheduling: perfv1alpha1.PodSchedulingSpec{},
+					Resources: corev1.ResourceRequirements{
+						Limits: nil,
+						Requests: map[corev1.ResourceName]resource.Quantity{
+							corev1.ResourceName("memory"): memResource,
+						},
+					},
 				},
 				InitArgs: "-s 5",
 				Args:     "-t 100",
@@ -99,5 +113,12 @@ var _ = Describe("pgbench job", func() {
 			Expect(job.Spec.Template.Spec.Containers[0].Args).To(
 				ContainElement("100"))
 		})
+
+		Context("init container", func() {
+			It("should have the requested resource", func() {
+				Expect(job.Spec.Template.Spec.InitContainers[0].Resources).ToNot(Equal(corev1.ResourceRequirements{}))
+			})
+		})
+
 	})
 })

@@ -26,19 +26,19 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 )
 
-// KafkaClientReconciler reconciles a KafkaClient object
+// KafkaBenchReconciler reconciles a KafkaBench object
 type KafkaBenchReconciler struct {
 	K8S k8s.Access
 	Log logr.Logger
 }
 
-// +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=kafkaclients,verbs=get;list;watch;create;update;patch;delete
-// +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=kafkaclients/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=kafkabenchs,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=kafkabenchs/status,verbs=get;update;patch
 // +kubebuilder:rbac:groups="",resources=pods,verbs=get;list;create;delete
 
 func (r *KafkaBenchReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 	ctx := context.Background()
-	_ = r.Log.WithValues("kafkaclient", req.NamespacedName)
+	_ = r.Log.WithValues("kafkabench", req.NamespacedName)
 
 	var cr perfv1alpha1.KafkaBench
 

@@ -32,7 +32,7 @@ func NewConsumerJob(cr *perfv1alpha1.KafkaBench, ts *perfv1alpha1.KafkaTestSpec)
 		Namespace: cr.Namespace,
 	}
 
-	job := k8s.NewPerfJob(objectMeta, "kafkaclient", cr.Spec.Image, cr.Spec.PodConfig)
+	job := k8s.NewPerfJob(objectMeta, "kafkabench", cr.Spec.Image, cr.Spec.PodConfig)
 	job.Spec.Parallelism = &ts.Threads
 
 	// Add init job to sleep, this allows the producer to queue up messages

@@ -176,7 +176,7 @@ rules:
 - apiGroups:
   - perf.kubestone.xridge.io
   resources:
-  - kafkaclients
+  - kafkabenchs
   verbs:
   - create
   - delete
@@ -188,7 +188,7 @@ rules:
 - apiGroups:
   - perf.kubestone.xridge.io
   resources:
-  - kafkaclients/status
+  - kafkabenchs/status
   verbs:
   - get
   - patch

@@ -16,7 +16,7 @@ var _ = Describe("Consumer Job", func() {
 		BeforeEach(func() {
 			cr = ksapi.KafkaBench{
 				ObjectMeta: v1.ObjectMeta{
-					Name: "kafkaclient-sample",
+					Name: "kafkabench-sample",
 				},
 				Spec: ksapi.KafkaBenchSpec{
 					Image: ksapi.ImageSpec{

@@ -1,0 +1,26 @@
+# permissions to do edit kafkabenches.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kafkabench-editor-role
+rules:
+- apiGroups:
+  - perf.kubestone.xridge.io
+  resources:
+  - kafkabenches
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - perf.kubestone.xridge.io
+  resources:
+  - kafkabenches/status
+  verbs:
+  - get
+  - patch
+  - update

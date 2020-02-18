@@ -23,3 +23,6 @@ resources:
 - group: perf
   version: v1alpha1
   kind: Qperf
+- group: perf
+  kind: KafkaBench
+  version: v1alpha1

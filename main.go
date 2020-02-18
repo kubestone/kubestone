@@ -33,9 +33,11 @@ import (
 	"github.com/xridge/kubestone/controllers/fio"
 	"github.com/xridge/kubestone/controllers/ioping"
 	"github.com/xridge/kubestone/controllers/iperf3"
+	"github.com/xridge/kubestone/controllers/kafkabench"
 	"github.com/xridge/kubestone/controllers/pgbench"
 	"github.com/xridge/kubestone/controllers/qperf"
 	"github.com/xridge/kubestone/controllers/sysbench"
+
 	"github.com/xridge/kubestone/pkg/k8s"
 	// +kubebuilder:scaffold:imports
 )
@@ -131,6 +133,14 @@ func main() {
 		Log: ctrl.Log.WithName("controllers").WithName("Qperf"),
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "Qperf")
+		os.Exit(1)
+	}
+
+	if err = (&kafkabench.KafkaBenchReconciler{
+		K8S: k8sAccess,
+		Log: ctrl.Log.WithName("controllers").WithName("KafkaBench"),
+	}).SetupWithManager(mgr); err != nil {
+		setupLog.Error(err, "unable to create controller", "controller", "KafkaBench")
 		os.Exit(1)
 	}
 	// +kubebuilder:scaffold:builder

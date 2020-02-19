@@ -27,8 +27,10 @@ import (
 )
 
 func NewProducerJob(cr *perfv1alpha1.KafkaBench, ts *perfv1alpha1.KafkaTestSpec) *batchv1.Job {
+	jobName := fmt.Sprintf("%s-%s-producer", cr.Name, ts.Name)
+
 	objectMeta := metav1.ObjectMeta{
-		Name:      fmt.Sprintf("%s-%s-producer", cr.Name, ts.Name),
+		Name:      jobName,
 		Namespace: cr.Namespace,
 	}
 
@@ -47,6 +49,9 @@ func NewProducerJob(cr *perfv1alpha1.KafkaBench, ts *perfv1alpha1.KafkaTestSpec)
 
 	job.Spec.Template.Spec.Containers[0].Command = []string{"/bin/sh"}
 	job.Spec.Template.Spec.Containers[0].Args = ProducerJobCmd(cr, ts)
+
+	// Add pod affinity
+	AddPodAffinity(job, jobName)
 
 	return job
 }

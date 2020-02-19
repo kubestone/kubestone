@@ -22,6 +22,8 @@ import (
 	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
 	"github.com/xridge/kubestone/pkg/k8s"
 	batchv1 "k8s.io/api/batch/v1"
+	corev1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	ctrl "sigs.k8s.io/controller-runtime"
 )
@@ -120,4 +122,28 @@ func (r *KafkaBenchReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&perfv1alpha1.KafkaBench{}).
 		Complete(r)
+}
+
+func AddPodAffinity(job *batchv1.Job, job_name string) {
+	job.Spec.Template.Spec.Affinity.PodAffinity.PreferredDuringSchedulingIgnoredDuringExecution = append(
+		job.Spec.Template.Spec.Affinity.PodAffinity.PreferredDuringSchedulingIgnoredDuringExecution, corev1.WeightedPodAffinityTerm{
+			Weight: 1,
+			PodAffinityTerm: corev1.PodAffinityTerm{
+				LabelSelector: &metav1.LabelSelector{
+					MatchExpressions: []metav1.LabelSelectorRequirement{
+						{
+							Key:      "kubestone.xridge.io/app",
+							Operator: "In",
+							Values:   []string{"kafkabench"},
+						},
+						{
+							Key:      "kubestone.xridge.io/cr-name",
+							Operator: "In",
+							Values:   []string{job_name},
+						},
+					},
+				},
+				TopologyKey: "kubernetes.io/hostname",
+			},
+		})
 }

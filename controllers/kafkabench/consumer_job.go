@@ -27,8 +27,10 @@ import (
 )
 
 func NewConsumerJob(cr *perfv1alpha1.KafkaBench, ts *perfv1alpha1.KafkaTestSpec) *batchv1.Job {
+	jobName := fmt.Sprintf("%s-%s-consumer", cr.Name, ts.Name)
+
 	objectMeta := metav1.ObjectMeta{
-		Name:      fmt.Sprintf("%s-%s-consumer", cr.Name, ts.Name),
+		Name:      jobName,
 		Namespace: cr.Namespace,
 	}
 
@@ -40,14 +42,16 @@ func NewConsumerJob(cr *perfv1alpha1.KafkaBench, ts *perfv1alpha1.KafkaTestSpec)
 		Name:            "kafka-consumer-init",
 		Image:           cr.Spec.Image.Name,
 		ImagePullPolicy: corev1.PullPolicy(cr.Spec.Image.PullPolicy),
-		//Command:         []string{"/bin/sh"},
-		Command:   []string{"/bin/sleep", "40"},
-		Resources: cr.Spec.PodConfig.Resources,
+		Command:         []string{"/bin/sleep", "40"},
+		Resources:       cr.Spec.PodConfig.Resources,
 	}
 	job.Spec.Template.Spec.InitContainers = append(job.Spec.Template.Spec.InitContainers, initContainer)
 
 	job.Spec.Template.Spec.Containers[0].Command = []string{"/bin/sh"}
 	job.Spec.Template.Spec.Containers[0].Args = ConsumerJobArgs(cr, ts)
+
+	// Add pod affinity
+	AddPodAffinity(job, jobName)
 
 	return job
 }

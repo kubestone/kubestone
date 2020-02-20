@@ -9,11 +9,6 @@ With the Kafka benchmark, you can do the following by passing messages through t
 * Stress testing the cluster based on specific parameters (such as message size).
 * Load testing for the purpose of evaluating specific metrics or determining the impact of cluster configuration changes.
  
-
-https://docs.cloudera.com/runtime/7.0.3/kafka-managing/topics/kafka-manage-cli-perf-test.html
-https://engineering.linkedin.com/kafka/benchmarking-apache-kafka-2-million-writes-second-three-cheap-machines    
-
-
 ## Mode of operation
 
 To get benchmarks for kafka, a producer and consumer is created to pass messages through the kafka cluster. To use this you must already have a kafka cluster deployed. 

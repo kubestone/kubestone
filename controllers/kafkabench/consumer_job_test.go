@@ -72,10 +72,16 @@ var _ = Describe("Consumer Job", func() {
 			}
 		})
 
+		Context("with multiple tests", func() {
+			It("create multiple jobs", func() {
+				Expect(jobs).To(HaveLen(2))
+			})
+		})
+
 		Context("with ClusterInfo specified", func() {
 			It("should contain broker list", func() {
 				Expect(jobs[0].Spec.Template.Spec.Containers[0].Args).To(
-					ContainSubstring(strings.Join(cr.Spec.KafkaClusterInfo.Brokers, ",")))
+					ContainElement(strings.Join(cr.Spec.KafkaClusterInfo.Brokers, ",")))
 			})
 		})
 	})

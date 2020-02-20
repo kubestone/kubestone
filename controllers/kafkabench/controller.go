@@ -151,9 +151,10 @@ func AddPodAffinity(job *batchv1.Job, jobName string) {
 			RequiredDuringSchedulingIgnoredDuringExecution:  nil,
 			PreferredDuringSchedulingIgnoredDuringExecution: []corev1.WeightedPodAffinityTerm{affinity},
 		}
-	}else{
+	} else {
 		job.Spec.Template.Spec.Affinity.PodAffinity.PreferredDuringSchedulingIgnoredDuringExecution = append(
 			job.Spec.Template.Spec.Affinity.PodAffinity.PreferredDuringSchedulingIgnoredDuringExecution,
+			affinity,
 		)
 	}
 }

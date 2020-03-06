@@ -45,12 +45,22 @@ var _ = Describe("ocplogtest job", func() {
 		It("should have the translated args", func() {
 			Expect(job.Spec.Template.Spec.Containers[0].Args).To(
 				ContainElement("ocp_logtest.py"))
+
 			Expect(job.Spec.Template.Spec.Containers[0].Args).To(
-				ContainElement("--line-length=1024"))
+				ContainElement("--line-length"))
 			Expect(job.Spec.Template.Spec.Containers[0].Args).To(
-				ContainElement("--num-lines=300000"))
+				ContainElement("1024"))
+
 			Expect(job.Spec.Template.Spec.Containers[0].Args).To(
-				ContainElement("--rate=60000"))
+				ContainElement("--num-lines"))
+			Expect(job.Spec.Template.Spec.Containers[0].Args).To(
+				ContainElement("300000"))
+
+			Expect(job.Spec.Template.Spec.Containers[0].Args).To(
+				ContainElement("--rate"))
+			Expect(job.Spec.Template.Spec.Containers[0].Args).To(
+				ContainElement("60000"))
+
 			Expect(job.Spec.Template.Spec.Containers[0].Args).To(
 				ContainElement("--fixed-line"))
 		})

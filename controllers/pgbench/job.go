@@ -50,6 +50,7 @@ func NewJob(cr *perfv1alpha1.Pgbench) *batchv1.Job {
 		Command:         []string{"pgbench", "-i"},
 		Args:            qsplit.ToStrings([]byte(cr.Spec.InitArgs)),
 		Env:             env,
+		Resources:       cr.Spec.PodConfig.Resources,
 	}
 
 	job := k8s.NewPerfJob(objectMeta, "pgbench", cr.Spec.Image, cr.Spec.PodConfig)

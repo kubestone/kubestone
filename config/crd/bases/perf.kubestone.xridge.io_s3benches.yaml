@@ -959,7 +959,6 @@ spec:
               type: object
           required:
           - host
-          - image
           - mode
           type: object
         status:

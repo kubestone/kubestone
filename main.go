@@ -135,9 +135,8 @@ func main() {
 		os.Exit(1)
 	}
 	if err = (&s3bench.Reconciler{
-		Client: mgr.GetClient(),
-		Log:    ctrl.Log.WithName("controllers").WithName("S3Bench"),
-		Scheme: mgr.GetScheme(),
+		K8S: k8sAccess,
+		Log: ctrl.Log.WithName("controllers").WithName("S3Bench"),
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "S3Bench")
 		os.Exit(1)

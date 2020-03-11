@@ -1,0 +1,7 @@
+apiVersion: perf.kubestone.xridge.io/v1alpha1
+kind: S3Bench
+metadata:
+  name: s3bench-sample
+spec:
+  # Add fields here
+  foo: bar

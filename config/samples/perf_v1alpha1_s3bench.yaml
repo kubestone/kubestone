@@ -2,6 +2,20 @@ apiVersion: perf.kubestone.xridge.io/v1alpha1
 kind: S3Bench
 metadata:
   name: s3bench-sample
+  namespace: minio
 spec:
-  # Add fields here
-  foo: bar
+  mode: mixed
+  host: minio-test.minio.svc.sol1.diamanti.com:9000
+  #,172.16.222.6:9000,172.16.222.7:9000,172.16.222.8:9000,172.16.222.9:9000,172.16.222.10:9000,172.16.222.11:9000,172.16.222.12:9000
+  access_key: AKIAIOSFODNN7EXAMPLE
+  secret_key: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+#  duration: 1m
+  concurrent: 12
+  auto_term:
+    enabled: true
+#  objects:
+#    count: 4
+#    size: 10GiB
+  podConfig:
+    annotations:
+      diamanti.com/endpoint0: '{"network":"blue","perfTier":"high"}'

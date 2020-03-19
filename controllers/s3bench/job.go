@@ -43,7 +43,7 @@ func NewJob(cr *perfv1alpha1.S3Bench) *batchv1.Job {
 		}
 	}
 
-	job := k8s.NewPerfJob(objectMeta, "s3bench", cr.Spec.Image, cr.Spec.PodConfig)
+	job := k8s.NewPerfJob(objectMeta, "s3bench", image, cr.Spec.PodConfig)
 	job.Spec.Template.Spec.Containers[0].Args = s3benchCmdLineArgs
 	return job
 }

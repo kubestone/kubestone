@@ -39,6 +39,8 @@ spec:
         spec:
           description: S3BenchSpec defines the desired state of S3Bench
           properties:
+            access_key:
+              type: string
             analysis:
               description: S3AnalysisOptions defines options for the analysis features
                 of warp
@@ -88,9 +90,37 @@ spec:
                     7.5)'
                   type: string
               type: object
+            bench_output:
+              description: Output benchmark+profile data to this file. By default
+                unique filename is generated.
+              type: string
+            bucket:
+              description: 'Bucket defines which bucket to use for benchmark data.
+                ALL DATA WILL BE DELETED IN BUCKET! (default: "warp-benchmark-bucket")'
+              type: string
+            concurrent:
+              description: 'Concurrent defines how many concurrent operations to run
+                (default: 6)'
+              format: int32
+              type: integer
+            debug:
+              description: 'Debug will enable debug output (default: false)'
+              type: boolean
+            duration:
+              description: 'Duration defines the time length to run the benchmark.
+                Use ''s'' and ''m'' to specify seconds and minutes. (default: 5m0s)'
+              type: string
+            encrypt:
+              description: 'Encrypt defines if to encrypt/decrypt objects (using server-side
+                encryption with random keys) (default: false)'
+              type: boolean
             host:
               description: 'Host defines the host to benchmark against. Multiple hosts
                 can be specified as a comma separated list. (default: "127.0.0.1:9000")'
+              type: string
+            host_select:
+              description: 'HostSelect defines the host selection algorithm. Can be
+                "weighed" or "roundrobin" (default: "weighed")'
               type: string
             image:
               description: Image defines the warp docker image used for the benchmark
@@ -114,6 +144,10 @@ spec:
               required:
               - name
               type: object
+            insecure:
+              description: 'Insecure defines if to disable SSL certificate verification
+                (default: false)'
+              type: boolean
             mixed_dist:
               description: MixedDistributionOptions defines the distribution of operation
                 types if using the mixed mode Will only be used in "mixed" mode.
@@ -142,6 +176,17 @@ spec:
                 See https://github.com/minio/warp#mixed for option definition. Currently
                 accepted values are: get, put, delete, mixed'
               type: string
+            no_clear:
+              description: 'NoClear Do not clear bucket before or after running benchmarks.
+                Use when running multiple clients. (default: false)'
+              type: boolean
+            no_color:
+              description: 'NoColor will disable color theme (default: false)'
+              type: boolean
+            no_prefix:
+              description: 'NoPrefix defines if to NOT use separate prefix for each
+                thread (default: false)'
+              type: boolean
             objects:
               description: S3ObjectOptions defines options for the objects generated
                 by the benchmark
@@ -164,73 +209,6 @@ spec:
                     be a number or 10KiB/MiB/GiB. All sizes are base 2 binary. (default:
                     "10MiB")'
                   type: string
-              type: object
-            options:
-              description: S3BenchOptions defines the runtime arguments for the benchmark
-                test
-              properties:
-                access_key:
-                  type: string
-                bench_output:
-                  description: Output benchmark+profile data to this file. By default
-                    unique filename is generated.
-                  type: string
-                bucket:
-                  description: 'Bucket defines which bucket to use for benchmark data.
-                    ALL DATA WILL BE DELETED IN BUCKET! (default: "warp-benchmark-bucket")'
-                  type: string
-                concurrent:
-                  description: 'Concurrent defines how many concurrent operations
-                    to run (default: 6)'
-                  format: int32
-                  type: integer
-                debug:
-                  description: 'Debug will enable debug output (default: false)'
-                  type: boolean
-                duration:
-                  description: 'Duration defines the time length to run the benchmark.
-                    Use ''s'' and ''m'' to specify seconds and minutes. (default:
-                    5m0s)'
-                  type: string
-                encrypt:
-                  description: 'Encrypt defines if to encrypt/decrypt objects (using
-                    server-side encryption with random keys) (default: false)'
-                  type: boolean
-                host_select:
-                  description: 'HostSelect defines the host selection algorithm. Can
-                    be "weighed" or "roundrobin" (default: "weighed")'
-                  type: string
-                insecure:
-                  description: 'Insecure defines if to disable SSL certificate verification
-                    (default: false)'
-                  type: boolean
-                no_clear:
-                  description: 'NoClear Do not clear bucket before or after running
-                    benchmarks. Use when running multiple clients. (default: false)'
-                  type: boolean
-                no_color:
-                  description: 'NoColor will disable color theme (default: false)'
-                  type: boolean
-                no_prefix:
-                  description: 'NoPrefix defines if to NOT use separate prefix for
-                    each thread (default: false)'
-                  type: boolean
-                region:
-                  description: Region defines a custom region
-                  type: string
-                requests:
-                  description: Requests Display individual request stats.
-                  type: boolean
-                secret_key:
-                  type: string
-                sync_start:
-                  description: Specify a benchmark start time. Time format is 'hh:mm'
-                    where hours are specified in 24h format, server TZ.
-                  type: string
-                tls:
-                  description: 'Tls defines if to use TLS (HTTPS) for transport (default:
-                    false)'
-                  type: boolean
               type: object
             podConfig:
               description: PodConfig contains the configuration for the benchmark
@@ -957,6 +935,22 @@ spec:
                       type: object
                   type: object
               type: object
+            region:
+              description: Region defines a custom region
+              type: string
+            requests:
+              description: Requests Display individual request stats.
+              type: boolean
+            secret_key:
+              type: string
+            sync_start:
+              description: Specify a benchmark start time. Time format is 'hh:mm'
+                where hours are specified in 24h format, server TZ.
+              type: string
+            tls:
+              description: 'Tls defines if to use TLS (HTTPS) for transport (default:
+                false)'
+              type: boolean
           required:
           - host
           - mode

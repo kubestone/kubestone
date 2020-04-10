@@ -1,0 +1,7 @@
+apiVersion: perf.kubestone.xridge.io/v1alpha1
+kind: EsRally
+metadata:
+  name: esrally-sample
+spec:
+  # Add fields here
+  foo: bar

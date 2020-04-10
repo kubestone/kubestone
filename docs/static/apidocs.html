@@ -265,6 +265,113 @@ pod labels and scheduling policies (affinity, toleration, node selector&hellip;)
 </tr>
 </tbody>
 </table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.EsRally">EsRally
+</h3>
+<p>
+<p>EsRally is the Schema for the esrallies API</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>metadata</code></br>
+<em>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#objectmeta-v1-meta">
+Kubernetes meta/v1.ObjectMeta
+</a>
+</em>
+</td>
+<td>
+Refer to the Kubernetes API documentation for the fields of the
+<code>metadata</code> field.
+</td>
+</tr>
+<tr>
+<td>
+<code>spec</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.EsRallySpec">
+EsRallySpec
+</a>
+</em>
+</td>
+<td>
+<br/>
+<br/>
+<table>
+<tr>
+<td>
+<code>foo</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<p>Foo is an example field of EsRally. Edit EsRally_types.go to remove/update</p>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<code>status</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.EsRallyStatus">
+EsRallyStatus
+</a>
+</em>
+</td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.EsRallySpec">EsRallySpec
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.EsRally">EsRally</a>)
+</p>
+<p>
+<p>EsRallySpec defines the desired state of EsRally</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>foo</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<p>Foo is an example field of EsRally. Edit EsRally_types.go to remove/update</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.EsRallyStatus">EsRallyStatus
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.EsRally">EsRally</a>)
+</p>
+<p>
+<p>EsRallyStatus defines the observed state of EsRally</p>
+</p>
 <h3 id="perf.kubestone.xridge.io/v1alpha1.Fio">Fio
 </h3>
 <p>
@@ -1980,5 +2087,5 @@ claimName must be set to &lsquo;GENERATED&rsquo;</p>
 <hr/>
 <p><em>
 Generated with <code>gen-crd-api-reference-docs</code>
-on git commit <code>ed28fad</code>.
+on git commit <code>0c0e4a5</code>.
 </em></p>

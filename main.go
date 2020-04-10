@@ -18,6 +18,7 @@ package main
 
 import (
 	"flag"
+	"github.com/xridge/kubestone/controllers/esrally"
 	"os"
 
 	"github.com/go-logr/zapr"
@@ -131,6 +132,13 @@ func main() {
 		Log: ctrl.Log.WithName("controllers").WithName("Qperf"),
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "Qperf")
+		os.Exit(1)
+	}
+	if err = (&esrally.Reconciler{
+		K8S: k8sAccess,
+		Log: ctrl.Log.WithName("controllers").WithName("EsRally"),
+	}).SetupWithManager(mgr); err != nil {
+		setupLog.Error(err, "unable to create controller", "controller", "EsRally")
 		os.Exit(1)
 	}
 	// +kubebuilder:scaffold:builder

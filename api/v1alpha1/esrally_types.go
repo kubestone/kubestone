@@ -59,9 +59,9 @@ type EsRallyStatus struct {
 	Deployed bool `json:"deployed"`
 }
 
-
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
+// +kubebuilder:printcolumn:name="Deployed",type="boolean",JSONPath=".status.deployed"
 // +kubebuilder:printcolumn:name="Running",type="boolean",JSONPath=".status.running"
 // +kubebuilder:printcolumn:name="Completed",type="boolean",JSONPath=".status.completed"
 

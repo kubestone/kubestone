@@ -19,6 +19,7 @@ package k8s
 import (
 	"context"
 	"fmt"
+	v1 "k8s.io/api/apps/v1"
 
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -177,4 +178,28 @@ func (a *Access) IsDeploymentReady(namespacedName types.NamespacedName) (ready b
 	ready = deployment.Status.ReadyReplicas == *deployment.Spec.Replicas
 
 	return ready, err
+}
+
+// IsStatefulSetReady returns true if the given deployment's ready replicas matching with the desired replicas
+func (a *Access) IsStatefulSetReady(namespacedName types.NamespacedName) (set *v1.StatefulSet, ready bool, err error) {
+	ready, err = false, nil
+	statefulSet, err := a.Clientset.AppsV1().StatefulSets(namespacedName.Namespace).Get(
+		namespacedName.Name, metav1.GetOptions{})
+	if err != nil {
+		return set, ready, err
+	}
+
+	ready = statefulSet.Status.ReadyReplicas == *statefulSet.Spec.Replicas
+
+	return statefulSet, ready, err
+}
+
+func (a *Access) GetStatefulSet(namespacedName types.NamespacedName) *v1.StatefulSet {
+	statefulSet, err := a.Clientset.AppsV1().StatefulSets(namespacedName.Namespace).Get(
+		namespacedName.Name, metav1.GetOptions{})
+
+	if err != nil {
+		return statefulSet
+	}
+	return nil
 }

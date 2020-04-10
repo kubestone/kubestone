@@ -61,6 +61,15 @@ rules:
   - list
   - watch
 - apiGroups:
+  - apps
+  resources:
+  - statefulsets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+- apiGroups:
   - batch
   resources:
   - jobs
@@ -107,6 +116,12 @@ rules:
   - patch
   - update
   - watch
+- apiGroups:
+  - perf.kubestone.xridge.io
+  resources:
+  - esrallies/finalizers
+  verbs:
+  - update
 - apiGroups:
   - perf.kubestone.xridge.io
   resources:

@@ -307,13 +307,95 @@ EsRallySpec
 <table>
 <tr>
 <td>
-<code>foo</code></br>
+<code>image</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.ImageSpec">
+ImageSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Image defines the docker image used for the benchmark</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>podConfig</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PodConfigurationSpec">
+PodConfigurationSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>PodConfig contains the configuration for the benchmark pod, including
+pod labels and scheduling policies (affinity, toleration, node selector&hellip;)</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>track</code></br>
 <em>
 string
 </em>
 </td>
 <td>
-<p>Foo is an example field of EsRally. Edit EsRally_types.go to remove/update</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>hosts</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<code>pipeline</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<code>challenge</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<code>config</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.EsRallyConfig">
+EsRallyConfig
+</a>
+</em>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<code>persistence</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.EsRallyVolConfig">
+EsRallyVolConfig
+</a>
+</em>
+</td>
+<td>
 </td>
 </tr>
 </table>
@@ -329,6 +411,35 @@ EsRallyStatus
 </em>
 </td>
 <td>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.EsRallyConfig">EsRallyConfig
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.EsRallySpec">EsRallySpec</a>)
+</p>
+<p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>nodes</code></br>
+<em>
+int32
+</em>
+</td>
+<td>
+<p>Nodes contains the number of esrally clients to use. Default is 1</p>
 </td>
 </tr>
 </tbody>
@@ -352,13 +463,95 @@ EsRallyStatus
 <tbody>
 <tr>
 <td>
-<code>foo</code></br>
+<code>image</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.ImageSpec">
+ImageSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Image defines the docker image used for the benchmark</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>podConfig</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PodConfigurationSpec">
+PodConfigurationSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>PodConfig contains the configuration for the benchmark pod, including
+pod labels and scheduling policies (affinity, toleration, node selector&hellip;)</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>track</code></br>
 <em>
 string
 </em>
 </td>
 <td>
-<p>Foo is an example field of EsRally. Edit EsRally_types.go to remove/update</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>hosts</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<code>pipeline</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<code>challenge</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<code>config</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.EsRallyConfig">
+EsRallyConfig
+</a>
+</em>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<code>persistence</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.EsRallyVolConfig">
+EsRallyVolConfig
+</a>
+</em>
+</td>
+<td>
 </td>
 </tr>
 </tbody>
@@ -370,8 +563,88 @@ string
 <a href="#perf.kubestone.xridge.io/v1alpha1.EsRally">EsRally</a>)
 </p>
 <p>
-<p>EsRallyStatus defines the observed state of EsRally</p>
 </p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>running</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+<p>Running shows the state of execution</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>completed</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+<p>Completed shows the state of completion</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>deployed</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+<p>Deployed shows the state of the StatefulSet needed for testing</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.EsRallyVolConfig">EsRallyVolConfig
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.EsRallySpec">EsRallySpec</a>)
+</p>
+<p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>size</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<code>storage_class</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
 <h3 id="perf.kubestone.xridge.io/v1alpha1.Fio">Fio
 </h3>
 <p>
@@ -617,6 +890,7 @@ run on.</p>
 <p>
 (<em>Appears on:</em>
 <a href="#perf.kubestone.xridge.io/v1alpha1.DrillSpec">DrillSpec</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.EsRallySpec">EsRallySpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.IopingSpec">IopingSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3Spec">Iperf3Spec</a>, 
@@ -1318,6 +1592,7 @@ pod labels and scheduling policies (affinity, toleration, node selector&hellip;)
 <p>
 (<em>Appears on:</em>
 <a href="#perf.kubestone.xridge.io/v1alpha1.DrillSpec">DrillSpec</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.EsRallySpec">EsRallySpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.IopingSpec">IopingSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3ConfigurationSpec">Iperf3ConfigurationSpec</a>, 
@@ -2087,5 +2362,5 @@ claimName must be set to &lsquo;GENERATED&rsquo;</p>
 <hr/>
 <p><em>
 Generated with <code>gen-crd-api-reference-docs</code>
-on git commit <code>0c0e4a5</code>.
+on git commit <code>dec8282</code>.
 </em></p>

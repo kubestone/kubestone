@@ -19,6 +19,10 @@ package esrally
 import (
 	"context"
 	"github.com/xridge/kubestone/pkg/k8s"
+	corev1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/types"
+	"k8s.io/apimachinery/pkg/util/intstr"
 
 	"github.com/go-logr/logr"
 	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
@@ -52,6 +56,60 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 		return ctrl.Result{}, nil
 	}
 
+	namespaceName := types.NamespacedName{
+		Namespace: cr.Namespace,
+		Name:      cr.Name,
+	}
+
+	if !cr.Status.Deployed {
+		statefulSet, sError := NewStatefulSet(&cr)
+
+		if sError != nil {
+			return ctrl.Result{}, sError
+		}
+
+		// Create StatefulSet
+		if err := r.K8S.CreateWithReference(ctx, statefulSet, &cr); err != nil {
+			return ctrl.Result{}, err
+		}
+
+		// Create service
+		service := corev1.Service{
+			ObjectMeta: metav1.ObjectMeta{
+				Name:      cr.Name,
+				Namespace: cr.Namespace,
+			},
+			Spec: corev1.ServiceSpec{
+				Ports: []corev1.ServicePort{
+					{Port: 1900, TargetPort: intstr.FromString("transport")},
+				},
+				Selector: statefulSet.Spec.Selector.MatchLabels,
+			},
+			Status: corev1.ServiceStatus{},
+		}
+
+		if err := r.K8S.CreateWithReference(ctx, &service, &cr); err != nil {
+			return ctrl.Result{}, err
+		}
+
+		// set Deployed as true
+		cr.Status.Deployed = true
+		if err := r.K8S.Client.Status().Update(ctx, &cr); err != nil {
+			return ctrl.Result{}, err
+		}
+
+		// We need to wait for the StatefulSet to be ready, so requeue
+		return ctrl.Result{Requeue: true}, nil
+	}
+
+	_, ready, _ := r.K8S.IsStatefulSetReady(namespaceName)
+	if !ready {
+		// We need to wait for the StatefulSet to be ready, so requeue
+		return ctrl.Result{Requeue: true}, nil
+	}
+
+	// TODO Create Job
+
 	if !cr.Status.Running {
 		// Mark it as running
 		cr.Status.Running = true
@@ -59,16 +117,6 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 			return ctrl.Result{}, err
 		}
 	}
-
-	if !cr.Status.Deployed {
-		// TODO: Create StatefulSet
-
-
-		// Wait for the StatefulSet to be ready
-		return ctrl.Result{Requeue: true}, nil
-	}
-
-	// TODO: Create job
 
 	return ctrl.Result{}, nil
 }

@@ -20,6 +20,8 @@ import (
 	"flag"
 	"os"
 
+	"github.com/xridge/kubestone/controllers/ycsbbench"
+
 	"github.com/go-logr/zapr"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/client-go/kubernetes"
@@ -131,6 +133,13 @@ func main() {
 		Log: ctrl.Log.WithName("controllers").WithName("Qperf"),
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "Qperf")
+		os.Exit(1)
+	}
+	if err = (&ycsbbench.Reconciler{
+		K8S: k8sAccess,
+		Log: ctrl.Log.WithName("controllers").WithName("YcsbBench"),
+	}).SetupWithManager(mgr); err != nil {
+		setupLog.Error(err, "unable to create controller", "controller", "YcsbBench")
 		os.Exit(1)
 	}
 	// +kubebuilder:scaffold:builder

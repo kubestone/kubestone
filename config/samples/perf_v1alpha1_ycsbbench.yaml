@@ -1,0 +1,15 @@
+apiVersion: perf.kubestone.xridge.io/v1alpha1
+kind: YcsbBench
+metadata:
+  name: ycsbbench-sample
+spec:
+  image:
+    name: diamantisolutions/ycsb:latest
+  database: redis
+  workload: a
+  options:
+    threadcount: 1
+    target: 100
+  properties:
+    redis.host: 10.0.0.1
+

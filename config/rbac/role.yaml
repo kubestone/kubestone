@@ -251,3 +251,29 @@ rules:
   - get
   - patch
   - update
+- apiGroups:
+  - perf.kubestone.xridge.io
+  resources:
+  - ycsbbenches
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - perf.kubestone.xridge.io
+  resources:
+  - ycsbbenches/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - perf.kubestone.xridge.io
+  resources:
+  - ycsbbenches/status
+  verbs:
+  - get
+  - patch
+  - update

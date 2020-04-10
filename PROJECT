@@ -1,28 +1,31 @@
+version: "2"
 domain: kubestone.xridge.io
 repo: github.com/xridge/kubestone
 resources:
 - group: perf
+  version: v1alpha1
   kind: Iperf3
-  version: v1alpha1
 - group: perf
+  version: v1alpha1
   kind: Fio
-  version: v1alpha1
 - group: perf
+  version: v1alpha1
   kind: Sysbench
-  version: v1alpha1
 - group: perf
+  version: v1alpha1
   kind: Drill
-  version: v1alpha1
 - group: perf
+  version: v1alpha1
   kind: Pgbench
-  version: v1alpha1
 - group: perf
+  version: v1alpha1
   kind: Ioping
-  version: v1alpha1
 - group: perf
+  version: v1alpha1
   kind: Qperf
+- group: perf
+  kind: YcsbBench
   version: v1alpha1
 - group: perf
   kind: OcpLogtest
   version: v1alpha1
-version: "2"

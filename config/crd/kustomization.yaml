@@ -9,6 +9,7 @@ resources:
 - bases/perf.kubestone.xridge.io_pgbenches.yaml
 - bases/perf.kubestone.xridge.io_iopings.yaml
 - bases/perf.kubestone.xridge.io_qperves.yaml
+- bases/perf.kubestone.xridge.io_ycsbbenches.yaml
 - bases/perf.kubestone.xridge.io_ocplogtests.yaml
 # +kubebuilder:scaffold:crdkustomizeresource
 
@@ -22,6 +23,7 @@ patchesStrategicMerge:
 #- patches/webhook_in_pgbenches.yaml
 #- patches/webhook_in_iopings.yaml
 #- patches/webhook_in_qperves.yaml
+#- patches/webhook_in_ycsbbenches.yaml
 #- patches/webhook_in_ocplogtests.yaml
 # +kubebuilder:scaffold:crdkustomizewebhookpatch
 
@@ -34,6 +36,7 @@ patchesStrategicMerge:
 #- patches/cainjection_in_pgbenches.yaml
 #- patches/cainjection_in_iopings.yaml
 #- patches/cainjection_in_qperves.yaml
+#- patches/cainjection_in_ycsbbenches.yaml
 #- patches/cainjection_in_ocplogtests.yaml
 # +kubebuilder:scaffold:crdkustomizecainjectionpatch
 

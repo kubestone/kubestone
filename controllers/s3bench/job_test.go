@@ -29,12 +29,12 @@ var _ = Describe("s3bench job", func() {
 		var job *batchv1.Job
 
 		BeforeEach(func() {
-			cr = perfv1alpha1.S3Bench{Spec:perfv1alpha1.S3BenchSpec{
-				Mode:                     "mixed",
-				Host:                     "minio-test.minio.svc.sol1.diamanti.com:9000",
-				S3BenchOptions:           perfv1alpha1.S3BenchOptions{
-					AccessKey:   "AKIAIOSFODNN7EXAMPLE",
-					SecretKey:   "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+			cr = perfv1alpha1.S3Bench{Spec: perfv1alpha1.S3BenchSpec{
+				Mode: "mixed",
+				Host: "minio-test.minio.svc.sol1.diamanti.com:9000",
+				S3BenchOptions: perfv1alpha1.S3BenchOptions{
+					AccessKey: "AKIAIOSFODNN7EXAMPLE",
+					SecretKey: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
 				},
 				S3ObjectOptions:          perfv1alpha1.S3ObjectOptions{},
 				S3AutoTermOptions:        perfv1alpha1.S3AutoTermOptions{},

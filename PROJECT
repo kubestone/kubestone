@@ -26,3 +26,7 @@ resources:
 - group: perf
   kind: EsRally
   version: v1alpha1
+- group: perf
+  kind: YcsbBench
+  version: v1alpha1
+version: "2"

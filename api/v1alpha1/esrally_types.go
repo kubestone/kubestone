@@ -20,25 +20,50 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
-// NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
-
 // EsRallySpec defines the desired state of EsRally
 type EsRallySpec struct {
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
+	// Image defines the docker image used for the benchmark
+	// +optional
+	Image ImageSpec `json:"image,omitempty"`
 
-	// Foo is an example field of EsRally. Edit EsRally_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
+	// PodConfig contains the configuration for the benchmark pod, including
+	// pod labels and scheduling policies (affinity, toleration, node selector...)
+	// +optional
+	PodConfig PodConfigurationSpec `json:"podConfig,omitempty"`
+
+	Track     string `json:"track"`
+	Hosts     string `json:"hosts"`
+	Pipeline  string `json:"pipeline"`
+	Challenge string `json:"challenge"`
+
+	Config      EsRallyConfig    `json:"config,omitempty"`
+	Persistence EsRallyVolConfig `json:"persistence"`
 }
 
-// EsRallyStatus defines the observed state of EsRally
+type EsRallyVolConfig struct {
+	Size         string `json:"size"`
+	StorageClass string `json:"storage_class"`
+}
+
+type EsRallyConfig struct {
+	// Nodes contains the number of esrally clients to use. Default is 1
+	Nodes *int32 `json:"nodes"`
+}
+
 type EsRallyStatus struct {
-	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
+	// Running shows the state of execution
+	Running bool `json:"running"`
+	// Completed shows the state of completion
+	Completed bool `json:"completed"`
+	// Deployed shows the state of the StatefulSet needed for testing
+	Deployed bool `json:"deployed"`
 }
+
 
 // +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
+// +kubebuilder:printcolumn:name="Running",type="boolean",JSONPath=".status.running"
+// +kubebuilder:printcolumn:name="Completed",type="boolean",JSONPath=".status.completed"
 
 // EsRally is the Schema for the esrallies API
 type EsRally struct {

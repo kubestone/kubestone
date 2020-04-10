@@ -31,14 +31,44 @@ type Reconciler struct {
 	Log logr.Logger
 }
 
+// +kubebuilder:rbac:groups="",resources=services,verbs=get;list;create;delete
+// +kubebuilder:rbac:groups=apps,resources=statefulsets,verbs=get;list;create;delete
+
 // +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=esrallies,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=esrallies/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=esrallies/finalizers,verbs=update
 
 func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
-	_ = context.Background()
+	ctx := context.Background()
 	_ = r.Log.WithValues("esrally", req.NamespacedName)
 
-	// your logic here
+	var cr perfv1alpha1.EsRally
+	if err := r.K8S.Client.Get(ctx, req.NamespacedName, &cr); err != nil {
+		return ctrl.Result{}, k8s.IgnoreNotFound(err)
+	}
+
+	// Return if its completed
+	if cr.Status.Completed {
+		return ctrl.Result{}, nil
+	}
+
+	if !cr.Status.Running {
+		// Mark it as running
+		cr.Status.Running = true
+		if err := r.K8S.Client.Status().Update(ctx, &cr); err != nil {
+			return ctrl.Result{}, err
+		}
+	}
+
+	if !cr.Status.Deployed {
+		// TODO: Create StatefulSet
+
+
+		// Wait for the StatefulSet to be ready
+		return ctrl.Result{Requeue: true}, nil
+	}
+
+	// TODO: Create job
 
 	return ctrl.Result{}, nil
 }

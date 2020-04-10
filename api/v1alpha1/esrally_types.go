@@ -42,7 +42,7 @@ type EsRallySpec struct {
 
 type EsRallyVolConfig struct {
 	Size         string `json:"size"`
-	StorageClass string `json:"storage_class"`
+	StorageClass string `json:"storageClass"`
 }
 
 type EsRallyConfig struct {

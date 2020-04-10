@@ -82,11 +82,11 @@ spec:
               properties:
                 size:
                   type: string
-                storage_class:
+                storageClass:
                   type: string
               required:
               - size
-              - storage_class
+              - storageClass
               type: object
             pipeline:
               type: string

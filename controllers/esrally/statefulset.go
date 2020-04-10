@@ -42,7 +42,7 @@ func NewStatefulSet(cr *v1alpha1.EsRally) (*v1.StatefulSet, error) {
 	image := cr.Spec.Image
 	if image == (v1alpha1.ImageSpec{}) {
 		image = v1alpha1.ImageSpec{
-			Name:       "elastic/rally:latest",
+			Name:       "diamantisolutions/esrally:kubestone",
 			PullPolicy: "Always",
 		}
 	}
@@ -54,7 +54,7 @@ func NewStatefulSet(cr *v1alpha1.EsRally) (*v1.StatefulSet, error) {
 		},
 	}
 
-	quantity, err := resource.ParseQuantity(cr.Spec.Persistence.StorageClass)
+	quantity, err := resource.ParseQuantity(cr.Spec.Persistence.Size)
 	if err != nil {
 		return nil, err
 	}
@@ -65,8 +65,10 @@ func NewStatefulSet(cr *v1alpha1.EsRally) (*v1.StatefulSet, error) {
 				Name: "data",
 			},
 			Spec: corev1.PersistentVolumeClaimSpec{
-				AccessModes: nil,
-				Selector:    nil,
+				AccessModes: []corev1.PersistentVolumeAccessMode{
+					corev1.ReadWriteOnce,
+				},
+				Selector: nil,
 				Resources: corev1.ResourceRequirements{
 					Limits: nil,
 					Requests: corev1.ResourceList{
@@ -93,6 +95,7 @@ func NewStatefulSet(cr *v1alpha1.EsRally) (*v1.StatefulSet, error) {
 			Selector: &metav1.LabelSelector{
 				MatchLabels: selectorLabels,
 			},
+			ServiceName: cr.Name,
 			Template: corev1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels:      podLabels,
@@ -121,8 +124,12 @@ func NewStatefulSet(cr *v1alpha1.EsRally) (*v1.StatefulSet, error) {
 								}},
 							},
 							VolumeMounts: volumeMounts,
+							Command: []string{
+								"/bin/sh", "-c",
+							},
 							Args: []string{
-								"start", "--node-ip=${MY_POD_IP}", "--coordinator-ip=${MY_POD_IP}",
+								"/usr/local/bin/esrallyd start --node-ip=${MY_POD_IP} --coordinator-ip=" + cr.Name + "-0." + cr.Name + ";\n" +
+									"touch /rally/.rally/logs/rally.log; tail -f /rally/.rally/logs/rally.log",
 							},
 						},
 					},

@@ -3,5 +3,12 @@ kind: EsRally
 metadata:
   name: esrally-sample
 spec:
-  # Add fields here
-  foo: bar
+  track: eventdata
+  hosts: "elastic-cluster-elasticsearch-client:9200"
+  pipeline: benchmark-only
+  challenge: append-no-conflicts
+  persistence:
+    size: 50Gi
+    storageClass: high
+  config:
+    nodes: 3

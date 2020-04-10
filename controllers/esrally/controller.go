@@ -68,11 +68,6 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 			return ctrl.Result{}, sError
 		}
 
-		// Create StatefulSet
-		if err := r.K8S.CreateWithReference(ctx, statefulSet, &cr); err != nil {
-			return ctrl.Result{}, err
-		}
-
 		// Create service
 		service := corev1.Service{
 			ObjectMeta: metav1.ObjectMeta{
@@ -88,7 +83,13 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 			Status: corev1.ServiceStatus{},
 		}
 
+		// Create service
 		if err := r.K8S.CreateWithReference(ctx, &service, &cr); err != nil {
+			return ctrl.Result{}, err
+		}
+
+		// Create StatefulSet
+		if err := r.K8S.CreateWithReference(ctx, statefulSet, &cr); err != nil {
 			return ctrl.Result{}, err
 		}
 

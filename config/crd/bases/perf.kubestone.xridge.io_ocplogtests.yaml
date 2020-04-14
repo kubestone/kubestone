@@ -39,7 +39,7 @@ spec:
         spec:
           description: OcpLogtestSpec defines the desired state of OcpLogtest
           properties:
-            fixed_line:
+            fixedLine:
               description: repeat the same line of text over and over or use new text
                 for each line
               type: boolean
@@ -65,10 +65,10 @@ spec:
               required:
               - name
               type: object
-            line_length:
+            lineLength:
               description: length of each line
               type: integer
-            num_lines:
+            numLines:
               description: number of lines to generate
               type: integer
             podConfig:

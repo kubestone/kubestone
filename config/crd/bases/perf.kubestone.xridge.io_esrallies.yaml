@@ -44,16 +44,6 @@ spec:
           properties:
             challenge:
               type: string
-            config:
-              properties:
-                nodes:
-                  description: Nodes contains the number of esrally clients to use.
-                    Default is 1
-                  format: int32
-                  type: integer
-              required:
-              - nodes
-              type: object
             hosts:
               type: string
             image:
@@ -78,6 +68,11 @@ spec:
               required:
               - name
               type: object
+            nodes:
+              description: Nodes defines the number of esrally clients to use. Default
+                is 1
+              format: int32
+              type: integer
             persistence:
               properties:
                 size:
@@ -816,6 +811,18 @@ spec:
                   type: object
               type: object
             track:
+              description: Track defines the track that Rally should run.
+              type: string
+            trackParams:
+              additionalProperties:
+                type: string
+              description: TrackParams defines variables to inject into tracks. The
+                supported variables depend on the track and you should check the track
+                JSON file to see which variables can be provided. https://esrally.readthedocs.io/en/stable/command_line_reference.html#track-params
+              type: object
+            trackRepository:
+              description: 'TrackRepository defines the track repository that Rally
+                should use to resolve tracks. Default: default https://esrally.readthedocs.io/en/stable/command_line_reference.html#track-repository'
               type: string
           required:
           - challenge

@@ -3,12 +3,15 @@ kind: EsRally
 metadata:
   name: esrally-sample
 spec:
-  track: eventdata
   hosts: "elastic-cluster-elasticsearch-client:9200"
   pipeline: benchmark-only
   challenge: append-no-conflicts
+  nodes: 3
+  track: eventdata
+  trackRepository: eventdata
+  trackParams:
+    bulk_indexing_clients: 256
+    shard_count: 3
   persistence:
     size: 50Gi
     storageClass: high
-  config:
-    nodes: 3

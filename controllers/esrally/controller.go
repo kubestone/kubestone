@@ -109,14 +109,37 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 		return ctrl.Result{Requeue: true}, nil
 	}
 
-	// TODO Create Job
-
+	// If its not running, create job and mark it as running
 	if !cr.Status.Running {
+		job := NewJob(&cr)
+		if err := r.K8S.CreateWithReference(ctx, job, &cr); err != nil {
+			return ctrl.Result{}, err
+		}
+
 		// Mark it as running
 		cr.Status.Running = true
 		if err := r.K8S.Client.Status().Update(ctx, &cr); err != nil {
 			return ctrl.Result{}, err
 		}
+	}
+
+	jobFinished, err := r.K8S.IsJobFinished(namespaceName)
+	if err != nil {
+		return ctrl.Result{}, err
+	}
+	if !jobFinished {
+		// Wait for the job to be completed
+		return ctrl.Result{Requeue: true}, nil
+	}
+
+	// The cr could have been modified since the last time we got it
+	if err := r.K8S.Client.Get(ctx, req.NamespacedName, &cr); err != nil {
+		return ctrl.Result{}, k8s.IgnoreNotFound(err)
+	}
+	cr.Status.Running = false
+	cr.Status.Completed = true
+	if err := r.K8S.Client.Status().Update(ctx, &cr); err != nil {
+		return ctrl.Result{}, err
 	}
 
 	return ctrl.Result{}, nil

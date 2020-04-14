@@ -17,6 +17,7 @@ limitations under the License.
 package esrally
 
 import (
+	"fmt"
 	"github.com/xridge/kubestone/api/v1alpha1"
 	v1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -81,8 +82,8 @@ func NewStatefulSet(cr *v1alpha1.EsRally) (*v1.StatefulSet, error) {
 	}
 
 	replicas := int32(1)
-	if cr.Spec.Config.Nodes != nil {
-		replicas = *cr.Spec.Config.Nodes
+	if cr.Spec.Nodes != nil {
+		replicas = *cr.Spec.Nodes
 	}
 
 	stateFulSet := v1.StatefulSet{
@@ -128,7 +129,7 @@ func NewStatefulSet(cr *v1alpha1.EsRally) (*v1.StatefulSet, error) {
 								"/bin/sh", "-c",
 							},
 							Args: []string{
-								"/usr/local/bin/esrallyd start --node-ip=${MY_POD_IP} --coordinator-ip=" + cr.Name + "-0." + cr.Name + ";\n" +
+								fmt.Sprintf("/usr/local/bin/esrallyd start --node-ip=${MY_POD_IP} --coordinator-ip=%s-0.%s;\n", cr.Name, cr.Namespace) +
 									"touch /rally/.rally/logs/rally.log; tail -f /rally/.rally/logs/rally.log",
 							},
 						},

@@ -343,6 +343,33 @@ string
 </em>
 </td>
 <td>
+<p>Track defines the track that Rally should run.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>trackRepository</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>TrackRepository defines the track repository that Rally should use to resolve tracks. Default: default
+<a href="https://esrally.readthedocs.io/en/stable/command_line_reference.html#track-repository">https://esrally.readthedocs.io/en/stable/command_line_reference.html#track-repository</a></p>
+</td>
+</tr>
+<tr>
+<td>
+<code>trackParams</code></br>
+<em>
+map[string]string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>TrackParams defines variables to inject into tracks. The supported variables depend on the track and you should check the track JSON file to see which variables can be provided.
+<a href="https://esrally.readthedocs.io/en/stable/command_line_reference.html#track-params">https://esrally.readthedocs.io/en/stable/command_line_reference.html#track-params</a></p>
 </td>
 </tr>
 <tr>
@@ -377,14 +404,14 @@ string
 </tr>
 <tr>
 <td>
-<code>config</code></br>
+<code>nodes</code></br>
 <em>
-<a href="#perf.kubestone.xridge.io/v1alpha1.EsRallyConfig">
-EsRallyConfig
-</a>
+int32
 </em>
 </td>
 <td>
+<em>(Optional)</em>
+<p>Nodes defines the number of esrally clients to use. Default is 1</p>
 </td>
 </tr>
 <tr>
@@ -412,35 +439,6 @@ EsRallyStatus
 </em>
 </td>
 <td>
-</td>
-</tr>
-</tbody>
-</table>
-<h3 id="perf.kubestone.xridge.io/v1alpha1.EsRallyConfig">EsRallyConfig
-</h3>
-<p>
-(<em>Appears on:</em>
-<a href="#perf.kubestone.xridge.io/v1alpha1.EsRallySpec">EsRallySpec</a>)
-</p>
-<p>
-</p>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<code>nodes</code></br>
-<em>
-int32
-</em>
-</td>
-<td>
-<p>Nodes contains the number of esrally clients to use. Default is 1</p>
 </td>
 </tr>
 </tbody>
@@ -499,6 +497,33 @@ string
 </em>
 </td>
 <td>
+<p>Track defines the track that Rally should run.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>trackRepository</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>TrackRepository defines the track repository that Rally should use to resolve tracks. Default: default
+<a href="https://esrally.readthedocs.io/en/stable/command_line_reference.html#track-repository">https://esrally.readthedocs.io/en/stable/command_line_reference.html#track-repository</a></p>
+</td>
+</tr>
+<tr>
+<td>
+<code>trackParams</code></br>
+<em>
+map[string]string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>TrackParams defines variables to inject into tracks. The supported variables depend on the track and you should check the track JSON file to see which variables can be provided.
+<a href="https://esrally.readthedocs.io/en/stable/command_line_reference.html#track-params">https://esrally.readthedocs.io/en/stable/command_line_reference.html#track-params</a></p>
 </td>
 </tr>
 <tr>
@@ -533,14 +558,14 @@ string
 </tr>
 <tr>
 <td>
-<code>config</code></br>
+<code>nodes</code></br>
 <em>
-<a href="#perf.kubestone.xridge.io/v1alpha1.EsRallyConfig">
-EsRallyConfig
-</a>
+int32
 </em>
 </td>
 <td>
+<em>(Optional)</em>
+<p>Nodes defines the number of esrally clients to use. Default is 1</p>
 </td>
 </tr>
 <tr>
@@ -2621,5 +2646,5 @@ pod labels and scheduling policies (affinity, toleration, node selector&hellip;)
 <hr/>
 <p><em>
 Generated with <code>gen-crd-api-reference-docs</code>
-on git commit <code>541fc69</code>.
+on git commit <code>ff949e7</code>.
 </em></p>

@@ -31,23 +31,33 @@ type EsRallySpec struct {
 	// +optional
 	PodConfig PodConfigurationSpec `json:"podConfig,omitempty"`
 
-	Track     string `json:"track"`
+	// Track defines the track that Rally should run.
+	Track string `json:"track"`
+
+	// TrackRepository defines the track repository that Rally should use to resolve tracks. Default: default
+	// https://esrally.readthedocs.io/en/stable/command_line_reference.html#track-repository
+	// +optional
+	TrackRepository *string `json:"trackRepository,omitempty"`
+
+	// TrackParams defines variables to inject into tracks. The supported variables depend on the track and you should check the track JSON file to see which variables can be provided.
+	// https://esrally.readthedocs.io/en/stable/command_line_reference.html#track-params
+	// +optional
+	TrackParams *map[string]string `json:"trackParams,omitempty"`
+
 	Hosts     string `json:"hosts"`
 	Pipeline  string `json:"pipeline"`
 	Challenge string `json:"challenge"`
 
-	Config      EsRallyConfig    `json:"config,omitempty"`
+	// Nodes defines the number of esrally clients to use. Default is 1
+	// +optional
+	Nodes *int32 `json:"nodes,omitempty"`
+
 	Persistence EsRallyVolConfig `json:"persistence"`
 }
 
 type EsRallyVolConfig struct {
 	Size         string `json:"size"`
 	StorageClass string `json:"storageClass"`
-}
-
-type EsRallyConfig struct {
-	// Nodes contains the number of esrally clients to use. Default is 1
-	Nodes *int32 `json:"nodes"`
 }
 
 type EsRallyStatus struct {

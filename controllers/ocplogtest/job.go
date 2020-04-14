@@ -9,7 +9,7 @@ import (
 	"github.com/xridge/kubestone/pkg/k8s"
 )
 
-// NewJob creates a new pgbench job
+// NewJob creates a new ocplogbench job
 func NewJob(cr *perfv1alpha1.OcpLogtest) *batchv1.Job {
 	objectMeta := metav1.ObjectMeta{
 		Name:      cr.Name,
@@ -36,7 +36,7 @@ func NewJob(cr *perfv1alpha1.OcpLogtest) *batchv1.Job {
 		args = append(args, "--fixed-line")
 	}
 
-	job := k8s.NewPerfJob(objectMeta, "pgbench", cr.Spec.Image, cr.Spec.PodConfig)
+	job := k8s.NewPerfJob(objectMeta, "ocplogbench", cr.Spec.Image, cr.Spec.PodConfig)
 	job.Spec.Template.Spec.Containers[0].Command = []string{"python"}
 	job.Spec.Template.Spec.Containers[0].Args = args
 

@@ -5,7 +5,7 @@ metadata:
 spec:
   image:
     name: quay.io/mffiedler/ocp-logtest:latest
-  line_length: 1024
-  num_lines: 300000
+  lineLength: 1024
+  numLines: 300000
   rate: 60000
-  fixed_line: true
+  fixedLine: true

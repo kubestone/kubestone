@@ -23,7 +23,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-func TestPgbenchController(t *testing.T) {
+func TestOcpLogController(t *testing.T) {
 	RegisterFailHandler(Fail)
 	RunSpecs(t, "OcpLogtest Controller Suite")
 }

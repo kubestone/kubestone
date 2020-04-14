@@ -20,25 +20,22 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
-// NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
-
 // OcpLogtestSpec defines the desired state of OcpLogtest
 type OcpLogtestSpec struct {
 	// Image defines the docker image used for the benchmark
 	Image ImageSpec `json:"image"`
 
 	// length of each line
-	LineLength int `json:"line_length,omitempty"`
+	LineLength int `json:"lineLength,omitempty"`
 
 	// number of lines to generate
-	NumLines int `json:"num_lines,omitempty"`
+	NumLines int `json:"numLines,omitempty"`
 
 	// lines per minute
 	Rate int `json:"rate,omitempty"`
 
 	// repeat the same line of text over and over or use new text for each line
-	FixedLine bool `json:"fixed_line,omitempty"`
+	FixedLine bool `json:"fixedLine,omitempty"`
 
 	// PodConfig contains the configuration for the benchmark pod, including
 	// pod labels and scheduling policies (affinity, toleration, node selector...)

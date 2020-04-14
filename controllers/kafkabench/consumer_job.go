@@ -37,12 +37,18 @@ func NewConsumerJob(cr *perfv1alpha1.KafkaBench, ts *perfv1alpha1.KafkaTestSpec)
 	job := k8s.NewPerfJob(objectMeta, "kafkabench", cr.Spec.Image, cr.Spec.PodConfig)
 	job.Spec.Parallelism = &ts.Threads
 
+	consumerSleep := int32(40)
+
+	if ts.ConsumerSleep != nil {
+		consumerSleep = *ts.ConsumerSleep
+	}
+
 	// Add init job to sleep, this allows the producer to queue up messages
 	initContainer := corev1.Container{
 		Name:            "kafka-consumer-init",
 		Image:           cr.Spec.Image.Name,
 		ImagePullPolicy: corev1.PullPolicy(cr.Spec.Image.PullPolicy),
-		Command:         []string{"/bin/sleep", "40"},
+		Command:         []string{"/bin/sleep", fmt.Sprintf("%d", consumerSleep)},
 		Resources:       cr.Spec.PodConfig.Resources,
 	}
 	job.Spec.Template.Spec.InitContainers = append(job.Spec.Template.Spec.InitContainers, initContainer)

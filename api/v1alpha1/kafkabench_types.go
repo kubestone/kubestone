@@ -54,6 +54,10 @@ type KafkaTestSpec struct {
 	RecordSize  int    `json:"recordSize"`
 	Records     int    `json:"records"`
 
+	// ConsumerSleep defines the time in seconds the consumer will sleep before attempting to consume messages. Only change if you are having issues with consuming messages. Default: 40
+	// +optional
+	ConsumerSleep *int32 `json:"consumerSleep"`
+
 	// Timeout defines the consumer maximum allowed time in milliseconds between returned records. (default: 10000)
 	// +optional
 	Timeout *int `json:"timeout"`

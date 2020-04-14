@@ -796,6 +796,12 @@ spec:
               items:
                 description: TestSpec defines the specifications for the kafka tests
                 properties:
+                  consumerSleep:
+                    description: 'ConsumerSleep defines the time in seconds the consumer
+                      will sleep before attempting to consume messages. Only change
+                      if you are having issues with consuming messages. Default: 40'
+                    format: int32
+                    type: integer
                   consumersOnly:
                     type: boolean
                   extraProducerOpts:

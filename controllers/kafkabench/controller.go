@@ -34,8 +34,8 @@ type KafkaBenchReconciler struct {
 	Log logr.Logger
 }
 
-// +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=kafkabenchs,verbs=get;list;watch;create;update;patch;delete
-// +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=kafkabenchs/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=kafkabenches,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=perf.kubestone.xridge.io,resources=kafkabenches/status,verbs=get;update;patch
 // +kubebuilder:rbac:groups="",resources=pods,verbs=get;list;create;delete
 
 func (r *KafkaBenchReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {

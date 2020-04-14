@@ -40,14 +40,6 @@ func NewStatefulSet(cr *v1alpha1.EsRally) (*v1.StatefulSet, error) {
 		podLabels[k] = v
 	}
 
-	image := cr.Spec.Image
-	if image == (v1alpha1.ImageSpec{}) {
-		image = v1alpha1.ImageSpec{
-			Name:       "diamantisolutions/esrally:kubestone",
-			PullPolicy: "Always",
-		}
-	}
-
 	volumeMounts := []corev1.VolumeMount{
 		corev1.VolumeMount{
 			Name:      "data",
@@ -109,8 +101,8 @@ func NewStatefulSet(cr *v1alpha1.EsRally) (*v1.StatefulSet, error) {
 					Containers: []corev1.Container{
 						corev1.Container{
 							Name:            "esrally",
-							Image:           image.Name,
-							ImagePullPolicy: corev1.PullPolicy(image.PullPolicy),
+							Image:           cr.Spec.Image.Name,
+							ImagePullPolicy: corev1.PullPolicy(cr.Spec.Image.PullPolicy),
 							Resources:       cr.Spec.PodConfig.Resources,
 							Ports: []corev1.ContainerPort{
 								corev1.ContainerPort{
@@ -129,7 +121,7 @@ func NewStatefulSet(cr *v1alpha1.EsRally) (*v1.StatefulSet, error) {
 								"/bin/sh", "-c",
 							},
 							Args: []string{
-								fmt.Sprintf("/usr/local/bin/esrallyd start --node-ip=${MY_POD_IP} --coordinator-ip=%s-0.%s;\n", cr.Name, cr.Namespace) +
+								fmt.Sprintf("/usr/local/bin/esrallyd start --node-ip=${MY_POD_IP} --coordinator-ip=%s-0.%s;\n", cr.Name, cr.Name) +
 									"touch /rally/.rally/logs/rally.log; tail -f /rally/.rally/logs/rally.log",
 							},
 						},

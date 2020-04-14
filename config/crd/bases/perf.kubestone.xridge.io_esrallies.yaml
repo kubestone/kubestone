@@ -43,6 +43,7 @@ spec:
           description: EsRallySpec defines the desired state of EsRally
           properties:
             challenge:
+              description: Pipeline  string `json:"pipeline"`
               type: string
             hosts:
               type: string
@@ -83,8 +84,6 @@ spec:
               - size
               - storageClass
               type: object
-            pipeline:
-              type: string
             podConfig:
               description: PodConfig contains the configuration for the benchmark
                 pod, including pod labels and scheduling policies (affinity, toleration,
@@ -828,7 +827,6 @@ spec:
           - challenge
           - hosts
           - persistence
-          - pipeline
           - track
           type: object
         status:

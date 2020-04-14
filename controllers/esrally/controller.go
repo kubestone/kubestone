@@ -18,6 +18,7 @@ package esrally
 
 import (
 	"context"
+	"github.com/xridge/kubestone/api/v1alpha1"
 	"github.com/xridge/kubestone/pkg/k8s"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -59,6 +60,13 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 	namespaceName := types.NamespacedName{
 		Namespace: cr.Namespace,
 		Name:      cr.Name,
+	}
+
+	if cr.Spec.Image == (v1alpha1.ImageSpec{}) {
+		cr.Spec.Image = v1alpha1.ImageSpec{
+			Name:       "diamantisolutions/esrally:kubestone",
+			PullPolicy: "Always",
+		}
 	}
 
 	if !cr.Status.Deployed {

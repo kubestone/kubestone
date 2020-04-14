@@ -44,8 +44,8 @@ type EsRallySpec struct {
 	// +optional
 	TrackParams *map[string]string `json:"trackParams,omitempty"`
 
-	Hosts     string `json:"hosts"`
-	Pipeline  string `json:"pipeline"`
+	Hosts string `json:"hosts"`
+	//Pipeline  string `json:"pipeline"`
 	Challenge string `json:"challenge"`
 
 	// Nodes defines the number of esrally clients to use. Default is 1
@@ -53,6 +53,9 @@ type EsRallySpec struct {
 	Nodes *int32 `json:"nodes,omitempty"`
 
 	Persistence EsRallyVolConfig `json:"persistence"`
+
+	// TODO: enable client options for ES authentication/config
+	// https://esrally.readthedocs.io/en/stable/command_line_reference.html#id2
 }
 
 type EsRallyVolConfig struct {

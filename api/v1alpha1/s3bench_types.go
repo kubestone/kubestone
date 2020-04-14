@@ -48,7 +48,7 @@ type S3BenchSpec struct {
 
 	// S3AutoTermOptions defines options for the auto terminate feature of warp.
 	// +optional
-	S3AutoTermOptions S3AutoTermOptions `json:"auto_term,omitempty"`
+	S3AutoTermOptions S3AutoTermOptions `json:"autoTerm,omitempty"`
 
 	// S3AnalysisOptions defines options for the analysis features of warp
 	// +optional
@@ -57,14 +57,14 @@ type S3BenchSpec struct {
 	// MixedDistributionOptions defines the distribution of operation types if using the mixed mode
 	// Will only be used in "mixed" mode.
 	// +optional
-	MixedDistributionOptions MixedDistributionOptions `json:"mixed_dist,omitempty"`
+	MixedDistributionOptions MixedDistributionOptions `json:"mixedDist,omitempty"`
 }
 
 // S3BenchOptions defines the runtime arguments for the Warp cli
 type S3BenchOptions struct {
 	// NoColor will disable color theme (default: false)
 	// +optional
-	NoColor bool `json:"no_color,omitempty"`
+	NoColor bool `json:"noColor,omitempty"`
 
 	// Debug will enable debug output (default: false)
 	// +optional
@@ -75,10 +75,10 @@ type S3BenchOptions struct {
 	Insecure bool `json:"insecure,omitempty"`
 
 	// +optional
-	AccessKey string `json:"access_key,omitempty"`
+	AccessKey string `json:"accessKey,omitempty"`
 
 	// +optional
-	SecretKey string `json:"secret_key,omitempty"`
+	SecretKey string `json:"secretKey,omitempty"`
 
 	// Tls defines if to use TLS (HTTPS) for transport (default: false)
 	// +optional
@@ -100,7 +100,7 @@ type S3BenchOptions struct {
 
 	// HostSelect defines the host selection algorithm. Can be "weighed" or "roundrobin" (default: "weighed")
 	// +optional
-	HostSelect string `json:"host_select,omitempty"`
+	HostSelect string `json:"hostSelect,omitempty"`
 
 	// Concurrent defines how many concurrent operations to run (default: 6)
 	// +optional
@@ -108,11 +108,11 @@ type S3BenchOptions struct {
 
 	// NoPrefix defines if to NOT use separate prefix for each thread (default: false)
 	// +optional
-	NoPrefix bool `json:"no_prefix,omitempty"`
+	NoPrefix bool `json:"noPrefix,omitempty"`
 
 	// Output benchmark+profile data to this file. By default unique filename is generated.
 	// +optional
-	BenchOutput string `json:"bench_output,omitempty"`
+	BenchOutput string `json:"benchOutput,omitempty"`
 
 	// Duration defines the time length to run the benchmark. Use 's' and 'm' to specify seconds and minutes.
 	// (default: 5m0s)
@@ -122,11 +122,11 @@ type S3BenchOptions struct {
 	// NoClear Do not clear bucket before or after running benchmarks. Use when running multiple clients.
 	// (default: false)
 	// +optional
-	NoClear bool `json:"no_clear,omitempty"`
+	NoClear bool `json:"noClear,omitempty"`
 
 	// Specify a benchmark start time. Time format is 'hh:mm' where hours are specified in 24h format, server TZ.
 	// +optional
-	SyncStart string `json:"sync_start,omitempty"`
+	SyncStart string `json:"syncStart,omitempty"`
 
 	// Requests Display individual request stats.
 	// +optional
@@ -151,7 +151,7 @@ type S3ObjectOptions struct {
 	// RandomSize defines if to randomize size of objects so they will be up to the specified size
 	// (default: false)
 	// +optional
-	RandomSize bool `json:"random_size,omitempty"`
+	RandomSize bool `json:"randomSize,omitempty"`
 }
 
 // S3AnalysisOptions defines options for the analysis features of warp
@@ -164,19 +164,19 @@ type S3AnalysisOptions struct {
 	Output string `json:"output,omitempty"`
 	// OperationFilter Only output for this op. Can be GET/PUT/DELETE, etc.
 	// +optional
-	OperationFilter string `json:"operation_filter,omitempty"`
+	OperationFilter string `json:"operationFilter,omitempty"`
 	// PrintErrors Print out errors (default: false)
 	// +optional
-	PrintErrors bool `json:"print_errors,omitempty"`
+	PrintErrors bool `json:"printErrors,omitempty"`
 	// HostFilter Only output for this host.
 	// +optional
-	HostFilter string `json:"host_filter,omitempty"`
+	HostFilter string `json:"hostFilter,omitempty"`
 	// Skip Additional duration to skip when analyzing data. (default: 0s)
 	// +optional
 	Skip string `json:"skip,omitempty"`
 	// HostDetails Do detailed time segmentation per host (default: false)
 	// +optional
-	HostDetails bool `json:"host_details,omitempty"`
+	HostDetails bool `json:"hostDetails,omitempty"`
 }
 
 // MixedDistributionOptions defines the distribution of operation types if using the mixed mode

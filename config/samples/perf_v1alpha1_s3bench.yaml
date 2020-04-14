@@ -5,13 +5,12 @@ metadata:
   namespace: minio
 spec:
   mode: mixed
-  host: minio-test.minio.svc.sol1.diamanti.com:9000
-  #,172.16.222.6:9000,172.16.222.7:9000,172.16.222.8:9000,172.16.222.9:9000,172.16.222.10:9000,172.16.222.11:9000,172.16.222.12:9000
-  access_key: AKIAIOSFODNN7EXAMPLE
-  secret_key: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+  host: minio-test.minio.svc.cluster.local:9000
+  accessKey: AKIAIOSFODNN7EXAMPLE
+  secretKey: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
 #  duration: 1m
   concurrent: 12
-  auto_term:
+  autoTerm:
     enabled: true
 #  objects:
 #    count: 4

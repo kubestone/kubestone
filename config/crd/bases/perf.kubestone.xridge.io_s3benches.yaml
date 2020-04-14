@@ -39,7 +39,7 @@ spec:
         spec:
           description: S3BenchSpec defines the desired state of S3Bench
           properties:
-            access_key:
+            accessKey:
               type: string
             analysis:
               description: S3AnalysisOptions defines options for the analysis features
@@ -49,21 +49,21 @@ spec:
                   description: 'Duration defines the time length to split analysis
                     into durations of this length (default: "1s")'
                   type: string
-                host_details:
+                hostDetails:
                   description: 'HostDetails Do detailed time segmentation per host
                     (default: false)'
                   type: boolean
-                host_filter:
+                hostFilter:
                   description: HostFilter Only output for this host.
                   type: string
-                operation_filter:
+                operationFilter:
                   description: OperationFilter Only output for this op. Can be GET/PUT/DELETE,
                     etc.
                   type: string
                 output:
                   description: Output aggregated data as to file
                   type: string
-                print_errors:
+                printErrors:
                   description: 'PrintErrors Print out errors (default: false)'
                   type: boolean
                 skip:
@@ -71,7 +71,7 @@ spec:
                     (default: 0s)'
                   type: string
               type: object
-            auto_term:
+            autoTerm:
               description: S3AutoTermOptions defines options for the auto terminate
                 feature of warp.
               properties:
@@ -90,7 +90,7 @@ spec:
                     7.5)'
                   type: string
               type: object
-            bench_output:
+            benchOutput:
               description: Output benchmark+profile data to this file. By default
                 unique filename is generated.
               type: string
@@ -118,7 +118,7 @@ spec:
               description: 'Host defines the host to benchmark against. Multiple hosts
                 can be specified as a comma separated list. (default: "127.0.0.1:9000")'
               type: string
-            host_select:
+            hostSelect:
               description: 'HostSelect defines the host selection algorithm. Can be
                 "weighed" or "roundrobin" (default: "weighed")'
               type: string
@@ -148,7 +148,7 @@ spec:
               description: 'Insecure defines if to disable SSL certificate verification
                 (default: false)'
               type: boolean
-            mixed_dist:
+            mixedDist:
               description: MixedDistributionOptions defines the distribution of operation
                 types if using the mixed mode Will only be used in "mixed" mode.
               properties:
@@ -176,14 +176,14 @@ spec:
                 See https://github.com/minio/warp#mixed for option definition. Currently
                 accepted values are: get, put, delete, mixed'
               type: string
-            no_clear:
+            noClear:
               description: 'NoClear Do not clear bucket before or after running benchmarks.
                 Use when running multiple clients. (default: false)'
               type: boolean
-            no_color:
+            noColor:
               description: 'NoColor will disable color theme (default: false)'
               type: boolean
-            no_prefix:
+            noPrefix:
               description: 'NoPrefix defines if to NOT use separate prefix for each
                 thread (default: false)'
               type: boolean
@@ -200,7 +200,7 @@ spec:
                   description: 'Generator defines if to use a specific data generator
                     (default: "random")'
                   type: string
-                random_size:
+                randomSize:
                   description: 'RandomSize defines if to randomize size of objects
                     so they will be up to the specified size (default: false)'
                   type: boolean
@@ -941,9 +941,9 @@ spec:
             requests:
               description: Requests Display individual request stats.
               type: boolean
-            secret_key:
+            secretKey:
               type: string
-            sync_start:
+            syncStart:
               description: Specify a benchmark start time. Time format is 'hh:mm'
                 where hours are specified in 24h format, server TZ.
               type: string

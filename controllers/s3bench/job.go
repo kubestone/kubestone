@@ -31,7 +31,7 @@ func NewJob(cr *perfv1alpha1.S3Bench) *batchv1.Job {
 		Namespace: cr.Namespace,
 	}
 
-	s3benchCmdLineArgs := []string{}
+	var s3benchCmdLineArgs []string
 	s3benchCmdLineArgs = append(s3benchCmdLineArgs, cr.Spec.Mode)
 	s3benchCmdLineArgs = append(s3benchCmdLineArgs, ProcessS3BenchArgs(&cr.Spec)...)
 

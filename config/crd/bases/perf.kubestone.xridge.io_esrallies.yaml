@@ -809,6 +809,24 @@ spec:
                       type: object
                   type: object
               type: object
+            security:
+              properties:
+                basicAuth:
+                  description: BasicAuth contains basic HTTP authentication credentials.
+                  properties:
+                    password:
+                      type: string
+                    username:
+                      type: string
+                  required:
+                  - password
+                  - username
+                  type: object
+                useSsl:
+                  type: boolean
+                verifyCerts:
+                  type: boolean
+              type: object
             track:
               description: Track defines the track that Rally should run.
               type: string
@@ -824,7 +842,6 @@ spec:
                 should use to resolve tracks. Default: default https://esrally.readthedocs.io/en/stable/command_line_reference.html#track-repository'
               type: string
           required:
-          - challenge
           - hosts
           - persistence
           - track

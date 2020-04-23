@@ -3,14 +3,20 @@ kind: EsRally
 metadata:
   name: esrally-sample
 spec:
-  hosts: "production-1-es-http:9200"
+  hosts: "production-1-es-http.elastic:9200"
   challenge: append-no-conflicts
   nodes: 3
   track: eventdata
-  trackRepository: eventdata
+  trackRepository: default
   trackParams:
     bulk_indexing_clients: "256"
-    shard_count: "3"
+#    shard_count: "3"
   persistence:
     size: 50Gi
     storageClass: high
+  security:
+    useSsl: false
+    verifyCerts: false
+    basicAuth:
+      username: elastic
+      password: jhpwtsmpfpwlk8mg7qzp7mw8

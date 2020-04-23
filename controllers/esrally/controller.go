@@ -129,6 +129,8 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 		if err := r.K8S.Client.Status().Update(ctx, &cr); err != nil {
 			return ctrl.Result{}, err
 		}
+
+		return ctrl.Result{Requeue: true}, nil
 	}
 
 	jobFinished, err := r.K8S.IsJobFinished(namespaceName)

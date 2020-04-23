@@ -21,6 +21,7 @@ import (
 	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
 	"github.com/xridge/kubestone/pkg/k8s"
 	batchv1 "k8s.io/api/batch/v1"
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"strings"
 )
@@ -32,10 +33,16 @@ func NewJob(cr *perfv1alpha1.EsRally) *batchv1.Job {
 	}
 
 	job := k8s.NewPerfJob(objectMeta, "esrally", cr.Spec.Image, cr.Spec.PodConfig)
+
 	job.Spec.Template.Spec.Containers[0].Command = []string{"/bin/sh", "-c"}
 	job.Spec.Template.Spec.Containers[0].Args = []string{
 		"touch /rally/.rally/logs/rally.log && tail -f /rally/.rally/logs/rally.log & " +
 			strings.Join(CreateEsRallyCmd(&cr.Spec, &objectMeta), " "),
+	}
+	job.Spec.Template.Spec.Containers[0].Env = []corev1.EnvVar{{
+		Name: "MY_POD_IP", ValueFrom: &corev1.EnvVarSource{
+			FieldRef: &corev1.ObjectFieldSelector{FieldPath: "status.podIP"},
+		}},
 	}
 
 	return job
@@ -46,12 +53,15 @@ func CreateEsRallyCmd(spec *perfv1alpha1.EsRallySpec, objectMeta *metav1.ObjectM
 
 	cmdArgs = append(cmdArgs, "/usr/local/bin/esrally", "--pipeline=benchmark-only")
 	cmdArgs = append(cmdArgs, fmt.Sprintf("--track=%s", spec.Track))
-	cmdArgs = append(cmdArgs, fmt.Sprintf("--challenge=%s", spec.Challenge))
 	cmdArgs = append(cmdArgs, fmt.Sprintf("--target-hosts=%s", spec.Hosts))
 	cmdArgs = append(cmdArgs, fmt.Sprintf("--load-driver-hosts=%s", ParseRallyNodeNames(spec, objectMeta)))
 
 	if spec.TrackRepository != nil {
 		cmdArgs = append(cmdArgs, fmt.Sprintf("--track-repository=%s", *spec.TrackRepository))
+	}
+
+	if spec.Challenge != nil {
+		cmdArgs = append(cmdArgs, fmt.Sprintf("--challenge=%s", *spec.Challenge))
 	}
 
 	if spec.TrackParams != nil {
@@ -60,6 +70,31 @@ func CreateEsRallyCmd(spec *perfv1alpha1.EsRallySpec, objectMeta *metav1.ObjectM
 			params = params + fmt.Sprintf("%s:%s,", key, val)
 		}
 		cmdArgs = append(cmdArgs, fmt.Sprintf("--track-params=%s", strings.Trim(params, ",")))
+	}
+
+	var clientOptions []string
+
+	if spec.Security != nil {
+		if spec.Security.UseSSL {
+			clientOptions = append(clientOptions, "use_ssl:true")
+		} else {
+			clientOptions = append(clientOptions, "use_ssl:false")
+		}
+
+		if spec.Security.VerifyCerts {
+			clientOptions = append(clientOptions, "verify_certs:true")
+		} else {
+			clientOptions = append(clientOptions, "verify_certs:false")
+		}
+
+		if spec.Security.BasicAuth != nil {
+			clientOptions = append(clientOptions, fmt.Sprintf("basic_auth_user:'%s'", spec.Security.BasicAuth.Username))
+			clientOptions = append(clientOptions, fmt.Sprintf("basic_auth_password:'%s'", spec.Security.BasicAuth.Password))
+		}
+	}
+
+	if len(clientOptions) > 0 {
+		cmdArgs = append(cmdArgs, fmt.Sprintf("--client-options=\"%s\"", strings.Join(clientOptions, ",")))
 	}
 
 	return cmdArgs

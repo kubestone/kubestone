@@ -10,6 +10,45 @@
 </p>
 Resource Types:
 <ul></ul>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.BasicAuth">BasicAuth
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.EsRallySecurity">EsRallySecurity</a>)
+</p>
+<p>
+<p>BasicAuth contains basic HTTP authentication credentials.</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>username</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<code>password</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
 <h3 id="perf.kubestone.xridge.io/v1alpha1.BenchmarkStatus">BenchmarkStatus
 </h3>
 <p>
@@ -417,6 +456,19 @@ EsRallyVolConfig
 <td>
 </td>
 </tr>
+<tr>
+<td>
+<code>security</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.EsRallySecurity">
+EsRallySecurity
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+</td>
+</tr>
 </table>
 </td>
 </tr>
@@ -430,6 +482,59 @@ EsRallyStatus
 </em>
 </td>
 <td>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.EsRallySecurity">EsRallySecurity
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.EsRallySpec">EsRallySpec</a>)
+</p>
+<p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>useSsl</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+</td>
+</tr>
+<tr>
+<td>
+<code>verifyCerts</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+</td>
+</tr>
+<tr>
+<td>
+<code>basicAuth</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.BasicAuth">
+BasicAuth
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
 </td>
 </tr>
 </tbody>
@@ -560,6 +665,19 @@ EsRallyVolConfig
 </em>
 </td>
 <td>
+</td>
+</tr>
+<tr>
+<td>
+<code>security</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.EsRallySecurity">
+EsRallySecurity
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
 </td>
 </tr>
 </tbody>
@@ -2628,5 +2746,5 @@ pod labels and scheduling policies (affinity, toleration, node selector&hellip;)
 <hr/>
 <p><em>
 Generated with <code>gen-crd-api-reference-docs</code>
-on git commit <code>a6ca6c0</code>.
+on git commit <code>f56ba0b</code>.
 </em></p>

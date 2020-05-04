@@ -1,0 +1,26 @@
+# permissions to do edit ocplogtests.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: ocplogtest-editor-role
+rules:
+- apiGroups:
+  - perf.kubestone.xridge.io
+  resources:
+  - ocplogtests
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - perf.kubestone.xridge.io
+  resources:
+  - ocplogtests/status
+  verbs:
+  - get
+  - patch
+  - update

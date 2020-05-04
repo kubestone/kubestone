@@ -18,6 +18,7 @@ package main
 
 import (
 	"flag"
+	"github.com/xridge/kubestone/controllers/ocplogtest"
 	"os"
 
 	"github.com/xridge/kubestone/controllers/ycsbbench"
@@ -143,6 +144,13 @@ func main() {
 		Log: ctrl.Log.WithName("controllers").WithName("YcsbBench"),
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "YcsbBench")
+		os.Exit(1)
+	}
+	if err = (&ocplogtest.Reconciler{
+		K8S: k8sAccess,
+		Log: ctrl.Log.WithName("controllers").WithName("OcpLogtest"),
+	}).SetupWithManager(mgr); err != nil {
+		setupLog.Error(err, "unable to create controller", "controller", "OcpLogtest")
 		os.Exit(1)
 	}
 	if err = (&s3bench.Reconciler{

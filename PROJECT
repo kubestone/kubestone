@@ -31,4 +31,7 @@ resources:
 - group: perf
   kind: S3Bench
   version: v1alpha1
+- group: perf
+  kind: OcpLogtest
+  version: v1alpha1
 version: "2"

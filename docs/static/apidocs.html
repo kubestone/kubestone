@@ -19,6 +19,7 @@ Resource Types:
 <a href="#perf.kubestone.xridge.io/v1alpha1.Ioping">Ioping</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3">Iperf3</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.KafkaBench">KafkaBench</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.OcpLogtest">OcpLogtest</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.Pgbench">Pgbench</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.Qperf">Qperf</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.S3Bench">S3Bench</a>, 
@@ -517,6 +518,7 @@ run on.</p>
 <a href="#perf.kubestone.xridge.io/v1alpha1.IopingSpec">IopingSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3Spec">Iperf3Spec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.KafkaBenchSpec">KafkaBenchSpec</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.OcpLogtestSpec">OcpLogtestSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.PgbenchSpec">PgbenchSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.QperfSpec">QperfSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.S3BenchSpec">S3BenchSpec</a>, 
@@ -1435,6 +1437,226 @@ int32
 </tr>
 </tbody>
 </table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.OcpLogtest">OcpLogtest
+</h3>
+<p>
+<p>OcpLogtest is the Schema for the ocplogtests API</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>metadata</code></br>
+<em>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#objectmeta-v1-meta">
+Kubernetes meta/v1.ObjectMeta
+</a>
+</em>
+</td>
+<td>
+Refer to the Kubernetes API documentation for the fields of the
+<code>metadata</code> field.
+</td>
+</tr>
+<tr>
+<td>
+<code>spec</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.OcpLogtestSpec">
+OcpLogtestSpec
+</a>
+</em>
+</td>
+<td>
+<br/>
+<br/>
+<table>
+<tr>
+<td>
+<code>image</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.ImageSpec">
+ImageSpec
+</a>
+</em>
+</td>
+<td>
+<p>Image defines the docker image used for the benchmark</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>lineLength</code></br>
+<em>
+int
+</em>
+</td>
+<td>
+<p>length of each line</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>numLines</code></br>
+<em>
+int
+</em>
+</td>
+<td>
+<p>number of lines to generate</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>rate</code></br>
+<em>
+int
+</em>
+</td>
+<td>
+<p>lines per minute</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>fixedLine</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+<p>repeat the same line of text over and over or use new text for each line</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>podConfig</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PodConfigurationSpec">
+PodConfigurationSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>PodConfig contains the configuration for the benchmark pod, including
+pod labels and scheduling policies (affinity, toleration, node selector&hellip;)</p>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<code>status</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.BenchmarkStatus">
+BenchmarkStatus
+</a>
+</em>
+</td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.OcpLogtestSpec">OcpLogtestSpec
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.OcpLogtest">OcpLogtest</a>)
+</p>
+<p>
+<p>OcpLogtestSpec defines the desired state of OcpLogtest</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>image</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.ImageSpec">
+ImageSpec
+</a>
+</em>
+</td>
+<td>
+<p>Image defines the docker image used for the benchmark</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>lineLength</code></br>
+<em>
+int
+</em>
+</td>
+<td>
+<p>length of each line</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>numLines</code></br>
+<em>
+int
+</em>
+</td>
+<td>
+<p>number of lines to generate</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>rate</code></br>
+<em>
+int
+</em>
+</td>
+<td>
+<p>lines per minute</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>fixedLine</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+<p>repeat the same line of text over and over or use new text for each line</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>podConfig</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PodConfigurationSpec">
+PodConfigurationSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>PodConfig contains the configuration for the benchmark pod, including
+pod labels and scheduling policies (affinity, toleration, node selector&hellip;)</p>
+</td>
+</tr>
+</tbody>
+</table>
 <h3 id="perf.kubestone.xridge.io/v1alpha1.Pgbench">Pgbench
 </h3>
 <p>
@@ -1652,6 +1874,7 @@ pod labels and scheduling policies (affinity, toleration, node selector&hellip;)
 <a href="#perf.kubestone.xridge.io/v1alpha1.IopingSpec">IopingSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3ConfigurationSpec">Iperf3ConfigurationSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.KafkaBenchSpec">KafkaBenchSpec</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.OcpLogtestSpec">OcpLogtestSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.PgbenchSpec">PgbenchSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.QperfConfigurationSpec">QperfConfigurationSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.S3BenchSpec">S3BenchSpec</a>, 
@@ -3456,5 +3679,5 @@ pod labels and scheduling policies (affinity, toleration, node selector&hellip;)
 <hr/>
 <p><em>
 Generated with <code>gen-crd-api-reference-docs</code>
-on git commit <code>599dc35</code>.
+on git commit <code>068b519</code>.
 </em></p>

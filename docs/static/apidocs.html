@@ -21,6 +21,7 @@ Resource Types:
 <a href="#perf.kubestone.xridge.io/v1alpha1.KafkaBench">KafkaBench</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.Pgbench">Pgbench</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.Qperf">Qperf</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.S3Bench">S3Bench</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.Sysbench">Sysbench</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.YcsbBench">YcsbBench</a>)
 </p>
@@ -518,6 +519,7 @@ run on.</p>
 <a href="#perf.kubestone.xridge.io/v1alpha1.KafkaBenchSpec">KafkaBenchSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.PgbenchSpec">PgbenchSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.QperfSpec">QperfSpec</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.S3BenchSpec">S3BenchSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.SysbenchSpec">SysbenchSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.YcsbBenchSpec">YcsbBenchSpec</a>)
 </p>
@@ -1366,6 +1368,73 @@ bool
 </tr>
 </tbody>
 </table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.MixedDistributionOptions">MixedDistributionOptions
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.S3BenchSpec">S3BenchSpec</a>)
+</p>
+<p>
+<p>MixedDistributionOptions defines the distribution of operation types if using the mixed mode</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>get</code></br>
+<em>
+int32
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>GetDist The amount of GET operations. (default: 45)</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>stat</code></br>
+<em>
+int32
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>StatDist The amount of STAT operations. (default: 30)</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>put</code></br>
+<em>
+int32
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>PutDist The amount of PUT operations. (default: 15)</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>delete</code></br>
+<em>
+int32
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>DeleteDist The amount of DELETE operations. Must be at least the same as PUT. (default: 10)</p>
+</td>
+</tr>
+</tbody>
+</table>
 <h3 id="perf.kubestone.xridge.io/v1alpha1.Pgbench">Pgbench
 </h3>
 <p>
@@ -1585,6 +1654,7 @@ pod labels and scheduling policies (affinity, toleration, node selector&hellip;)
 <a href="#perf.kubestone.xridge.io/v1alpha1.KafkaBenchSpec">KafkaBenchSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.PgbenchSpec">PgbenchSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.QperfConfigurationSpec">QperfConfigurationSpec</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.S3BenchSpec">S3BenchSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.SysbenchSpec">SysbenchSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.YcsbBenchSpec">YcsbBenchSpec</a>)
 </p>
@@ -2070,6 +2140,786 @@ QperfConfigurationSpec
 <td>
 <em>(Optional)</em>
 <p>ClientConfiguration contains the configuration of the qperf client</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.S3AnalysisOptions">S3AnalysisOptions
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.S3BenchSpec">S3BenchSpec</a>)
+</p>
+<p>
+<p>S3AnalysisOptions defines options for the analysis features of warp</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>duration</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Duration defines the time length to split analysis into durations of this length (default: &ldquo;1s&rdquo;)</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>output</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Output aggregated data as to file</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>operationFilter</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>OperationFilter Only output for this op. Can be GET/PUT/DELETE, etc.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>printErrors</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>PrintErrors Print out errors (default: false)</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>hostFilter</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>HostFilter Only output for this host.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>skip</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Skip Additional duration to skip when analyzing data. (default: 0s)</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>hostDetails</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>HostDetails Do detailed time segmentation per host (default: false)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.S3AutoTermOptions">S3AutoTermOptions
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.S3BenchSpec">S3BenchSpec</a>)
+</p>
+<p>
+<p>S3AutoTermOptions defines options for the auto terminate feature of warp.</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>enabled</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Enabled defines if to auto terminate when benchmark is considered stable. (default: false)</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>duration</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Duration defines the minimum duration where output must have been stable to allow automatic termination. (default: 10s)</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>percent</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Percent defines the percentage the last <sup>6</sup>&frasl;<sub>25</sub> time blocks must be within current speed to auto terminate. (default: 7.5)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.S3Bench">S3Bench
+</h3>
+<p>
+<p>S3Bench is the Schema for the s3benches API</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>metadata</code></br>
+<em>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#objectmeta-v1-meta">
+Kubernetes meta/v1.ObjectMeta
+</a>
+</em>
+</td>
+<td>
+Refer to the Kubernetes API documentation for the fields of the
+<code>metadata</code> field.
+</td>
+</tr>
+<tr>
+<td>
+<code>spec</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.S3BenchSpec">
+S3BenchSpec
+</a>
+</em>
+</td>
+<td>
+<br/>
+<br/>
+<table>
+<tr>
+<td>
+<code>image</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.ImageSpec">
+ImageSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Image defines the warp docker image used for the benchmark</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>podConfig</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PodConfigurationSpec">
+PodConfigurationSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>PodConfig contains the configuration for the benchmark pod, including
+pod labels and scheduling policies (affinity, toleration, node selector&hellip;)</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>mode</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<p>Mode defines the operating mode of the benchmark test. See <a href="https://github.com/minio/warp#mixed">https://github.com/minio/warp#mixed</a> for option definition.
+Currently accepted values are: get, put, delete, mixed</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>host</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<p>Host defines the host to benchmark against.
+Multiple hosts can be specified as a comma separated list. (default: &ldquo;127.0.0.1:9000&rdquo;)</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>S3BenchOptions</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.S3BenchOptions">
+S3BenchOptions
+</a>
+</em>
+</td>
+<td>
+<p>
+(Members of <code>S3BenchOptions</code> are embedded into this type.)
+</p>
+<p>S3BenchOptions defines the runtime arguments for the benchmark test</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>objects</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.S3ObjectOptions">
+S3ObjectOptions
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>S3ObjectOptions defines options for the objects generated by the benchmark</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>autoTerm</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.S3AutoTermOptions">
+S3AutoTermOptions
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>S3AutoTermOptions defines options for the auto terminate feature of warp.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>analysis</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.S3AnalysisOptions">
+S3AnalysisOptions
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>S3AnalysisOptions defines options for the analysis features of warp</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>mixedDist</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.MixedDistributionOptions">
+MixedDistributionOptions
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>MixedDistributionOptions defines the distribution of operation types if using the mixed mode
+Will only be used in &ldquo;mixed&rdquo; mode.</p>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<code>status</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.BenchmarkStatus">
+BenchmarkStatus
+</a>
+</em>
+</td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.S3BenchOptions">S3BenchOptions
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.S3BenchSpec">S3BenchSpec</a>)
+</p>
+<p>
+<p>S3BenchOptions defines the runtime arguments for the Warp cli</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>noColor</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>NoColor will disable color theme (default: false)</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>debug</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Debug will enable debug output (default: false)</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>insecure</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Insecure defines if to disable SSL certificate verification (default: false)</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>accessKey</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+</td>
+</tr>
+<tr>
+<td>
+<code>secretKey</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+</td>
+</tr>
+<tr>
+<td>
+<code>tls</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Tls defines if to use TLS (HTTPS) for transport (default: false)</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>region</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Region defines a custom region</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>encrypt</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Encrypt defines if to encrypt/decrypt objects (using server-side encryption with random keys)
+(default: false)</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>bucket</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Bucket defines which bucket to use for benchmark data. ALL DATA WILL BE DELETED IN BUCKET!
+(default: &ldquo;warp-benchmark-bucket&rdquo;)</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>hostSelect</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>HostSelect defines the host selection algorithm. Can be &ldquo;weighed&rdquo; or &ldquo;roundrobin&rdquo; (default: &ldquo;weighed&rdquo;)</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>concurrent</code></br>
+<em>
+int32
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Concurrent defines how many concurrent operations to run (default: 6)</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>noPrefix</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>NoPrefix defines if to NOT use separate prefix for each thread (default: false)</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>benchOutput</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Output benchmark+profile data to this file. By default unique filename is generated.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>duration</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Duration defines the time length to run the benchmark. Use &rsquo;s&rsquo; and &rsquo;m&rsquo; to specify seconds and minutes.
+(default: 5m0s)</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>noClear</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>NoClear Do not clear bucket before or after running benchmarks. Use when running multiple clients.
+(default: false)</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>syncStart</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Specify a benchmark start time. Time format is &lsquo;hh:mm&rsquo; where hours are specified in 24h format, server TZ.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>requests</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Requests Display individual request stats.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.S3BenchSpec">S3BenchSpec
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.S3Bench">S3Bench</a>)
+</p>
+<p>
+<p>S3BenchSpec defines the desired state of S3Bench</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>image</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.ImageSpec">
+ImageSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Image defines the warp docker image used for the benchmark</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>podConfig</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PodConfigurationSpec">
+PodConfigurationSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>PodConfig contains the configuration for the benchmark pod, including
+pod labels and scheduling policies (affinity, toleration, node selector&hellip;)</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>mode</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<p>Mode defines the operating mode of the benchmark test. See <a href="https://github.com/minio/warp#mixed">https://github.com/minio/warp#mixed</a> for option definition.
+Currently accepted values are: get, put, delete, mixed</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>host</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<p>Host defines the host to benchmark against.
+Multiple hosts can be specified as a comma separated list. (default: &ldquo;127.0.0.1:9000&rdquo;)</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>S3BenchOptions</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.S3BenchOptions">
+S3BenchOptions
+</a>
+</em>
+</td>
+<td>
+<p>
+(Members of <code>S3BenchOptions</code> are embedded into this type.)
+</p>
+<p>S3BenchOptions defines the runtime arguments for the benchmark test</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>objects</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.S3ObjectOptions">
+S3ObjectOptions
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>S3ObjectOptions defines options for the objects generated by the benchmark</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>autoTerm</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.S3AutoTermOptions">
+S3AutoTermOptions
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>S3AutoTermOptions defines options for the auto terminate feature of warp.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>analysis</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.S3AnalysisOptions">
+S3AnalysisOptions
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>S3AnalysisOptions defines options for the analysis features of warp</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>mixedDist</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.MixedDistributionOptions">
+MixedDistributionOptions
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>MixedDistributionOptions defines the distribution of operation types if using the mixed mode
+Will only be used in &ldquo;mixed&rdquo; mode.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.S3ObjectOptions">S3ObjectOptions
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.S3BenchSpec">S3BenchSpec</a>)
+</p>
+<p>
+<p>S3ObjectOptions defines options for the objects generated by the benchmark</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>count</code></br>
+<em>
+int32
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Count defines the number of objects to upload. (default: 2500)</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>size</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Size defines the size of each generated object. Can be a number or 10KiB/MiB/GiB.
+All sizes are base 2 binary. (default: &ldquo;10MiB&rdquo;)</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>generator</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Generator defines if to use a specific data generator (default: &ldquo;random&rdquo;)</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>randomSize</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>RandomSize defines if to randomize size of objects so they will be up to the specified size
+(default: false)</p>
 </td>
 </tr>
 </tbody>
@@ -2606,5 +3456,5 @@ pod labels and scheduling policies (affinity, toleration, node selector&hellip;)
 <hr/>
 <p><em>
 Generated with <code>gen-crd-api-reference-docs</code>
-on git commit <code>bb37c05</code>.
+on git commit <code>599dc35</code>.
 </em></p>

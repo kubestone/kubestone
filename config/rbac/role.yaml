@@ -254,6 +254,32 @@ rules:
 - apiGroups:
   - perf.kubestone.xridge.io
   resources:
+  - s3benches
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - perf.kubestone.xridge.io
+  resources:
+  - s3benches/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - perf.kubestone.xridge.io
+  resources:
+  - s3benches/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - perf.kubestone.xridge.io
+  resources:
   - sysbenches
   verbs:
   - create

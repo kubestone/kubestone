@@ -142,9 +142,7 @@ func NewStatefulSet(cr *v1alpha1.EsRally) (*v1.StatefulSet, error) {
 					},
 					Containers: []corev1.Container{
 						esrallydContainer,
-						//esrallyContainer,
 					},
-					RestartPolicy: "Never",
 				},
 			},
 			VolumeClaimTemplates: volumeClaims,

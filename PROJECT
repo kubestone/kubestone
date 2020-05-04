@@ -1,4 +1,3 @@
-version: "2"
 domain: kubestone.xridge.io
 repo: github.com/xridge/kubestone
 resources:
@@ -28,5 +27,8 @@ resources:
   version: v1alpha1
 - group: perf
   kind: YcsbBench
+  version: v1alpha1
+- group: perf
+  kind: S3Bench
   version: v1alpha1
 version: "2"

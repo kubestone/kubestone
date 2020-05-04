@@ -7,6 +7,9 @@ API_VERSION ?= "v1alpha1"
 # Produce CRDs that work back to Kubernetes 1.11 (no version conversion)
 CRD_OPTIONS ?= "crd:trivialVersions=true"
 
+# Get the last release tag if an override is not provided
+KUBESTONE_RELEASE ?= $(shell git tag -l | egrep "v\d+\.\d+\.\d+" | tail -1)
+
 # Get the currently used golang install path (in GOPATH/bin, unless GOBIN is set)
 ifeq (,$(shell go env GOBIN))
 GOBIN=$(shell go env GOPATH)/bin
@@ -110,3 +113,5 @@ endif
 
 # All the things needed before you make a PR
 pre-commit: generate apidocs manifests fmt vet
+	@echo "Updating quickstart doc to current release ${KUBESTONE_RELEASE}"
+	sed -i'' -E "s@(github\.com/xridge/kubestone/config/default)(\?ref=v\d+\.\d+\.\d+)?\b@\1?ref=${KUBESTONE_RELEASE}@g" docs/quickstart.md

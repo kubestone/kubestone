@@ -176,6 +176,26 @@ rules:
 - apiGroups:
   - perf.kubestone.xridge.io
   resources:
+  - kafkabenches
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - perf.kubestone.xridge.io
+  resources:
+  - kafkabenches/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - perf.kubestone.xridge.io
+  resources:
   - pgbenches
   verbs:
   - create

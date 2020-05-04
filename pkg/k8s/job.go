@@ -49,6 +49,23 @@ func NewPerfJob(objectMeta metav1.ObjectMeta, app string, imageSpec perfv1alpha1
 		}
 	}
 
+	if podConfig.PodScheduling.Affinity == nil {
+		podConfig.PodScheduling.Affinity = &corev1.Affinity{
+			NodeAffinity: &corev1.NodeAffinity{
+				RequiredDuringSchedulingIgnoredDuringExecution:  nil,
+				PreferredDuringSchedulingIgnoredDuringExecution: nil,
+			},
+			PodAffinity: &corev1.PodAffinity{
+				RequiredDuringSchedulingIgnoredDuringExecution:  nil,
+				PreferredDuringSchedulingIgnoredDuringExecution: nil,
+			},
+			PodAntiAffinity: &corev1.PodAntiAffinity{
+				RequiredDuringSchedulingIgnoredDuringExecution:  nil,
+				PreferredDuringSchedulingIgnoredDuringExecution: nil,
+			},
+		}
+	}
+
 	job := batchv1.Job{
 		ObjectMeta: objectMeta,
 		Spec: batchv1.JobSpec{

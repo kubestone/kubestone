@@ -1,0 +1,46 @@
+apiVersion: perf.kubestone.xridge.io/v1alpha1
+kind: KafkaBench
+metadata:
+  name: kafkabench-sample
+spec:
+  image:
+    name: confluentinc/cp-kafka:5.2.1
+
+  # List of ZooKeeper instances we want to connect to
+  zookeepers:
+    - kafka-demo-cp-zookeeper-0.kafka-demo-cp-zookeeper-headless.kafka-demo.svc.cluster.local:2181
+    - kafka-demo-cp-zookeeper-1.kafka-demo-cp-zookeeper-headless.kafka-demo.svc.cluster.local:2181
+    - kafka-demo-cp-zookeeper-2.kafka-demo-cp-zookeeper-headless.kafka-demo.svc.cluster.local:2181
+
+  # List of Kafka Broker instances we want to connect to
+  brokers:
+    - kafka-demo-cp-kafka-0.kafka-demo-cp-kafka-headless.kafka-demo.svc.cluster.local:9092
+    - kafka-demo-cp-kafka-1.kafka-demo-cp-kafka-headless.kafka-demo.svc.cluster.local:9092
+    - kafka-demo-cp-kafka-2.kafka-demo-cp-kafka-headless.kafka-demo.svc.cluster.local:9092
+
+  ## Define performance tests we want to run against the new cluster
+  tests:
+    - name: "noreplication"
+      # This is the number of instances we will fire up of the kafka-producer/kafka-consumer binaries
+      threads: 2
+      replication: 1
+      partitions: 16
+      recordSize: 100
+      records: 60000000
+      # These can be any official producer Kafka options: https://kafka.apache.org/documentation/#producerconfigs
+      extraProducerOpts:
+        - "buffer.memory=671088640"
+      consumersOnly: false
+      producersOnly: false
+      timeout: 10000
+    - name: "replication"
+      threads: 3
+      replication: 3
+      partitions: 16
+      recordSize: 100
+      records: 60000000
+      extraProducerOpts:
+        - "acks=1"
+        - "buffer.memory=671088640"
+      consumersOnly: false
+      producersOnly: false

@@ -18,6 +18,7 @@ Resource Types:
 <a href="#perf.kubestone.xridge.io/v1alpha1.Fio">Fio</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.Ioping">Ioping</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3">Iperf3</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.KafkaBench">KafkaBench</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.Pgbench">Pgbench</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.Qperf">Qperf</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.S3Bench">S3Bench</a>, 
@@ -515,6 +516,7 @@ run on.</p>
 <a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.IopingSpec">IopingSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3Spec">Iperf3Spec</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.KafkaBenchSpec">KafkaBenchSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.PgbenchSpec">PgbenchSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.QperfSpec">QperfSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.S3BenchSpec">S3BenchSpec</a>, 
@@ -1002,6 +1004,370 @@ If enabled the &lsquo;&ndash;udp&rsquo; parameter is added to iperf command line
 </tr>
 </tbody>
 </table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.KafkaBench">KafkaBench
+</h3>
+<p>
+<p>KafkaBench is the Schema for the kafkabenches API</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>metadata</code></br>
+<em>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#objectmeta-v1-meta">
+Kubernetes meta/v1.ObjectMeta
+</a>
+</em>
+</td>
+<td>
+Refer to the Kubernetes API documentation for the fields of the
+<code>metadata</code> field.
+</td>
+</tr>
+<tr>
+<td>
+<code>spec</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.KafkaBenchSpec">
+KafkaBenchSpec
+</a>
+</em>
+</td>
+<td>
+<br/>
+<br/>
+<table>
+<tr>
+<td>
+<code>image</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.ImageSpec">
+ImageSpec
+</a>
+</em>
+</td>
+<td>
+<p>Image defines the kafka docker image used for the benchmark</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>podConfig</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PodConfigurationSpec">
+PodConfigurationSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>PodConfig contains the configuration for the benchmark pod, including
+pod labels and scheduling policies (affinity, toleration, node selector&hellip;)</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>KafkaClusterInfo</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.KafkaClusterInfo">
+KafkaClusterInfo
+</a>
+</em>
+</td>
+<td>
+<p>
+(Members of <code>KafkaClusterInfo</code> are embedded into this type.)
+</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>tests</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.KafkaTestSpec">
+[]KafkaTestSpec
+</a>
+</em>
+</td>
+<td>
+<p>Tests defines the tests with which to create</p>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<code>status</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.BenchmarkStatus">
+BenchmarkStatus
+</a>
+</em>
+</td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.KafkaBenchSpec">KafkaBenchSpec
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.KafkaBench">KafkaBench</a>)
+</p>
+<p>
+<p>KafkaBenchSpec defines the desired state of KafkaBench</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>image</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.ImageSpec">
+ImageSpec
+</a>
+</em>
+</td>
+<td>
+<p>Image defines the kafka docker image used for the benchmark</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>podConfig</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PodConfigurationSpec">
+PodConfigurationSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>PodConfig contains the configuration for the benchmark pod, including
+pod labels and scheduling policies (affinity, toleration, node selector&hellip;)</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>KafkaClusterInfo</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.KafkaClusterInfo">
+KafkaClusterInfo
+</a>
+</em>
+</td>
+<td>
+<p>
+(Members of <code>KafkaClusterInfo</code> are embedded into this type.)
+</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>tests</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.KafkaTestSpec">
+[]KafkaTestSpec
+</a>
+</em>
+</td>
+<td>
+<p>Tests defines the tests with which to create</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.KafkaClusterInfo">KafkaClusterInfo
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.KafkaBenchSpec">KafkaBenchSpec</a>)
+</p>
+<p>
+<p>ClusterInfo to be used by the benchmark for ZooKeeper and Kafka Brokers</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>zookeepers</code></br>
+<em>
+[]string
+</em>
+</td>
+<td>
+<p>List of ZooKeeper instances we to connect to</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>brokers</code></br>
+<em>
+[]string
+</em>
+</td>
+<td>
+<p>List of Kafka Broker instances we to connect to</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.KafkaTestSpec">KafkaTestSpec
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.KafkaBenchSpec">KafkaBenchSpec</a>)
+</p>
+<p>
+<p>TestSpec defines the specifications for the kafka tests</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>name</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<code>threads</code></br>
+<em>
+int32
+</em>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<code>replication</code></br>
+<em>
+int
+</em>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<code>partitions</code></br>
+<em>
+int
+</em>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<code>recordSize</code></br>
+<em>
+int
+</em>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<code>records</code></br>
+<em>
+int
+</em>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<code>consumerSleep</code></br>
+<em>
+int32
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>ConsumerSleep defines the time in seconds the consumer will sleep before attempting to consume messages. Only change if you are having issues with consuming messages. Default: 40</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>timeout</code></br>
+<em>
+int
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Timeout defines the consumer maximum allowed time in milliseconds between returned records. (default: 10000)</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>extraProducerOpts</code></br>
+<em>
+[]string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>These can be any official producer Kafka options: <a href="https://kafka.apache.org/documentation/#producerconfigs">https://kafka.apache.org/documentation/#producerconfigs</a></p>
+</td>
+</tr>
+<tr>
+<td>
+<code>consumersOnly</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<code>producersOnly</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
 <h3 id="perf.kubestone.xridge.io/v1alpha1.MixedDistributionOptions">MixedDistributionOptions
 </h3>
 <p>
@@ -1285,6 +1651,7 @@ pod labels and scheduling policies (affinity, toleration, node selector&hellip;)
 <a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.IopingSpec">IopingSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3ConfigurationSpec">Iperf3ConfigurationSpec</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.KafkaBenchSpec">KafkaBenchSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.PgbenchSpec">PgbenchSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.QperfConfigurationSpec">QperfConfigurationSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.S3BenchSpec">S3BenchSpec</a>, 
@@ -3089,5 +3456,5 @@ pod labels and scheduling policies (affinity, toleration, node selector&hellip;)
 <hr/>
 <p><em>
 Generated with <code>gen-crd-api-reference-docs</code>
-on git commit <code>6d807d6</code>.
+on git commit <code>599dc35</code>.
 </em></p>

@@ -20,6 +20,7 @@ import (
 	"context"
 	"fmt"
 	v1 "k8s.io/api/apps/v1"
+	batchv1 "k8s.io/api/batch/v1"
 
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -134,6 +135,30 @@ func (a *Access) IsJobFinished(namespacedName types.NamespacedName) (finished bo
 
 	finished = job.Status.CompletionTime != nil
 	return finished, nil
+}
+
+func (a *Access) GetJob(namespacedName types.NamespacedName) *batchv1.Job {
+	job, err := a.Clientset.BatchV1().Jobs(namespacedName.Namespace).Get(
+		namespacedName.Name, metav1.GetOptions{})
+	if err != nil {
+		return nil
+	}
+	return job
+}
+
+func (a *Access) GetJobPods(namespacedName types.NamespacedName) (*corev1.PodList, error) {
+	job, err := a.Clientset.BatchV1().Jobs(namespacedName.Namespace).Get(
+		namespacedName.Name, metav1.GetOptions{})
+	if err != nil {
+		return nil, nil
+	}
+
+	uid := job.Labels["controller-uid"]
+
+	return a.Clientset.CoreV1().Pods(namespacedName.Namespace).List(
+		metav1.ListOptions{
+			LabelSelector: fmt.Sprintf("%s=%s", "controller-uid", uid),
+		})
 }
 
 // +kubebuilder:rbac:groups="",resources=endpoints,verbs=get;list

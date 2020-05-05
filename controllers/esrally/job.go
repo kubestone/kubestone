@@ -21,7 +21,6 @@ import (
 	perfv1alpha1 "github.com/xridge/kubestone/api/v1alpha1"
 	"github.com/xridge/kubestone/pkg/k8s"
 	batchv1 "k8s.io/api/batch/v1"
-	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"strings"
 )
@@ -32,18 +31,33 @@ func NewJob(cr *perfv1alpha1.EsRally) *batchv1.Job {
 		Namespace: cr.Namespace,
 	}
 
+	selectorLabels := map[string]string{
+		"perf.kubestone.xridge.io/benchmark": "esrally",
+		"perf.kubestone.xridge.io/instance":  cr.Name,
+		"perf.kubestone.xridge.io/esrally":   "coordinator",
+	}
+
 	job := k8s.NewPerfJob(objectMeta, "esrally", cr.Spec.Image, cr.Spec.PodConfig)
 
-	job.Spec.Template.Spec.Containers[0].Command = []string{"/bin/sh", "-c"}
-	job.Spec.Template.Spec.Containers[0].Args = []string{
-		"touch /rally/.rally/logs/rally.log && tail -f /rally/.rally/logs/rally.log & " +
+	for k, v := range selectorLabels {
+		job.Spec.Template.Labels[k] = v
+	}
+
+	esJobContainer := createEsRallyContainer(cr,
+		job.Spec.Template.Spec.Containers[0].Name,
+		[]string{"/bin/sh", "-c"},
+		strings.Join([]string{
+			"/kubestone.sh", "coordinator", "60",
+			"&&",
+			//"while true; do sleep 999999; done", "&&",
 			strings.Join(CreateEsRallyCmd(&cr.Spec, &objectMeta), " "),
-	}
-	job.Spec.Template.Spec.Containers[0].Env = []corev1.EnvVar{{
-		Name: "MY_POD_IP", ValueFrom: &corev1.EnvVarSource{
-			FieldRef: &corev1.ObjectFieldSelector{FieldPath: "status.podIP"},
-		}},
-	}
+		}, " "),
+		fmt.Sprintf("%s-coordinator", cr.Name),
+	)
+
+	job.Spec.Template.Spec.Containers[0].Command = esJobContainer.Command
+	job.Spec.Template.Spec.Containers[0].Args = esJobContainer.Args
+	job.Spec.Template.Spec.Containers[0].Env = esJobContainer.Env
 
 	return job
 }

@@ -10,7 +10,6 @@ spec:
   trackRepository: default
   trackParams:
     bulk_indexing_clients: "256"
-#    shard_count: "3"
   persistence:
     size: 50Gi
     storageClass: high
@@ -19,4 +18,4 @@ spec:
     verifyCerts: false
     basicAuth:
       username: elastic
-      password: jhpwtsmpfpwlk8mg7qzp7mw8
+      password: b8wjhbszvwwrx9b2bsdj7k9r

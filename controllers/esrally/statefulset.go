@@ -17,7 +17,6 @@ limitations under the License.
 package esrally
 
 import (
-	"fmt"
 	"github.com/xridge/kubestone/api/v1alpha1"
 	v1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -26,13 +25,15 @@ import (
 	"strings"
 )
 
-func NewStatefulSet(cr *v1alpha1.EsRally) (*v1.StatefulSet, error) {
+func NewStatefulSet(cr *v1alpha1.EsRally, coordinatorHostname string) (*v1.StatefulSet, error) {
 	selectorLabels := map[string]string{
 		"perf.kubestone.xridge.io/benchmark": "esrally",
 		"perf.kubestone.xridge.io/instance":  cr.Name,
 	}
 	podLabels := map[string]string{}
-	coordinatorHostname := fmt.Sprintf("%s-0.%s", cr.Name, cr.Name)
+
+	//coordinatorHostname := fmt.Sprintf("%s-coordinator.%s", cr.Name, cr.Namespace)
+	//coordinatorHostname = ip
 
 	for k, v := range selectorLabels {
 		podLabels[k] = v
@@ -54,7 +55,7 @@ func NewStatefulSet(cr *v1alpha1.EsRally) (*v1.StatefulSet, error) {
 			},
 			Spec: corev1.PersistentVolumeClaimSpec{
 				AccessModes: []corev1.PersistentVolumeAccessMode{
-					corev1.ReadWriteOnce,
+					corev1.ReadWriteMany,
 				},
 				Selector: nil,
 				Resources: corev1.ResourceRequirements{
@@ -78,34 +79,29 @@ func NewStatefulSet(cr *v1alpha1.EsRally) (*v1.StatefulSet, error) {
 		Namespace: cr.Namespace,
 	}
 
-	initContainer := createEsRallyContainer(cr, "init", "mkdir -p  /esrally/benchmarks; chown -R rally:rally /esrally")
+	initContainer := createEsRallyContainer(cr, "init", []string{"/bin/sh", "-c"},
+		"mkdir -p /esrally/benchmarks; chown -R rally:rally /esrally",
+		coordinatorHostname)
+
 	initContainer.VolumeMounts = []corev1.VolumeMount{
 		corev1.VolumeMount{
 			Name:      "data",
 			MountPath: "/esrally",
 		},
 	}
+
 	rootUid := int64(0)
 	initContainer.SecurityContext = &corev1.SecurityContext{
 		RunAsUser: &rootUid,
 	}
 
-	esrallydContainer := createEsRallyContainer(cr, "esrallyd",
-		strings.Join([]string{
-			"touch /rally/.rally/logs/rally.log;",
-			"/usr/local/bin/esrallyd", "start", "--node-ip=${MY_POD_IP}", fmt.Sprintf("--coordinator-ip=%s;", coordinatorHostname),
-			fmt.Sprintf("if  [ ${HOSTNAME} != '%s-0' ];then\n", cr.Name),
-			"tail -f /rally/.rally/logs/rally.log\n",
-			"else\n",
-			"tail -f /rally/.rally/logs/rally.log &",
-			"echo 'I am coordinator';",
-			"sleep 60;",
-			strings.Join(CreateEsRallyCmd(&cr.Spec, &objectMeta), " "), ";",
-			"fi\n",
-			"cat ~/.rally/logs/rally.log | grep PID | sed -r \"s/.*PID\\:([0-9]+).*/PID \\1/g\" | grep PID | awk '{print \"kill -9 \"$2}' | sh;",
-			"true;",
-		}, " "),
+	esrallydContainer := createEsRallyContainer(cr,
+		"esrallyd",
+		[]string{"/kubestone.sh"},
+		strings.Join(CreateEsRallyCmd(&cr.Spec, &objectMeta), " "),
+		coordinatorHostname,
 	)
+
 	esrallydContainer.Ports = []corev1.ContainerPort{
 		corev1.ContainerPort{
 			Name:          "transport",
@@ -152,20 +148,25 @@ func NewStatefulSet(cr *v1alpha1.EsRally) (*v1.StatefulSet, error) {
 	return &stateFulSet, nil
 }
 
-func createEsRallyContainer(cr *v1alpha1.EsRally, name string, command string) corev1.Container {
+func createEsRallyContainer(cr *v1alpha1.EsRally, name string, command []string, args string, coordinator string) corev1.Container {
 	return corev1.Container{
 		Name:            name,
 		Image:           cr.Spec.Image.Name,
 		ImagePullPolicy: corev1.PullPolicy(cr.Spec.Image.PullPolicy),
 		Resources:       cr.Spec.PodConfig.Resources,
-		Env: []corev1.EnvVar{{
-			Name: "MY_POD_IP", ValueFrom: &corev1.EnvVarSource{
-				FieldRef: &corev1.ObjectFieldSelector{FieldPath: "status.podIP"},
-			}},
+		Env: []corev1.EnvVar{
+			{
+				Name: "MY_POD_IP",
+				ValueFrom: &corev1.EnvVarSource{
+					FieldRef: &corev1.ObjectFieldSelector{FieldPath: "status.podIP"},
+				},
+			},
+			{
+				Name:  "ES_RALLY_COORDINATOR",
+				Value: coordinator,
+			},
 		},
-		Command: []string{
-			"/bin/sh", "-c",
-		},
-		Args: []string{command},
+		Command: command,
+		Args:    []string{args},
 	}
 }

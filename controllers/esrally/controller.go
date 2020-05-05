@@ -45,7 +45,7 @@ type Reconciler struct {
 
 func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 	ctx := context.Background()
-	_ = r.Log.WithValues("esrally", req.NamespacedName)
+	logger := r.Log.WithValues("esrally", req.NamespacedName)
 
 	var cr perfv1alpha1.EsRally
 	if err := r.K8S.Client.Get(ctx, req.NamespacedName, &cr); err != nil {
@@ -69,46 +69,24 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 		}
 	}
 
-	if !cr.Status.Deployed {
-		statefulSet, sError := NewStatefulSet(&cr)
+	// If its not running, create job and mark it as running
+	if !cr.Status.Running {
+		return esRallyJobHandler(cr, r, ctx, namespaceName)
+	}
 
-		if sError != nil {
-			return ctrl.Result{}, sError
-		}
-
-		// Create service
-		service := corev1.Service{
-			ObjectMeta: metav1.ObjectMeta{
-				Name:      cr.Name,
-				Namespace: cr.Namespace,
-			},
-			Spec: corev1.ServiceSpec{
-				Ports: []corev1.ServicePort{
-					{Port: 1900, TargetPort: intstr.FromString("transport")},
-				},
-				Selector: statefulSet.Spec.Selector.MatchLabels,
-			},
-			Status: corev1.ServiceStatus{},
-		}
-
-		// Create service
-		if err := r.K8S.CreateWithReference(ctx, &service, &cr); err != nil {
-			return ctrl.Result{}, err
-		}
-
-		// Create StatefulSet
-		if err := r.K8S.CreateWithReference(ctx, statefulSet, &cr); err != nil {
-			return ctrl.Result{}, err
-		}
-
-		// set Deployed as true
-		cr.Status.Deployed = true
-		if err := r.K8S.Client.Status().Update(ctx, &cr); err != nil {
-			return ctrl.Result{}, err
-		}
-
-		// We need to wait for the StatefulSet to be ready, so requeue
+	// Grab the job pod to pass to statefulset
+	pods, err := r.K8S.GetJobPods(namespaceName)
+	if err != nil {
+		return ctrl.Result{}, err
+	}
+	if len(pods.Items) == 0 || pods.Items[0].Status.PodIP == "" {
+		logger.Info("waiting for pod ip")
 		return ctrl.Result{Requeue: true}, nil
+	}
+
+	// Deploy statefulset
+	if !cr.Status.Deployed {
+		return esRallyDeployHandler(cr, r, ctx, pods.Items[0].Status.PodIP)
 	}
 
 	_, ready, _ := r.K8S.IsStatefulSetReady(namespaceName)
@@ -117,26 +95,11 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 		return ctrl.Result{Requeue: true}, nil
 	}
 
-	// If its not running, create job and mark it as running
-	if !cr.Status.Running {
-		job := NewJob(&cr)
-		if err := r.K8S.CreateWithReference(ctx, job, &cr); err != nil {
-			return ctrl.Result{}, err
-		}
-
-		// Mark it as running
-		cr.Status.Running = true
-		if err := r.K8S.Client.Status().Update(ctx, &cr); err != nil {
-			return ctrl.Result{}, err
-		}
-
-		return ctrl.Result{Requeue: true}, nil
-	}
-
 	jobFinished, err := r.K8S.IsJobFinished(namespaceName)
 	if err != nil {
 		return ctrl.Result{}, err
 	}
+
 	if !jobFinished {
 		// Wait for the job to be completed
 		return ctrl.Result{Requeue: true}, nil
@@ -146,13 +109,101 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 	if err := r.K8S.Client.Get(ctx, req.NamespacedName, &cr); err != nil {
 		return ctrl.Result{}, k8s.IgnoreNotFound(err)
 	}
+
 	cr.Status.Running = false
 	cr.Status.Completed = true
+
 	if err := r.K8S.Client.Status().Update(ctx, &cr); err != nil {
 		return ctrl.Result{}, err
 	}
 
 	return ctrl.Result{}, nil
+}
+
+func esRallyDeployHandler(cr perfv1alpha1.EsRally, r *Reconciler, ctx context.Context, ip string) (ctrl.Result, error) {
+	statefulSet, sError := NewStatefulSet(&cr, ip)
+	if sError != nil {
+		return ctrl.Result{}, sError
+	}
+
+	// Create service
+	service := corev1.Service{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      cr.Name,
+			Namespace: cr.Namespace,
+		},
+		Spec: corev1.ServiceSpec{
+			Ports: []corev1.ServicePort{
+				{Port: 1900, TargetPort: intstr.FromString("transport")},
+			},
+			Selector: statefulSet.Spec.Selector.MatchLabels,
+		},
+		Status: corev1.ServiceStatus{},
+	}
+
+	// Create service
+	if err := r.K8S.CreateWithReference(ctx, &service, &cr); err != nil {
+		return ctrl.Result{}, err
+	}
+
+	// Create StatefulSet
+	if err := r.K8S.CreateWithReference(ctx, statefulSet, &cr); err != nil {
+		return ctrl.Result{}, err
+	}
+
+	// set Deployed as true
+	cr.Status.Deployed = true
+	if err := r.K8S.Client.Status().Update(ctx, &cr); err != nil {
+		return ctrl.Result{}, err
+	}
+
+	// We need to wait for the StatefulSet to be ready, so requeue
+	return ctrl.Result{Requeue: true}, nil
+}
+
+func esRallyJobHandler(cr perfv1alpha1.EsRally, r *Reconciler, ctx context.Context, namespaceName types.NamespacedName) (ctrl.Result, error) {
+	job := NewJob(&cr)
+	if err := r.K8S.CreateWithReference(ctx, job, &cr); err != nil {
+		return ctrl.Result{}, err
+	}
+
+	// Create coordinator service
+	//masterService := GetEsRallyCoordSvc(&cr, job.Spec.Template.Labels)
+	//if err := r.K8S.CreateWithReference(ctx, &masterService, &cr); err != nil {
+	//	return ctrl.Result{}, err
+	//}
+
+	// Mark it as running
+	cr.Status.Running = true
+	if err := r.K8S.Client.Status().Update(ctx, &cr); err != nil {
+		return ctrl.Result{}, err
+	}
+
+	return ctrl.Result{Requeue: true}, nil
+}
+
+func GetEsRallyCoordSvc(cr *perfv1alpha1.EsRally, selectorLabels map[string]string) corev1.Service {
+	service := corev1.Service{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      cr.Name + "-coordinator",
+			Namespace: cr.Namespace,
+		},
+		Spec: corev1.ServiceSpec{
+			Type: corev1.ServiceTypeClusterIP,
+			Ports: []corev1.ServicePort{
+				{
+					Name:       "transport",
+					Port:       1900,
+					TargetPort: intstr.FromString("transport"),
+					Protocol:   corev1.ProtocolTCP,
+				},
+			},
+			Selector: selectorLabels,
+		},
+		Status: corev1.ServiceStatus{},
+	}
+
+	return service
 }
 
 func (r *Reconciler) SetupWithManager(mgr ctrl.Manager) error {

@@ -23,6 +23,9 @@ resources:
   version: v1alpha1
   kind: Qperf
 - group: perf
+  kind: KafkaBench
+  version: v1alpha1
+- group: perf
   kind: EsRally
   version: v1alpha1
 - group: perf
@@ -30,5 +33,8 @@ resources:
   version: v1alpha1
 - group: perf
   kind: S3Bench
+  version: v1alpha1
+- group: perf
+  kind: OcpLogtest
   version: v1alpha1
 version: "2"

@@ -1,0 +1,11 @@
+apiVersion: perf.kubestone.xridge.io/v1alpha1
+kind: OcpLogtest
+metadata:
+  name: ocplogtest-sample
+spec:
+  image:
+    name: quay.io/mffiedler/ocp-logtest:latest
+  lineLength: 1024
+  numLines: 300000
+  rate: 60000
+  fixedLine: true

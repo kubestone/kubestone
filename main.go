@@ -18,6 +18,7 @@ package main
 
 import (
 	"flag"
+	"github.com/xridge/kubestone/controllers/esrally"
 	"github.com/xridge/kubestone/controllers/ocplogtest"
 	"os"
 
@@ -41,7 +42,6 @@ import (
 	"github.com/xridge/kubestone/controllers/qperf"
 	"github.com/xridge/kubestone/controllers/s3bench"
 	"github.com/xridge/kubestone/controllers/sysbench"
-
 	"github.com/xridge/kubestone/pkg/k8s"
 	// +kubebuilder:scaffold:imports
 )
@@ -151,6 +151,13 @@ func main() {
 		Log: ctrl.Log.WithName("controllers").WithName("OcpLogtest"),
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "OcpLogtest")
+		os.Exit(1)
+	}
+	if err = (&esrally.Reconciler{
+		K8S: k8sAccess,
+		Log: ctrl.Log.WithName("controllers").WithName("EsRally"),
+	}).SetupWithManager(mgr); err != nil {
+		setupLog.Error(err, "unable to create controller", "controller", "EsRally")
 		os.Exit(1)
 	}
 	if err = (&s3bench.Reconciler{

@@ -1,0 +1,21 @@
+apiVersion: perf.kubestone.xridge.io/v1alpha1
+kind: EsRally
+metadata:
+  name: esrally-sample
+spec:
+  hosts: "production-1-es-http.elastic:9200"
+  challenge: append-no-conflicts
+  nodes: 3
+  track: eventdata
+  trackRepository: default
+  trackParams:
+    bulk_indexing_clients: "256"
+  persistence:
+    size: 50Gi
+    storageClass: high
+  security:
+    useSsl: false
+    verifyCerts: false
+    basicAuth:
+      username: elastic
+      password: b8wjhbszvwwrx9b2bsdj7k9r

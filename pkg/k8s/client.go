@@ -19,6 +19,8 @@ package k8s
 import (
 	"context"
 	"fmt"
+	v1 "k8s.io/api/apps/v1"
+	batchv1 "k8s.io/api/batch/v1"
 
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -135,6 +137,30 @@ func (a *Access) IsJobFinished(namespacedName types.NamespacedName) (finished bo
 	return finished, nil
 }
 
+func (a *Access) GetJob(namespacedName types.NamespacedName) *batchv1.Job {
+	job, err := a.Clientset.BatchV1().Jobs(namespacedName.Namespace).Get(
+		namespacedName.Name, metav1.GetOptions{})
+	if err != nil {
+		return nil
+	}
+	return job
+}
+
+func (a *Access) GetJobPods(namespacedName types.NamespacedName) (*corev1.PodList, error) {
+	job, err := a.Clientset.BatchV1().Jobs(namespacedName.Namespace).Get(
+		namespacedName.Name, metav1.GetOptions{})
+	if err != nil {
+		return nil, nil
+	}
+
+	uid := job.Labels["controller-uid"]
+
+	return a.Clientset.CoreV1().Pods(namespacedName.Namespace).List(
+		metav1.ListOptions{
+			LabelSelector: fmt.Sprintf("%s=%s", "controller-uid", uid),
+		})
+}
+
 // +kubebuilder:rbac:groups="",resources=endpoints,verbs=get;list
 
 // IsEndpointReady returns true if the given endpoint is fully connected to at least one pod
@@ -177,4 +203,28 @@ func (a *Access) IsDeploymentReady(namespacedName types.NamespacedName) (ready b
 	ready = deployment.Status.ReadyReplicas == *deployment.Spec.Replicas
 
 	return ready, err
+}
+
+// IsStatefulSetReady returns true if the given deployment's ready replicas matching with the desired replicas
+func (a *Access) IsStatefulSetReady(namespacedName types.NamespacedName) (set *v1.StatefulSet, ready bool, err error) {
+	ready, err = false, nil
+	statefulSet, err := a.Clientset.AppsV1().StatefulSets(namespacedName.Namespace).Get(
+		namespacedName.Name, metav1.GetOptions{})
+	if err != nil {
+		return set, ready, err
+	}
+
+	ready = statefulSet.Status.ReadyReplicas == *statefulSet.Spec.Replicas
+
+	return statefulSet, ready, err
+}
+
+func (a *Access) GetStatefulSet(namespacedName types.NamespacedName) *v1.StatefulSet {
+	statefulSet, err := a.Clientset.AppsV1().StatefulSets(namespacedName.Namespace).Get(
+		namespacedName.Name, metav1.GetOptions{})
+
+	if err != nil {
+		return statefulSet
+	}
+	return nil
 }

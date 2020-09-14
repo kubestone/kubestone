@@ -10,6 +10,45 @@
 </p>
 Resource Types:
 <ul></ul>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.BasicAuth">BasicAuth
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.EsRallySecurity">EsRallySecurity</a>)
+</p>
+<p>
+<p>BasicAuth contains basic HTTP authentication credentials.</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>username</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<code>password</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
 <h3 id="perf.kubestone.xridge.io/v1alpha1.BenchmarkStatus">BenchmarkStatus
 </h3>
 <p>
@@ -269,6 +308,474 @@ pod labels and scheduling policies (affinity, toleration, node selector&hellip;)
 </tr>
 </tbody>
 </table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.EsRally">EsRally
+</h3>
+<p>
+<p>EsRally is the Schema for the esrallies API</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>metadata</code></br>
+<em>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#objectmeta-v1-meta">
+Kubernetes meta/v1.ObjectMeta
+</a>
+</em>
+</td>
+<td>
+Refer to the Kubernetes API documentation for the fields of the
+<code>metadata</code> field.
+</td>
+</tr>
+<tr>
+<td>
+<code>spec</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.EsRallySpec">
+EsRallySpec
+</a>
+</em>
+</td>
+<td>
+<br/>
+<br/>
+<table>
+<tr>
+<td>
+<code>image</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.ImageSpec">
+ImageSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Image defines the docker image used for the benchmark</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>podConfig</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PodConfigurationSpec">
+PodConfigurationSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>PodConfig contains the configuration for the benchmark pod, including
+pod labels and scheduling policies (affinity, toleration, node selector&hellip;)</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>track</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<p>Track defines the track that Rally should run.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>trackRepository</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>TrackRepository defines the track repository that Rally should use to resolve tracks. Default: default
+<a href="https://esrally.readthedocs.io/en/stable/command_line_reference.html#track-repository">https://esrally.readthedocs.io/en/stable/command_line_reference.html#track-repository</a></p>
+</td>
+</tr>
+<tr>
+<td>
+<code>trackParams</code></br>
+<em>
+map[string]string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>TrackParams defines variables to inject into tracks. The supported variables depend on the track and you should check the track JSON file to see which variables can be provided.
+<a href="https://esrally.readthedocs.io/en/stable/command_line_reference.html#track-params">https://esrally.readthedocs.io/en/stable/command_line_reference.html#track-params</a></p>
+</td>
+</tr>
+<tr>
+<td>
+<code>hosts</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<code>challenge</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Pipeline  string <code>json:&quot;pipeline&quot;</code></p>
+</td>
+</tr>
+<tr>
+<td>
+<code>nodes</code></br>
+<em>
+int32
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Nodes defines the number of esrally clients to use. Default is 1</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>persistence</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.EsRallyVolConfig">
+EsRallyVolConfig
+</a>
+</em>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<code>security</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.EsRallySecurity">
+EsRallySecurity
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<code>status</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.EsRallyStatus">
+EsRallyStatus
+</a>
+</em>
+</td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.EsRallySecurity">EsRallySecurity
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.EsRallySpec">EsRallySpec</a>)
+</p>
+<p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>useSsl</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+</td>
+</tr>
+<tr>
+<td>
+<code>verifyCerts</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+</td>
+</tr>
+<tr>
+<td>
+<code>basicAuth</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.BasicAuth">
+BasicAuth
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.EsRallySpec">EsRallySpec
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.EsRally">EsRally</a>)
+</p>
+<p>
+<p>EsRallySpec defines the desired state of EsRally</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>image</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.ImageSpec">
+ImageSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Image defines the docker image used for the benchmark</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>podConfig</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.PodConfigurationSpec">
+PodConfigurationSpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>PodConfig contains the configuration for the benchmark pod, including
+pod labels and scheduling policies (affinity, toleration, node selector&hellip;)</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>track</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<p>Track defines the track that Rally should run.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>trackRepository</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>TrackRepository defines the track repository that Rally should use to resolve tracks. Default: default
+<a href="https://esrally.readthedocs.io/en/stable/command_line_reference.html#track-repository">https://esrally.readthedocs.io/en/stable/command_line_reference.html#track-repository</a></p>
+</td>
+</tr>
+<tr>
+<td>
+<code>trackParams</code></br>
+<em>
+map[string]string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>TrackParams defines variables to inject into tracks. The supported variables depend on the track and you should check the track JSON file to see which variables can be provided.
+<a href="https://esrally.readthedocs.io/en/stable/command_line_reference.html#track-params">https://esrally.readthedocs.io/en/stable/command_line_reference.html#track-params</a></p>
+</td>
+</tr>
+<tr>
+<td>
+<code>hosts</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<code>challenge</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Pipeline  string <code>json:&quot;pipeline&quot;</code></p>
+</td>
+</tr>
+<tr>
+<td>
+<code>nodes</code></br>
+<em>
+int32
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Nodes defines the number of esrally clients to use. Default is 1</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>persistence</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.EsRallyVolConfig">
+EsRallyVolConfig
+</a>
+</em>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<code>security</code></br>
+<em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.EsRallySecurity">
+EsRallySecurity
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.EsRallyStatus">EsRallyStatus
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.EsRally">EsRally</a>)
+</p>
+<p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>running</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+<p>Running shows the state of execution</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>completed</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+<p>Completed shows the state of completion</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>deployed</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+<p>Deployed shows the state of the StatefulSet needed for testing</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="perf.kubestone.xridge.io/v1alpha1.EsRallyVolConfig">EsRallyVolConfig
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#perf.kubestone.xridge.io/v1alpha1.EsRallySpec">EsRallySpec</a>)
+</p>
+<p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>size</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<code>storageClass</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
 <h3 id="perf.kubestone.xridge.io/v1alpha1.Fio">Fio
 </h3>
 <p>
@@ -514,6 +1021,7 @@ run on.</p>
 <p>
 (<em>Appears on:</em>
 <a href="#perf.kubestone.xridge.io/v1alpha1.DrillSpec">DrillSpec</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.EsRallySpec">EsRallySpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.IopingSpec">IopingSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3Spec">Iperf3Spec</a>, 
@@ -1870,6 +2378,7 @@ pod labels and scheduling policies (affinity, toleration, node selector&hellip;)
 <p>
 (<em>Appears on:</em>
 <a href="#perf.kubestone.xridge.io/v1alpha1.DrillSpec">DrillSpec</a>, 
+<a href="#perf.kubestone.xridge.io/v1alpha1.EsRallySpec">EsRallySpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.FioSpec">FioSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.IopingSpec">IopingSpec</a>, 
 <a href="#perf.kubestone.xridge.io/v1alpha1.Iperf3ConfigurationSpec">Iperf3ConfigurationSpec</a>, 
@@ -3679,5 +4188,5 @@ pod labels and scheduling policies (affinity, toleration, node selector&hellip;)
 <hr/>
 <p><em>
 Generated with <code>gen-crd-api-reference-docs</code>
-on git commit <code>068b519</code>.
+on git commit <code>96de7ce</code>.
 </em></p>

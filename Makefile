@@ -115,3 +115,4 @@ endif
 pre-commit: generate apidocs manifests fmt vet
 	@echo "Updating quickstart doc to current release ${KUBESTONE_RELEASE}"
 	sed -i'' -E "s@(github\.com/xridge/kubestone/config/default)(\?ref=v[0-9]+\.[0-9]+\.[0-9]+)+\b@\1?ref=${KUBESTONE_RELEASE}@g" docs/quickstart.md
+	sed -i'' -E "s@kubestone:(v[0-9]+\.[0-9]+\.[0-9]+)+\b@kubestone:${KUBESTONE_RELEASE}@g" docs/quickstart.md

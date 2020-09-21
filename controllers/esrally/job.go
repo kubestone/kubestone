@@ -22,6 +22,7 @@ import (
 	"github.com/xridge/kubestone/pkg/k8s"
 	batchv1 "k8s.io/api/batch/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"strconv"
 	"strings"
 )
 
@@ -49,7 +50,6 @@ func NewJob(cr *perfv1alpha1.EsRally) *batchv1.Job {
 		strings.Join([]string{
 			"/kubestone.sh", "coordinator", "60",
 			"&&",
-			//"while true; do sleep 999999; done", "&&",
 			strings.Join(CreateEsRallyCmd(&cr.Spec, &objectMeta), " "),
 		}, " "),
 		fmt.Sprintf("%s-coordinator", cr.Name),
@@ -89,17 +89,8 @@ func CreateEsRallyCmd(spec *perfv1alpha1.EsRallySpec, objectMeta *metav1.ObjectM
 	var clientOptions []string
 
 	if spec.Security != nil {
-		if spec.Security.UseSSL {
-			clientOptions = append(clientOptions, "use_ssl:true")
-		} else {
-			clientOptions = append(clientOptions, "use_ssl:false")
-		}
-
-		if spec.Security.VerifyCerts {
-			clientOptions = append(clientOptions, "verify_certs:true")
-		} else {
-			clientOptions = append(clientOptions, "verify_certs:false")
-		}
+		clientOptions = append(clientOptions, "use_ssl:"+ strconv.FormatBool(spec.Security.UseSSL))
+		clientOptions = append(clientOptions, "verify_certs:"+ strconv.FormatBool(spec.Security.VerifyCerts))
 
 		if spec.Security.BasicAuth != nil {
 			clientOptions = append(clientOptions, fmt.Sprintf("basic_auth_user:'%s'", spec.Security.BasicAuth.Username))

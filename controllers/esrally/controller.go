@@ -167,12 +167,6 @@ func esRallyJobHandler(cr perfv1alpha1.EsRally, r *Reconciler, ctx context.Conte
 		return ctrl.Result{}, err
 	}
 
-	// Create coordinator service
-	//masterService := GetEsRallyCoordSvc(&cr, job.Spec.Template.Labels)
-	//if err := r.K8S.CreateWithReference(ctx, &masterService, &cr); err != nil {
-	//	return ctrl.Result{}, err
-	//}
-
 	// Mark it as running
 	cr.Status.Running = true
 	if err := r.K8S.Client.Status().Update(ctx, &cr); err != nil {
@@ -180,30 +174,6 @@ func esRallyJobHandler(cr perfv1alpha1.EsRally, r *Reconciler, ctx context.Conte
 	}
 
 	return ctrl.Result{Requeue: true}, nil
-}
-
-func GetEsRallyCoordSvc(cr *perfv1alpha1.EsRally, selectorLabels map[string]string) corev1.Service {
-	service := corev1.Service{
-		ObjectMeta: metav1.ObjectMeta{
-			Name:      cr.Name + "-coordinator",
-			Namespace: cr.Namespace,
-		},
-		Spec: corev1.ServiceSpec{
-			Type: corev1.ServiceTypeClusterIP,
-			Ports: []corev1.ServicePort{
-				{
-					Name:       "transport",
-					Port:       1900,
-					TargetPort: intstr.FromString("transport"),
-					Protocol:   corev1.ProtocolTCP,
-				},
-			},
-			Selector: selectorLabels,
-		},
-		Status: corev1.ServiceStatus{},
-	}
-
-	return service
 }
 
 func (r *Reconciler) SetupWithManager(mgr ctrl.Manager) error {

@@ -32,9 +32,11 @@ var _ = Describe("jmeter configmaps", func() {
 		BeforeEach(func() {
 			cr = perfv1alpha1.JMeter{
 				Spec: perfv1alpha1.JMeterSpec{
-					TestName: "jmeter-sample-test.jmx",
-					PlanTest: map[string]string{
-						"jmeter-sample-test.jmx": JMeterPlan,
+					Controller: &perfv1alpha1.JMeterController{
+						TestName: "jmeter-sample-test.jmx",
+						PlanTest: map[string]string{
+							"jmeter-sample-test.jmx": JMeterPlan,
+						},
 					},
 				},
 			}
@@ -44,14 +46,14 @@ var _ = Describe("jmeter configmaps", func() {
 		Context("with jmx plan test specified", func() {
 			It("should have them in the configmap", func() {
 				Expect(configMap.Data).To(
-					Equal(cr.Spec.PlanTest))
+					Equal(cr.Spec.Controller.PlanTest))
 			})
 		})
 
 		Context("with jmx plan test name specified", func() {
 			It("should have them in the configmap", func() {
-				Expect(configMap.Data[cr.Spec.TestName]).To(
-					Equal(cr.Spec.PlanTest[cr.Spec.TestName]))
+				Expect(configMap.Data[cr.Spec.Controller.TestName]).To(
+					Equal(cr.Spec.Controller.PlanTest[cr.Spec.Controller.TestName]))
 			})
 		})
 	})
@@ -63,9 +65,11 @@ var _ = Describe("jmeter configmaps", func() {
 		BeforeEach(func() {
 			cr = perfv1alpha1.JMeter{
 				Spec: perfv1alpha1.JMeterSpec{
-					PropsName: "test.properties",
-					Props: map[string]string{
-						"test.properties": JMeterProperties,
+					Controller: &perfv1alpha1.JMeterController{
+						PropsName: "test.properties",
+						Props: map[string]string{
+							"test.properties": JMeterProperties,
+						},
 					},
 				},
 			}
@@ -75,17 +79,17 @@ var _ = Describe("jmeter configmaps", func() {
 		Context("with jmx properties specified", func() {
 			It("should have them in the configmap", func() {
 				Expect(configMap.Data).To(
-					Equal(cr.Spec.Props))
+					Equal(cr.Spec.Controller.Props))
 			})
 		})
 
 		Context("with jmx properties name specified", func() {
 			It("should have them in the configmap", func() {
-				Expect(configMap.Data[cr.Spec.PropsName]).To(
-					Equal(cr.Spec.Props[cr.Spec.PropsName]))
+				Expect(configMap.Data[cr.Spec.Controller.PropsName]).To(
+					Equal(cr.Spec.Controller.Props[cr.Spec.Controller.PropsName]))
 			})
 			It("should have the configMap", func() {
-				Expect(configMap.Data).To(Equal(cr.Spec.Props))
+				Expect(configMap.Data).To(Equal(cr.Spec.Controller.Props))
 			})
 		})
 	})

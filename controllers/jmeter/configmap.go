@@ -33,7 +33,7 @@ func NewPlanTestConfigMap(cr *perfv1alpha1.JMeter) (*corev1.ConfigMap, error) {
 			Name:      fmt.Sprintf("%s-plan-tests", cr.Name),
 			Namespace: cr.Namespace,
 		},
-		Data: cr.Spec.PlanTest,
+		Data: cr.Spec.Controller.PlanTest,
 	}
 
 	return &configMap, nil
@@ -47,7 +47,7 @@ func NewPropertiesConfigMap(cr *perfv1alpha1.JMeter) (*corev1.ConfigMap, error) 
 			Name:      fmt.Sprintf("%s-properties", cr.Name),
 			Namespace: cr.Namespace,
 		},
-		Data: cr.Spec.Props,
+		Data: cr.Spec.Controller.Props,
 	}
 
 	return &configMap, nil

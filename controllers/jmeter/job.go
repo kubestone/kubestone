@@ -17,7 +17,6 @@ limitations under the License.
 package jmeter
 
 import (
-	"errors"
 	"fmt"
 	"strings"
 
@@ -38,6 +37,7 @@ const (
 
 // NewJob creates a new jmeter job
 func NewJob(cr *perfv1alpha1.JMeter, planTestConfigMap, propertiesConfigMap *corev1.ConfigMap) *batchv1.Job {
+	var initContainers []corev1.Container
 	objectMeta := metav1.ObjectMeta{
 		Name:      cr.Name,
 		Namespace: cr.Namespace,
@@ -46,25 +46,70 @@ func NewJob(cr *perfv1alpha1.JMeter, planTestConfigMap, propertiesConfigMap *cor
 	volumes := generateVolumes(cr, planTestConfigMap, propertiesConfigMap)
 	volumeMounts := generateVolumeMounts(cr, planTestConfigMap, propertiesConfigMap)
 
-	args := qsplit.ToStrings([]byte(cr.Spec.Args))
+	args := qsplit.ToStrings([]byte(cr.Spec.Controller.Args))
 	args = append(args,
 		"-t",
-		fmt.Sprintf("%s/%s", testsDir, cr.Spec.TestName),
+		fmt.Sprintf("%s/%s", testsDir, cr.Spec.Controller.TestName),
+		"-e",
+		"-j",
+		fmt.Sprintf("%s/jmeter.log", reportsDir),
+		"-l",
+		fmt.Sprintf("%s/test-plan.jtl", reportsDir),
 		"-o",
-		reportsDir,
+		fmt.Sprintf("%s/report", reportsDir),
 	)
 
-	if propertiesConfigMap != nil {
-		args = append(args, "-p", fmt.Sprintf("%s/%s", propertiesDir, cr.Spec.PropsName))
+	if cr.Spec.Workers != nil {
+		clusterDomain := "cluster.local"
+		if cr.Spec.Controller.ClusterDomain != "" {
+			clusterDomain = cr.Spec.Controller.ClusterDomain
+		}
+
+		servers := []string{}
+		for i := 0; i < int(*cr.Spec.Workers.Replicas); i++ {
+			servers = append(servers,
+				fmt.Sprintf("%s-%d.%s.%s.svc.%s",
+					cr.Name,
+					i,
+					cr.Name,
+					cr.Namespace,
+					clusterDomain,
+				),
+			)
+		}
+
+		if len(servers) != 0 {
+			args = append(args,
+				"-R",
+				strings.Join(servers, ","),
+				"-J",
+				"server.rmi.ssl.disable=true",
+			)
+		}
+
+		initContainers = []corev1.Container{
+			corev1.Container{
+				Name:    "check-workers",
+				Image:   "alpine:3",
+				Command: []string{"/bin/sh"},
+				Args: []string{
+					"-c",
+					fmt.Sprintf("for worker in %s; do until nc -w 3 -z $worker 1099; do echo Waiting for $worker; sleep 2; done; done; echo All up!", strings.Join(servers, " ")),
+				},
+			},
+		}
 	}
 
-	job := k8s.NewPerfJob(objectMeta, "jmeter", cr.Spec.Image, cr.Spec.Configuration)
-	job.Spec.Completions = cr.Spec.JobConfig.Completions
-	job.Spec.Parallelism = cr.Spec.JobConfig.Parallelism
+	if propertiesConfigMap != nil {
+		args = append(args, "-p", fmt.Sprintf("%s/%s", propertiesDir, cr.Spec.Controller.PropsName))
+	}
+
+	job := k8s.NewPerfJob(objectMeta, "jmeter", cr.Spec.Controller.Image, cr.Spec.Controller.Configuration)
 	job.Spec.Template.Spec.Volumes = volumes
 	job.Spec.Template.Spec.Containers[0].Args = args
-	job.Spec.Template.Spec.Containers[0].Command = qsplit.ToStrings([]byte(cr.Spec.Command))
+	job.Spec.Template.Spec.Containers[0].Command = qsplit.ToStrings([]byte(cr.Spec.Controller.Command))
 	job.Spec.Template.Spec.Containers[0].VolumeMounts = volumeMounts
+	job.Spec.Template.Spec.InitContainers = initContainers
 	return job
 }
 
@@ -82,7 +127,7 @@ func generateVolumes(cr *perfv1alpha1.JMeter, planTestConfigMap, propertiesConfi
 		},
 		corev1.Volume{
 			Name:         "reports",
-			VolumeSource: cr.Spec.Volume.VolumeSource,
+			VolumeSource: cr.Spec.Controller.Volume.VolumeSource,
 		},
 	}
 
@@ -125,37 +170,4 @@ func generateVolumeMounts(cr *perfv1alpha1.JMeter, planTestConfigMap, properties
 	}
 
 	return volumeMounts
-}
-
-// IsCrValid validates the given CR and raises error if semantic errors detected
-// For jmeter it checks that the plan test is valid
-func IsCrValid(cr *perfv1alpha1.JMeter) (valid bool, err error) {
-	if len(cr.Spec.TestName) == 0 {
-		return false, errors.New("You need to specify the TestName")
-	}
-
-	if strings.Contains(cr.Spec.Args, "-t") {
-		return false, fmt.Errorf("You can't specify the flag '-t'")
-	}
-
-	if strings.Contains(cr.Spec.Args, "-o") {
-		return false, fmt.Errorf("You can't specify the flag '-o'")
-	}
-
-	testName := cr.Spec.TestName
-	planTest, ok := cr.Spec.PlanTest[testName]
-
-	if !ok {
-		return false, fmt.Errorf("The key '%s' is missing at spec.planTest", testName)
-	}
-
-	if planTest == "" {
-		return false, fmt.Errorf("The key '%s' is empty at spec.planTest", testName)
-	}
-
-	if ok, err := cr.Spec.Volume.Validate(); !ok || err != nil {
-		return false, fmt.Errorf("The volume spec is invalid: %s", err)
-	}
-
-	return true, nil
 }

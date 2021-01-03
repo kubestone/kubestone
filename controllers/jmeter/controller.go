@@ -18,6 +18,9 @@ package jmeter
 
 import (
 	"context"
+	"errors"
+	"fmt"
+	"strings"
 
 	"github.com/go-logr/logr"
 	corev1 "k8s.io/api/core/v1"
@@ -72,14 +75,14 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 		return ctrl.Result{}, err
 	}
 
-	if cr.Spec.Volume.PersistentVolumeClaimSpec != nil {
-		pvc := k8s.NewPersistentVolumeClaim(*cr.Spec.Volume.PersistentVolumeClaimSpec,
+	if cr.Spec.Controller.Volume.PersistentVolumeClaimSpec != nil {
+		pvc := k8s.NewPersistentVolumeClaim(*cr.Spec.Controller.Volume.PersistentVolumeClaimSpec,
 			cr.Name, cr.Namespace)
 		if err := r.K8S.CreateWithReference(ctx, pvc, &cr); err != nil {
 			return ctrl.Result{}, err
 		}
 		// Change ClaimName (from GENERATED) to the PVC was created
-		cr.Spec.Volume.VolumeSource.PersistentVolumeClaim.ClaimName = cr.Name
+		cr.Spec.Controller.Volume.VolumeSource.PersistentVolumeClaim.ClaimName = cr.Name
 	}
 
 	// Create the planTestConfigMap
@@ -95,7 +98,7 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 
 	// Create the propertiesConfigMap
 	var propertiesConfigMap *corev1.ConfigMap
-	if cr.Spec.Props != nil {
+	if cr.Spec.Controller.Props != nil {
 		propertiesConfigMap, err = NewPropertiesConfigMap(&cr)
 
 		if err != nil {
@@ -103,6 +106,22 @@ func (r *Reconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 		}
 
 		if err := r.K8S.CreateWithReference(ctx, propertiesConfigMap, &cr); err != nil {
+			return ctrl.Result{}, err
+		}
+	}
+
+	if cr.Spec.Workers != nil {
+		statefulset, err := NewStatefulSet(&cr)
+		if err != nil {
+			return ctrl.Result{}, err
+		}
+
+		if err := r.K8S.CreateWithReference(ctx, statefulset, &cr); err != nil {
+			return ctrl.Result{}, err
+		}
+
+		service := NewService(&cr, statefulset.Labels)
+		if err := r.K8S.CreateWithReference(ctx, service, &cr); err != nil {
 			return ctrl.Result{}, err
 		}
 	}
@@ -143,4 +162,45 @@ func (r *Reconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&perfv1alpha1.JMeter{}).
 		Complete(r)
+}
+
+// IsCrValid validates the given CR and raises error if semantic errors detected
+// For jmeter it checks that the plan test is valid
+func IsCrValid(cr *perfv1alpha1.JMeter) (valid bool, err error) {
+	if len(cr.Spec.Controller.TestName) == 0 {
+		return false, errors.New("You need to specify the TestName")
+	}
+
+	if strings.Contains(cr.Spec.Controller.Args, "-t") {
+		return false, fmt.Errorf("You can't specify the flag '-t'")
+	}
+
+	if strings.Contains(cr.Spec.Controller.Args, "-o") {
+		return false, fmt.Errorf("You can't specify the flag '-o'")
+	}
+
+	if strings.Contains(cr.Spec.Controller.Args, "-s") {
+		return false, fmt.Errorf("You can't specify the flag '-s' on the controller spec")
+	}
+
+	if cr.Spec.Workers != nil && strings.Contains(cr.Spec.Workers.Args, "-s") {
+		return false, fmt.Errorf("You can't specify the flag '-s' on the workers spec")
+	}
+
+	testName := cr.Spec.Controller.TestName
+	planTest, ok := cr.Spec.Controller.PlanTest[testName]
+
+	if !ok {
+		return false, fmt.Errorf("The key '%s' is missing at spec.controller.planTest", testName)
+	}
+
+	if planTest == "" {
+		return false, fmt.Errorf("The key '%s' is empty at spec.controller.planTest", testName)
+	}
+
+	if ok, err := cr.Spec.Controller.Volume.Validate(); !ok || err != nil {
+		return false, fmt.Errorf("The volume spec is invalid: %s", err)
+	}
+
+	return true, nil
 }

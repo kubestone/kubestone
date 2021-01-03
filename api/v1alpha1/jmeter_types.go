@@ -22,8 +22,43 @@ import (
 
 // JMeterSpec defines the desired state of JMeter
 type JMeterSpec struct {
+	// JMeter Workers configuration
+	// If isn't defined, the controller perform as a single worker
+	// +optional
+	Workers *JMeterWorkers `json:"workers,omitempty"`
+
+	// JMeter controller configuration
+	Controller *JMeterController `json:"controller"`
+}
+
+// JMeterWorkers defines the
+type JMeterWorkers struct {
+	Replicas *int32 `json:"replicas"`
+
 	// Image defines the docker image used for the benchmark
 	Image ImageSpec `json:"image"`
+
+	// pod labels and scheduling policies (affinity, toleration, node selector...)
+	// +optional
+	Configuration PodConfigurationSpec `json:"configuration,omitempty"`
+
+	// Args are appended to the predefined jmeter parameters
+	// +optional
+	Args string `json:"args,omitempty"`
+
+	// Command contains the command line passed to the main jmeter container
+	// +optional
+	Command string `json:"command,omitempty"`
+}
+
+// JMeterWorkers defines the
+type JMeterController struct {
+	// Image defines the docker image used for the benchmark
+	Image ImageSpec `json:"image"`
+
+	// pod labels and scheduling policies (affinity, toleration, node selector...)
+	// +optional
+	Configuration PodConfigurationSpec `json:"configuration,omitempty"`
 
 	// PlanTest define the jmeter plan test
 	PlanTest map[string]string `json:"planTest"`
@@ -42,10 +77,6 @@ type JMeterSpec struct {
 	// Volume to mount at result path
 	Volume VolumeSpec `json:"volume"`
 
-	// Job configurations
-	// +optional
-	JobConfig JobConfig `json:"jobConfig,omitempty"`
-
 	// Args are appended to the predefined jmeter parameters
 	// +optional
 	Args string `json:"args,omitempty"`
@@ -54,26 +85,10 @@ type JMeterSpec struct {
 	// +optional
 	Command string `json:"command,omitempty"`
 
-	// pod labels and scheduling policies (affinity, toleration, node selector...)
+	// Cluster domain, used to construct the pods dns
+	// Default to cluster.local
 	// +optional
-	Configuration PodConfigurationSpec `json:"configuration,omitempty"`
-}
-
-type JobConfig struct {
-	// Specifies the desired number of successfully finished pods the job should be run with.
-	// Setting to nil means that the success of any pod signals the success of all pods, and
-	// allows parallelism to have any positive value.
-	// Setting to 1 means that parallelism is limited to 1 and the success of that pod signals
-	// the success of the job.
-	// +optional
-	Completions *int32 `json:"completions,omitempty"`
-
-	// Specifies the maximum desired number of pods the job should run at any given time.
-	// The actual number of pods running in steady state will be less than this number when:
-	// ((.spec.completions - .status.successful) < .spec.parallelism),
-	// i.e. when the work left to do is less than max parallelism.
-	// +optional
-	Parallelism *int32 `json:"parallelism,omitempty"`
+	ClusterDomain string `json:"clusterDomain"`
 }
 
 // JMeterStatus defines the observed state of JMeter

@@ -213,8 +213,8 @@ type S3AutoTermOptions struct {
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
-// +kubebuilder:printcolumn:name="Running",type="boolean",JSONPath=".status.running"
-// +kubebuilder:printcolumn:name="Completed",type="boolean",JSONPath=".status.completed"
+// +kubebuilder:printcolumn:name="Running",type="boolean",jsonPath=".status.running"
+// +kubebuilder:printcolumn:name="Completed",type="boolean",jsonPath=".status.completed"
 
 // S3Bench is the Schema for the s3benches API
 type S3Bench struct {

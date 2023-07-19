@@ -53,8 +53,8 @@ type FioSpec struct {
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
-// +kubebuilder:printcolumn:name="Running",type="boolean",JSONPath=".status.running"
-// +kubebuilder:printcolumn:name="Completed",type="boolean",JSONPath=".status.completed"
+// +kubebuilder:printcolumn:name="Running",type="boolean",jsonPath=".status.running"
+// +kubebuilder:printcolumn:name="Completed",type="boolean",jsonPath=".status.completed"
 
 // Fio is the Schema for the fios API
 type Fio struct {
